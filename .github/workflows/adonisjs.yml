@@ -23,6 +23,8 @@ jobs:
         run: npm install
       - name: Install Vue dependencies
         run: cd ui && npm install --legacy-peer-deps
+      - name: Setup database
+        run: mkdir tmp && touch tmp/db.sqlite3
       - name: Run tests
         run: node -r @adonisjs/assembler/build/register japaFile.ts -ci
   build:
