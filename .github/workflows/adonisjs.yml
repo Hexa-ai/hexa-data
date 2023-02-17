@@ -22,7 +22,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
 
       - name: Install dependencies
-        run: cd backend && npm ci
+        run: npm ci
 
       - name: Build
-        run: cd backend && npm run build
+        run: npm run build
