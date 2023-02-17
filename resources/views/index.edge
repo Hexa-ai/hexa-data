@@ -1,0 +1,45 @@
+<html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<head>
+  @if(isDev)
+  <script type="module" src="http://localhost:2000/@vite/client"></script>
+  <script type="module" src="http://localhost:2000/src/main.ts"></script>
+
+  <script nomodule src="https://unpkg.com/@senx/discovery-widgets/dist/discovery/discovery.js"></script>
+  <script type="module" src="https://unpkg.com/@senx/discovery-widgets/dist/discovery/discovery.esm.js"></script>
+
+  <script src="https://unpkg.com/@senx/warpview-editor/elements/warpview-editor-elements.js"></script>
+  <script nomodule src="https://unpkg.com/@hexa-ai/discovery-plugin-csv-export/dist/discovery-plugin-csv-export/discovery-plugin-csv-export.js"></script>
+  <script type="module" src="https://unpkg.com/@hexa-ai/discovery-plugin-csv-export/dist/discovery-plugin-csv-export/discovery-plugin-csv-export.esm.js"></script>
+  <script nomodule src="https://unpkg.com/@hexa-ai/discovery-plugin-sensor-gauge/dist/discovery-plugin-sensor-gauge/discovery-plugin-sensor-gauge.js"></script>
+  <script type="module" src="https://unpkg.com/@hexa-ai/discovery-plugin-sensor-gauge/dist/discovery-plugin-sensor-gauge/discovery-plugin-sensor-gauge.esm.js"></script>
+  @end
+
+  @if(assetsData.found)
+    @each(css in assetsData.css)
+    <link rel="stylesheet" type="text/css" href="{{css}}">
+    @end
+    @each(js in assetsData.js)
+    <script type="module" src="{{js}}" defer></script>
+    @end
+  @end
+
+  <script nomodule src="/assets/@senx/discovery-widgets/dist/discovery/discovery.js"></script>
+  <script type="module" src="/assets/@senx/discovery-widgets/dist/discovery/discovery.esm.js"></script>
+
+  <script nomodule src="/assets/@hexa-ai/discovery-plugin-csv-export/dist/discovery-plugin-csv-export/discovery-plugin-csv-export.js"></script>
+  <script type="module" src="/assets/@hexa-ai/discovery-plugin-csv-export/dist/discovery-plugin-csv-export/discovery-plugin-csv-export.esm.js"></script>
+
+  <script nomodule src="/assets/@hexa-ai/discovery-plugin-sensor-gauge/dist/discovery-plugin-sensor-gauge/discovery-plugin-sensor-gauge.js"></script>
+  <script type="module" src="/assets/@hexa-ai/discovery-plugin-sensor-gauge/dist/discovery-plugin-sensor-gauge/discovery-plugin-sensor-gauge.esm.js"></script>
+
+  <script src="/assets/@senx/warpview-editor/elements/warpview-editor-elements.js"></script>
+  <script src="/"></script>
+  <link class="favicon" rel="apple-touch-icon" href="src/assets/logo-hexa-data.svg" type="image/svg+xml"/>
+  <link class="favicon" rel="icon" href="src/assets/logo-hexa-data.svg" type="image/svg+xml"/>
+</head>
+<body>
+<div id="app" class="h-full"></div>
+</body>
+</html>

@@ -1,0 +1,59 @@
+// Input data model
+// [{
+//   "classname": "TempSalon3",
+//   "labels": {
+//     "projectId": 1,
+//     "deviceId": 1
+//   },
+//   "attributes": {
+//     "descriptionL1": "Température du salon",
+//     "descriptionL2": "living room temperature",
+//     "descriptionL3": "درجة حرارة غرفة المعيشة"
+//   },
+//   "valueType": 2
+// }]
+
+<%
+    JSON-> 'gtsDescription' STORE
+    [] 'gtsList' STORE
+    [] 'errorList' STORE
+
+    $gtsDescription <%
+        'toCreate' STORE
+        $toCreate 'classname' GET 'classname' STORE
+        $toCreate 'labels' GET 'labels' STORE
+        $toCreate 'attributes' GET 'attributes' STORE
+        $toCreate 'valueType' GET 'valueType' STORE
+        // todo: vérifier avant si existe déjà avec un find ?
+
+        // création gts avec le bon type
+        NEWGTS
+        $classname RENAME
+        $labels RELABEL
+
+        // Boolean
+        $valueType 1 == <% 0 NaN NaN NaN 0 ADDVALUE %> IFT
+        // Long (Integer)
+        $valueType 2 == <% 0 NaN NaN NaN 0 ADDVALUE    %> IFT
+        // Flat (Real)
+        $valueType 3 == <% 0 NaN NaN NaN 0.0 ADDVALUE  %> IFT
+        // String
+        $valueType 4 == <% 0 NaN NaN NaN 'a' ADDVALUE  %> IFT
+
+
+        // add attributes
+        $attributes ISNULL ! <% $attributes { 'valueType' $valueType TOSTRING } APPEND SETATTRIBUTES %> IFT
+        $attributes ISNULL <% { 'valueType' $valueType TOSTRING } SETATTRIBUTES %> IFT
+        // Store GTS in var
+        'g' STORE
+
+        // Append GTS to list
+        $gtsList $g +! DROP //append to list
+    %> FOREACH
+
+    $gtsList $writeToken UPDATE
+    $gtsList $writeToken METADIFF
+
+%> 'macro' STORE
+
+ @macro $gtsList

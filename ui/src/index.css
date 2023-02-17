@@ -1,0 +1,37 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.tooltip{
+  visibility: hidden;
+  position: absolute;
+}
+.has-tooltip:hover .tooltip {
+  visibility: visible;
+  z-index: 100;
+}
+
+#headlessui-portal-root {
+  position: absolute ;
+  z-index: 1000;
+}
+
+body {
+  z-index: 1;
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+body::-webkit-scrollbar {
+  display: none;
+}
+#appNavTop {
+  z-index:100;
+}
+#appNavTool {
+  z-index: 90;
+}
+#appBody {
+  z-index:10;
+}
+

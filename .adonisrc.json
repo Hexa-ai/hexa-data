@@ -1,0 +1,51 @@
+{
+  "typescript": true,
+  "commands": [
+    "./commands",
+    "@adonisjs/core/build/commands/index.js",
+    "@adonisjs/repl/build/commands",
+    "@adonisjs/lucid/build/commands",
+    "@adonisjs/bouncer/build/commands",
+    "adonis5-scheduler/build/commands",
+    "@setten/bull-queue/build/commands",
+    "@adonisjs/mail/build/commands"
+  ],
+  "exceptionHandlerNamespace": "App/Exceptions/Handler",
+  "aliases": {
+    "App": "app",
+    "Config": "config",
+    "Database": "database",
+    "Contracts": "contracts"
+  },
+  "preloads": [
+    "./start/routes",
+    "./start/kernel",
+    "./start/bouncer",
+    "./start/events"
+  ],
+  "providers": [
+    "./providers/AppProvider",
+    "@adonisjs/core",
+    "@adonisjs/lucid",
+    "@adonisjs/auth",
+    "@adonisjs/bouncer",
+    "@adonisjs/attachment-lite",
+    "adonis5-scheduler",
+    "@adonisjs/view",
+    "@setten/bull-queue",
+    "@adonisjs/mail"
+  ],
+  "aceProviders": [
+    "@adonisjs/repl"
+  ],
+  "metaFiles": [
+    {
+      "pattern": "public/**",
+      "reloadServer": false
+    },
+    {
+      "pattern": "resources/views/**/*.edge",
+      "reloadServer": false
+    }
+  ]
+}

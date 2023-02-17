@@ -1,0 +1,1549 @@
+[
+  {
+    "_id": "8c180087-fdb7-475d-a74e-87369977c8eb",
+    "colId": "22bdf32b-b59e-4097-b228-0412b0016bf0",
+    "containerId": "3da1294e-ce20-4943-be04-a496b666bac0",
+    "name": "index",
+    "url": "127.0.0.1:3333/api/v1/users?page=1&perPage=100&searchKey",
+    "method": "GET",
+    "sortNum": 10000,
+    "created": "2021-10-25T13:00:31.846Z",
+    "modified": "2022-01-11T15:12:05.240Z",
+    "headers": [],
+    "params": [
+      {
+        "name": "page",
+        "value": "1",
+        "isPath": false
+      },
+      {
+        "name": "perPage",
+        "value": "100",
+        "isPath": false
+      },
+      {
+        "name": "searchKey",
+        "value": "",
+        "isPath": false
+      }
+    ],
+    "auth": {
+      "type": "bearer",
+      "bearer": "{{tokenBearer}}"
+    },
+    "tests": []
+  },
+  {
+    "_id": "ed132465-7e55-47c7-aac5-96008beaf971",
+    "colId": "22bdf32b-b59e-4097-b228-0412b0016bf0",
+    "containerId": "3da1294e-ce20-4943-be04-a496b666bac0",
+    "name": "show",
+    "url": "127.0.0.1:3333/users/17",
+    "method": "GET",
+    "sortNum": 20000,
+    "created": "2021-10-25T13:01:26.262Z",
+    "modified": "2021-11-04T16:09:38.249Z",
+    "headers": [],
+    "params": [],
+    "auth": {
+      "type": "bearer",
+      "bearer": "{{tokenBearer}}"
+    },
+    "tests": []
+  },
+  {
+    "_id": "db5734fc-0721-4d84-bf74-a42038f2ad3a",
+    "colId": "22bdf32b-b59e-4097-b228-0412b0016bf0",
+    "containerId": "3da1294e-ce20-4943-be04-a496b666bac0",
+    "name": "create",
+    "url": "127.0.0.1:3333/users",
+    "method": "POST",
+    "sortNum": 40000,
+    "created": "2021-10-25T13:03:25.204Z",
+    "modified": "2021-11-04T16:09:31.320Z",
+    "headers": [
+      {
+        "name": "Content-Type",
+        "value": "application/json",
+        "isDisabled": true
+      },
+      {
+        "name": "Content-Type",
+        "value": "multipart/form-data",
+        "isDisabled": true
+      }
+    ],
+    "params": [],
+    "body": {
+      "type": "formdata",
+      "raw": "",
+      "form": [
+        {
+          "name": "name",
+          "value": "jujuc"
+        },
+        {
+          "name": "email",
+          "value": "marcus123@5jskj.com"
+        },
+        {
+          "name": "is_activated",
+          "value": "true"
+        },
+        {
+          "name": "password",
+          "value": "5545454545"
+        }
+      ],
+      "files": [
+        {
+          "name": "photo",
+          "value": "..\\..\\..\\..\\..\\Images\\photo.png"
+        }
+      ]
+    },
+    "auth": {
+      "type": "bearer",
+      "bearer": "{{tokenBearer}}"
+    },
+    "tests": []
+  },
+  {
+    "_id": "6a3a8d3e-d22f-4d8d-8d18-c452f3e61fb1",
+    "colId": "22bdf32b-b59e-4097-b228-0412b0016bf0",
+    "containerId": "3da1294e-ce20-4943-be04-a496b666bac0",
+    "name": "update",
+    "url": "127.0.0.1:3333/api/v1/users/3",
+    "method": "PATCH",
+    "sortNum": 50000,
+    "created": "2021-10-25T13:05:28.995Z",
+    "modified": "2022-01-11T15:17:29.932Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "formdata",
+      "raw": "",
+      "form": [
+        {
+          "name": "is_activated",
+          "value": "true"
+        },
+        {
+          "name": "name",
+          "value": "julius"
+        },
+        {
+          "name": "email",
+          "value": "julius@gmail.com"
+        },
+        {
+          "name": "password",
+          "value": "12"
+        },
+        {
+          "name": "lang",
+          "value": "fr"
+        }
+      ],
+      "files": [
+        {
+          "name": "photo",
+          "value": "..\\..\\..\\Users\\Talbourdet\\OneDrive - Hexa-AI\\Images\\photo.png"
+        }
+      ]
+    },
+    "auth": {
+      "type": "bearer",
+      "bearer": "{{tokenBearer}}"
+    },
+    "tests": []
+  },
+  {
+    "_id": "65f13702-cb7f-4edb-8c0a-21e0c93c8cce",
+    "colId": "22bdf32b-b59e-4097-b228-0412b0016bf0",
+    "containerId": "3da1294e-ce20-4943-be04-a496b666bac0",
+    "name": "delete",
+    "url": "127.0.0.1:3333/users/4",
+    "method": "DELETE",
+    "sortNum": 60000,
+    "created": "2021-10-25T13:06:16.932Z",
+    "modified": "2021-11-04T16:09:19.296Z",
+    "headers": [],
+    "params": [],
+    "auth": {
+      "type": "bearer",
+      "bearer": "{{tokenBearer}}"
+    },
+    "tests": []
+  },
+  {
+    "_id": "75cf5287-a747-4cce-8960-4265164169cd",
+    "colId": "22bdf32b-b59e-4097-b228-0412b0016bf0",
+    "containerId": "adff652f-211b-4cf1-80a6-53bd43e22794",
+    "name": "Register",
+    "url": "127.0.0.1:3333/register",
+    "method": "POST",
+    "sortNum": 20000,
+    "created": "2021-10-25T15:11:07.670Z",
+    "modified": "2022-01-07T14:36:00.123Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "formdata",
+      "raw": "",
+      "form": [
+        {
+          "name": "name",
+          "value": "Juju"
+        },
+        {
+          "name": "email",
+          "value": "julien.talbourdet@gmail.com"
+        },
+        {
+          "name": "password",
+          "value": "123"
+        }
+      ]
+    },
+    "tests": []
+  },
+  {
+    "_id": "9cf3acfc-ecb7-450f-a839-d3aead1d1821",
+    "colId": "22bdf32b-b59e-4097-b228-0412b0016bf0",
+    "containerId": "adff652f-211b-4cf1-80a6-53bd43e22794",
+    "name": "Login",
+    "url": "127.0.0.1:3333/api/v1/login",
+    "method": "POST",
+    "sortNum": 30000,
+    "created": "2021-10-25T15:39:24.654Z",
+    "modified": "2022-01-11T22:09:32.549Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "formdata",
+      "raw": "",
+      "form": [
+        {
+          "name": "email",
+          "value": "admin@admin.com"
+        },
+        {
+          "name": "password",
+          "value": "12345678"
+        }
+      ]
+    },
+    "auth": {
+      "type": "none"
+    },
+    "tests": []
+  },
+  {
+    "_id": "0578a988-eeba-4a0e-b14f-2ca23f24ee61",
+    "colId": "22bdf32b-b59e-4097-b228-0412b0016bf0",
+    "containerId": "5d9a05e5-10c5-4053-96e3-3e561f0987c2",
+    "name": "index",
+    "url": "127.0.0.1:3333/api/v1/projects?page=1&perPage=100&searchKey",
+    "method": "GET",
+    "sortNum": 10000,
+    "created": "2021-11-02T12:01:39.733Z",
+    "modified": "2022-01-20T15:10:46.358Z",
+    "headers": [],
+    "params": [
+      {
+        "name": "page",
+        "value": "1",
+        "isPath": false
+      },
+      {
+        "name": "perPage",
+        "value": "100",
+        "isPath": false
+      },
+      {
+        "name": "searchKey",
+        "value": "",
+        "isPath": false
+      }
+    ],
+    "auth": {
+      "type": "bearer",
+      "bearer": "{{tokenBearer}}"
+    },
+    "tests": []
+  },
+  {
+    "_id": "6e798ace-ba9e-4158-aff9-deeb4cdcd630",
+    "colId": "22bdf32b-b59e-4097-b228-0412b0016bf0",
+    "containerId": "5d9a05e5-10c5-4053-96e3-3e561f0987c2",
+    "name": "create",
+    "url": "127.0.0.1:3333/api/v1/projects",
+    "method": "POST",
+    "sortNum": 20000,
+    "created": "2021-11-02T12:16:06.804Z",
+    "modified": "2022-01-20T16:17:39.005Z",
+    "headers": [
+      {
+        "name": "Content-Type",
+        "value": "application/json",
+        "isDisabled": true
+      },
+      {
+        "name": "Content-Type",
+        "value": "multipart/form-data",
+        "isDisabled": true
+      }
+    ],
+    "params": [],
+    "body": {
+      "type": "formdata",
+      "raw": "",
+      "form": [
+        {
+          "name": "name",
+          "value": "Projet GNSA"
+        },
+        {
+          "name": "description",
+          "value": "Monitoring Pareto"
+        },
+        {
+          "name": "adress",
+          "value": "6 Rue Jean Marie Chevalier VOURLES"
+        },
+        {
+          "name": "long",
+          "value": "5545"
+        },
+        {
+          "name": "lat",
+          "value": "5454"
+        },
+        {
+          "name": "l1",
+          "value": "en"
+        },
+        {
+          "name": "l2",
+          "value": "fr"
+        },
+        {
+          "name": "l3",
+          "value": "dd"
+        }
+      ],
+      "files": [
+        {
+          "name": "photo",
+          "value": "..\\..\\..\\Users\\Talbourdet\\OneDrive - Hexa-AI\\Images\\picture.png"
+        }
+      ]
+    },
+    "auth": {
+      "type": "bearer",
+      "bearer": "{{tokenBearer}}"
+    },
+    "tests": []
+  },
+  {
+    "_id": "cceb212f-aec5-43df-8751-d923256723e3",
+    "colId": "22bdf32b-b59e-4097-b228-0412b0016bf0",
+    "containerId": "5d9a05e5-10c5-4053-96e3-3e561f0987c2",
+    "name": "update",
+    "url": "127.0.0.1:3333/api/v1/projects/1",
+    "method": "PATCH",
+    "sortNum": 30000,
+    "created": "2021-11-02T14:07:30.609Z",
+    "modified": "2022-01-20T16:11:14.404Z",
+    "headers": [
+      {
+        "name": "Content-Type",
+        "value": "application/json",
+        "isDisabled": true
+      },
+      {
+        "name": "Content-Type",
+        "value": "multipart/form-data",
+        "isDisabled": true
+      }
+    ],
+    "params": [],
+    "body": {
+      "type": "formdata",
+      "raw": "",
+      "form": [
+        {
+          "name": "name",
+          "value": "ProjetTestDev"
+        },
+        {
+          "name": "description",
+          "value": "Projet pour le developpement d'Hexa-Data"
+        },
+        {
+          "name": "adress",
+          "value": "6 Rue Jean Marie Chevalier VOURLES"
+        },
+        {
+          "name": "long",
+          "value": "5545"
+        },
+        {
+          "name": "lat",
+          "value": "5454"
+        },
+        {
+          "name": "l1",
+          "value": "en"
+        },
+        {
+          "name": "l2",
+          "value": "fr"
+        },
+        {
+          "name": "l3",
+          "value": "cn"
+        }
+      ],
+      "files": [
+        {
+          "name": "photo",
+          "value": "..\\..\\..\\Users\\Talbourdet\\OneDrive - Hexa-AI\\Images\\INFRA-THERM.png"
+        }
+      ]
+    },
+    "auth": {
+      "type": "bearer",
+      "bearer": "{{tokenBearer}}"
+    },
+    "tests": []
+  },
+  {
+    "_id": "b589fbe7-937c-409a-b550-61dcd789291d",
+    "colId": "22bdf32b-b59e-4097-b228-0412b0016bf0",
+    "containerId": "5d9a05e5-10c5-4053-96e3-3e561f0987c2",
+    "name": "delete",
+    "url": "127.0.0.1:3333/projects/1",
+    "method": "DELETE",
+    "sortNum": 40000,
+    "created": "2021-11-02T14:36:59.705Z",
+    "modified": "2021-12-08T09:43:19.003Z",
+    "headers": [
+      {
+        "name": "Content-Type",
+        "value": "application/json",
+        "isDisabled": true
+      },
+      {
+        "name": "Content-Type",
+        "value": "multipart/form-data",
+        "isDisabled": true
+      }
+    ],
+    "params": [],
+    "auth": {
+      "type": "bearer",
+      "bearer": "{{tokenBearer}}"
+    },
+    "tests": []
+  },
+  {
+    "_id": "0fc77c0d-c260-47eb-b87f-9edd70cc1f3f",
+    "colId": "22bdf32b-b59e-4097-b228-0412b0016bf0",
+    "containerId": "5d9a05e5-10c5-4053-96e3-3e561f0987c2",
+    "name": "appendUsers",
+    "url": "127.0.0.1:3333/projects/1/users",
+    "method": "POST",
+    "sortNum": 25000,
+    "created": "2021-11-02T15:06:43.089Z",
+    "modified": "2021-12-31T10:52:25.831Z",
+    "headers": [
+      {
+        "name": "Content-Type",
+        "value": "application/json",
+        "isDisabled": true
+      },
+      {
+        "name": "Content-Type",
+        "value": "multipart/form-data",
+        "isDisabled": true
+      }
+    ],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\"users\":[{\"id\":2, \"role\":2}]}",
+      "form": []
+    },
+    "auth": {
+      "type": "bearer",
+      "bearer": "{{tokenBearer}}"
+    },
+    "tests": []
+  },
+  {
+    "_id": "89d97154-9ea1-42d4-ab2a-6d60d71b3bf6",
+    "colId": "22bdf32b-b59e-4097-b228-0412b0016bf0",
+    "containerId": "5d9a05e5-10c5-4053-96e3-3e561f0987c2",
+    "name": "removeUsers",
+    "url": "127.0.0.1:3333/projects/1/users",
+    "method": "DELETE",
+    "sortNum": 27500,
+    "created": "2021-11-02T15:42:58.577Z",
+    "modified": "2021-12-30T21:32:53.129Z",
+    "headers": [
+      {
+        "name": "Content-Type",
+        "value": "application/json",
+        "isDisabled": true
+      },
+      {
+        "name": "Content-Type",
+        "value": "multipart/form-data",
+        "isDisabled": true
+      }
+    ],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\"users\":[{\"id\":2}]}",
+      "form": []
+    },
+    "auth": {
+      "type": "bearer",
+      "bearer": "{{tokenBearer}}"
+    },
+    "tests": []
+  },
+  {
+    "_id": "15a9a85d-65ca-4ff2-bbdf-aa48d4d5f090",
+    "colId": "22bdf32b-b59e-4097-b228-0412b0016bf0",
+    "containerId": "5d9a05e5-10c5-4053-96e3-3e561f0987c2",
+    "name": "show",
+    "url": "127.0.0.1:3333/api/v1/projects/1",
+    "method": "GET",
+    "sortNum": 35000,
+    "created": "2021-11-02T16:34:09.542Z",
+    "modified": "2022-01-23T16:54:49.156Z",
+    "headers": [
+      {
+        "name": "Content-Type",
+        "value": "application/json",
+        "isDisabled": true
+      },
+      {
+        "name": "Content-Type",
+        "value": "multipart/form-data",
+        "isDisabled": true
+      }
+    ],
+    "params": [],
+    "auth": {
+      "type": "bearer",
+      "bearer": "{{tokenBearer}}"
+    },
+    "tests": []
+  },
+  {
+    "_id": "378b4273-970f-4ecd-a561-d2ae758482dc",
+    "colId": "22bdf32b-b59e-4097-b228-0412b0016bf0",
+    "containerId": "ad84ff2f-d4e5-4c29-9f1b-55d1352fb711",
+    "name": "create",
+    "url": "127.0.0.1:3333/api/v1/projects/2/devices",
+    "method": "POST",
+    "sortNum": 20000,
+    "created": "2021-11-04T15:59:23.354Z",
+    "modified": "2022-01-24T14:24:29.756Z",
+    "headers": [
+      {
+        "name": "Content-Type",
+        "value": "application/json",
+        "isDisabled": true
+      },
+      {
+        "name": "Content-Type",
+        "value": "multipart/form-data",
+        "isDisabled": true
+      }
+    ],
+    "params": [],
+    "body": {
+      "type": "formdata",
+      "raw": "",
+      "form": [
+        {
+          "name": "name",
+          "value": "PFC200 4G"
+        },
+        {
+          "name": "description",
+          "value": "Pfc de démo"
+        },
+        {
+          "name": "lat",
+          "value": "5454"
+        },
+        {
+          "name": "long",
+          "value": "5454"
+        },
+        {
+          "name": "adress",
+          "value": "6 Rue JEan Marie Chevalier"
+        },
+        {
+          "name": "clientId",
+          "value": "PFC7508217"
+        },
+        {
+          "name": "username",
+          "value": "admin"
+        },
+        {
+          "name": "password",
+          "value": "wago"
+        },
+        {
+          "name": "namespace",
+          "value": "pfc200"
+        }
+      ],
+      "files": [
+        {
+          "name": "photo",
+          "value": "..\\..\\..\\..\\..\\Images\\photo.png",
+          "isDisabled": true
+        }
+      ]
+    },
+    "auth": {
+      "type": "bearer",
+      "bearer": "{{tokenBearer}}"
+    },
+    "tests": []
+  },
+  {
+    "_id": "3ceddc45-bfaf-4ab3-9f36-3c04141f8f4f",
+    "colId": "22bdf32b-b59e-4097-b228-0412b0016bf0",
+    "containerId": "ad84ff2f-d4e5-4c29-9f1b-55d1352fb711",
+    "name": "delete",
+    "url": "127.0.0.1:3333/projects/1/devices/22",
+    "method": "DELETE",
+    "sortNum": 40000,
+    "created": "2021-11-04T15:59:23.354Z",
+    "modified": "2021-12-22T14:20:39.011Z",
+    "headers": [
+      {
+        "name": "Content-Type",
+        "value": "application/json",
+        "isDisabled": true
+      },
+      {
+        "name": "Content-Type",
+        "value": "multipart/form-data",
+        "isDisabled": true
+      }
+    ],
+    "params": [],
+    "auth": {
+      "type": "bearer",
+      "bearer": "{{tokenBearer}}"
+    },
+    "tests": []
+  },
+  {
+    "_id": "89bf5899-81ad-4ae7-8bf9-a000b8856ebc",
+    "colId": "22bdf32b-b59e-4097-b228-0412b0016bf0",
+    "containerId": "ad84ff2f-d4e5-4c29-9f1b-55d1352fb711",
+    "name": "index",
+    "url": "127.0.0.1:3333/api/v1/projects/2/devices?page=1&perPage=100&searchKey",
+    "method": "GET",
+    "sortNum": 10000,
+    "created": "2021-11-04T15:59:23.354Z",
+    "modified": "2022-01-25T13:35:40.442Z",
+    "headers": [],
+    "params": [
+      {
+        "name": "page",
+        "value": "1",
+        "isPath": false
+      },
+      {
+        "name": "perPage",
+        "value": "100",
+        "isPath": false
+      },
+      {
+        "name": "searchKey",
+        "value": "",
+        "isPath": false
+      }
+    ],
+    "auth": {
+      "type": "bearer",
+      "bearer": "{{tokenBearer}}"
+    },
+    "tests": []
+  },
+  {
+    "_id": "b291dd56-6e48-4a35-a77a-dc43968235b3",
+    "colId": "22bdf32b-b59e-4097-b228-0412b0016bf0",
+    "containerId": "ad84ff2f-d4e5-4c29-9f1b-55d1352fb711",
+    "name": "show",
+    "url": "127.0.0.1:3333/api/v1/projects/2/devices/1",
+    "method": "GET",
+    "sortNum": 35000,
+    "created": "2021-11-04T15:59:23.354Z",
+    "modified": "2022-01-25T13:36:31.496Z",
+    "headers": [
+      {
+        "name": "Content-Type",
+        "value": "application/json",
+        "isDisabled": true
+      },
+      {
+        "name": "Content-Type",
+        "value": "multipart/form-data",
+        "isDisabled": true
+      }
+    ],
+    "params": [],
+    "auth": {
+      "type": "bearer",
+      "bearer": "{{tokenBearer}}"
+    },
+    "tests": []
+  },
+  {
+    "_id": "62e72df9-07a7-4122-808a-9b2a68530b80",
+    "colId": "22bdf32b-b59e-4097-b228-0412b0016bf0",
+    "containerId": "ad84ff2f-d4e5-4c29-9f1b-55d1352fb711",
+    "name": "update",
+    "url": "127.0.0.1:3333/api/v1/projects/2/devices/1",
+    "method": "PATCH",
+    "sortNum": 27500,
+    "created": "2021-11-06T07:39:48.469Z",
+    "modified": "2022-01-25T14:08:51.553Z",
+    "headers": [
+      {
+        "name": "Content-Type",
+        "value": "application/json",
+        "isDisabled": true
+      },
+      {
+        "name": "Content-Type",
+        "value": "multipart/form-data",
+        "isDisabled": true
+      }
+    ],
+    "params": [],
+    "body": {
+      "type": "formdata",
+      "raw": "",
+      "form": [
+        {
+          "name": "name",
+          "value": "PFC2004G"
+        },
+        {
+          "name": "description",
+          "value": "Pfc de démo"
+        },
+        {
+          "name": "lat",
+          "value": "5454"
+        },
+        {
+          "name": "long",
+          "value": "5454"
+        },
+        {
+          "name": "adress",
+          "value": "6 Rue JEan Marie Chevalier"
+        },
+        {
+          "name": "clientId",
+          "value": "PFC7508217"
+        },
+        {
+          "name": "username",
+          "value": "admin"
+        },
+        {
+          "name": "password",
+          "value": "wago"
+        }
+      ],
+      "files": [
+        {
+          "name": "photo",
+          "value": "..\\..\\..\\..\\..\\Images\\photo.png",
+          "isDisabled": true
+        }
+      ]
+    },
+    "auth": {
+      "type": "bearer",
+      "bearer": "{{tokenBearer}}"
+    },
+    "tests": []
+  },
+  {
+    "_id": "2c184104-f5b1-4e04-8517-f97f90d5d2fb",
+    "colId": "22bdf32b-b59e-4097-b228-0412b0016bf0",
+    "containerId": "6445b8d7-bddb-4318-b750-70d064064849",
+    "name": "create",
+    "url": "127.0.0.1:3333/projects/1/tags",
+    "method": "POST",
+    "sortNum": 20000,
+    "created": "2021-11-19T14:48:20.820Z",
+    "modified": "2021-12-14T21:48:48.827Z",
+    "headers": [
+      {
+        "name": "Content-Type",
+        "value": "application/json",
+        "isDisabled": true
+      },
+      {
+        "name": "Content-Type",
+        "value": "multipart/form-data",
+        "isDisabled": true
+      }
+    ],
+    "params": [],
+    "body": {
+      "type": "formdata",
+      "raw": "",
+      "form": [
+        {
+          "name": "name",
+          "value": "readTimeTest"
+        },
+        {
+          "name": "descriptionL1",
+          "value": "Affiche la date et heure depuis macro"
+        },
+        {
+          "name": "descriptionL2",
+          "value": ""
+        },
+        {
+          "name": "descriptionL3",
+          "value": ""
+        },
+        {
+          "name": "unit",
+          "value": ""
+        },
+        {
+          "name": "type",
+          "value": "3"
+        },
+        {
+          "name": "script",
+          "value": "@1/getDateTime 'getDt' STORE $getDt"
+        },
+        {
+          "name": "scriptOutput",
+          "value": ""
+        },
+        {
+          "name": "scriptInterval",
+          "value": "1"
+        },
+        {
+          "name": "scriptLastExec",
+          "value": ""
+        },
+        {
+          "name": "deviceId",
+          "value": ""
+        },
+        {
+          "name": "valueType",
+          "value": ""
+        }
+      ]
+    },
+    "auth": {
+      "type": "bearer",
+      "bearer": "{{tokenBearer}}"
+    },
+    "tests": []
+  },
+  {
+    "_id": "6789e979-346d-4cc2-ae8d-8cfe1be134ff",
+    "colId": "22bdf32b-b59e-4097-b228-0412b0016bf0",
+    "containerId": "6445b8d7-bddb-4318-b750-70d064064849",
+    "name": "update",
+    "url": "127.0.0.1:3333/projects/1/tags/11",
+    "method": "PATCH",
+    "sortNum": 27500,
+    "created": "2021-11-19T14:48:20.820Z",
+    "modified": "2021-12-14T21:46:07.871Z",
+    "headers": [
+      {
+        "name": "Content-Type",
+        "value": "application/json",
+        "isDisabled": true
+      },
+      {
+        "name": "Content-Type",
+        "value": "multipart/form-data",
+        "isDisabled": true
+      }
+    ],
+    "params": [],
+    "body": {
+      "type": "formdata",
+      "raw": "",
+      "form": [
+        {
+          "name": "name",
+          "value": "getDateTime"
+        },
+        {
+          "name": "descriptionL1",
+          "value": "Température du salon et cusine blblll",
+          "isDisabled": true
+        },
+        {
+          "name": "descriptionL2",
+          "value": "living room temperature",
+          "isDisabled": true
+        },
+        {
+          "name": "descriptionL3",
+          "value": "درجة حرارة غرفة المعيشة 1",
+          "isDisabled": true
+        },
+        {
+          "name": "unit",
+          "value": "°C",
+          "isDisabled": true
+        },
+        {
+          "name": "type",
+          "value": "3"
+        },
+        {
+          "name": "script",
+          "value": "'Test WARPScript'",
+          "isDisabled": true
+        },
+        {
+          "name": "scriptOutput",
+          "value": "",
+          "isDisabled": true
+        },
+        {
+          "name": "scriptInterval",
+          "value": "0"
+        },
+        {
+          "name": "scriptLastExec",
+          "value": "",
+          "isDisabled": true
+        },
+        {
+          "name": "deviceId",
+          "value": "1",
+          "isDisabled": true
+        }
+      ],
+      "files": [
+        {
+          "name": "photo",
+          "value": "..\\..\\..\\..\\..\\Images\\photo.png",
+          "isDisabled": true
+        }
+      ]
+    },
+    "auth": {
+      "type": "bearer",
+      "bearer": "{{tokenBearer}}"
+    },
+    "tests": []
+  },
+  {
+    "_id": "85661fbd-7334-4879-8061-736162182da6",
+    "colId": "22bdf32b-b59e-4097-b228-0412b0016bf0",
+    "containerId": "6445b8d7-bddb-4318-b750-70d064064849",
+    "name": "show",
+    "url": "127.0.0.1:3333/projects/1/tags/12",
+    "method": "GET",
+    "sortNum": 35000,
+    "created": "2021-11-19T14:48:20.820Z",
+    "modified": "2021-12-14T21:59:08.309Z",
+    "headers": [
+      {
+        "name": "Content-Type",
+        "value": "application/json",
+        "isDisabled": true
+      },
+      {
+        "name": "Content-Type",
+        "value": "multipart/form-data",
+        "isDisabled": true
+      }
+    ],
+    "params": [],
+    "auth": {
+      "type": "bearer",
+      "bearer": "{{tokenBearer}}"
+    },
+    "tests": []
+  },
+  {
+    "_id": "a28e01a3-8dca-43ed-b6a4-d1d802a34ac0",
+    "colId": "22bdf32b-b59e-4097-b228-0412b0016bf0",
+    "containerId": "6445b8d7-bddb-4318-b750-70d064064849",
+    "name": "delete",
+    "url": "127.0.0.1:3333/api/v1/projects/2/tags/17",
+    "method": "DELETE",
+    "sortNum": 40000,
+    "created": "2021-11-19T14:48:20.820Z",
+    "modified": "2022-01-31T05:35:12.205Z",
+    "headers": [
+      {
+        "name": "Content-Type",
+        "value": "application/json",
+        "isDisabled": true
+      },
+      {
+        "name": "Content-Type",
+        "value": "multipart/form-data",
+        "isDisabled": true
+      }
+    ],
+    "params": [],
+    "auth": {
+      "type": "bearer",
+      "bearer": "{{tokenBearer}}"
+    },
+    "tests": []
+  },
+  {
+    "_id": "e3a7457d-5c1f-4b1d-97e1-052c2b0d6534",
+    "colId": "22bdf32b-b59e-4097-b228-0412b0016bf0",
+    "containerId": "6445b8d7-bddb-4318-b750-70d064064849",
+    "name": "index",
+    "url": "127.0.0.1:3333/api/v1/projects/2/tags?searchKey&typeFilter=1",
+    "method": "GET",
+    "sortNum": 10000,
+    "created": "2021-11-19T14:48:20.820Z",
+    "modified": "2022-01-27T07:21:28.620Z",
+    "headers": [],
+    "params": [
+      {
+        "name": "searchKey",
+        "value": "",
+        "isPath": false
+      },
+      {
+        "name": "typeFilter",
+        "value": "1",
+        "isPath": false
+      }
+    ],
+    "auth": {
+      "type": "bearer",
+      "bearer": "{{tokenBearer}}"
+    },
+    "tests": []
+  },
+  {
+    "_id": "fad6348c-0af0-4b44-9c4c-446eb73b8133",
+    "colId": "22bdf32b-b59e-4097-b228-0412b0016bf0",
+    "containerId": "6445b8d7-bddb-4318-b750-70d064064849",
+    "name": "exportCsv",
+    "url": "127.0.0.1:3333/api/v1/projects/2/tags/exportCsv",
+    "method": "GET",
+    "sortNum": 15000,
+    "created": "2021-11-23T09:50:27.853Z",
+    "modified": "2022-02-01T09:46:15.188Z",
+    "headers": [],
+    "params": [],
+    "auth": {
+      "type": "bearer",
+      "bearer": "{{tokenBearer}}"
+    },
+    "tests": []
+  },
+  {
+    "_id": "48582ac6-87c5-4cf7-be5b-144067dc1165",
+    "colId": "22bdf32b-b59e-4097-b228-0412b0016bf0",
+    "containerId": "6445b8d7-bddb-4318-b750-70d064064849",
+    "name": "importCsv",
+    "url": "127.0.0.1:3333/api/v1/projects/2/tags/importCsv",
+    "method": "POST",
+    "sortNum": 17500,
+    "created": "2021-11-23T09:51:12.724Z",
+    "modified": "2022-01-27T07:20:55.772Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "formdata",
+      "raw": "",
+      "form": [],
+      "files": [
+        {
+          "name": "csvFile",
+          "value": "..\\..\\..\\Users\\Talbourdet\\OneDrive - Hexa-AI\\07-Lab\\Warp10\\HexaStack\\Import.csv"
+        }
+      ]
+    },
+    "auth": {
+      "type": "bearer",
+      "bearer": "{{tokenBearer}}"
+    },
+    "tests": []
+  },
+  {
+    "_id": "71c8718f-7552-4262-badb-0352b1082a8c",
+    "colId": "22bdf32b-b59e-4097-b228-0412b0016bf0",
+    "containerId": "f5acfa5f-8961-4def-a3c6-455b3918d4c0",
+    "name": "getMacro",
+    "url": "127.0.0.1:3333/macros/a1/aa/SriptTest.mc2",
+    "method": "GET",
+    "sortNum": 10000,
+    "created": "2021-12-14T13:48:16.338Z",
+    "modified": "2021-12-14T15:02:08.306Z",
+    "headers": [
+      {
+        "name": "Content-Type",
+        "value": "application/json",
+        "isDisabled": true
+      },
+      {
+        "name": "Content-Type",
+        "value": "multipart/form-data",
+        "isDisabled": true
+      }
+    ],
+    "params": [],
+    "auth": {
+      "type": "bearer",
+      "bearer": "{{tokenBearer}}"
+    },
+    "tests": []
+  },
+  {
+    "_id": "220a9934-d130-4456-a768-610178cfc8fc",
+    "colId": "22bdf32b-b59e-4097-b228-0412b0016bf0",
+    "containerId": "5d9a05e5-10c5-4053-96e3-3e561f0987c2",
+    "name": "Export",
+    "url": "127.0.0.1:3333/projects/export/1/2021-12-10T13%3A30%3A00.000Z/2021-12-21T22%3A30%3A00.000Z",
+    "method": "GET",
+    "sortNum": 70000,
+    "created": "2021-12-20T20:56:20.428Z",
+    "modified": "2021-12-21T20:57:31.331Z",
+    "headers": [],
+    "params": [],
+    "auth": {
+      "type": "bearer",
+      "bearer": "{{tokenBearer}}"
+    },
+    "tests": []
+  },
+  {
+    "_id": "a0234568-643c-4ae3-a4d7-d7fb52c0acef",
+    "colId": "22bdf32b-b59e-4097-b228-0412b0016bf0",
+    "containerId": "5d9a05e5-10c5-4053-96e3-3e561f0987c2",
+    "name": "Import",
+    "url": "127.0.0.1:3333/projects/import/1",
+    "method": "POST",
+    "sortNum": 80000,
+    "created": "2021-12-21T21:12:44.788Z",
+    "modified": "2021-12-22T09:57:33.800Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "formdata",
+      "raw": "",
+      "form": [],
+      "files": [
+        {
+          "name": "archive",
+          "value": "..\\..\\..\\Users\\Talbourdet\\Downloads\\projetTestDev (4).zip"
+        }
+      ]
+    },
+    "auth": {
+      "type": "bearer",
+      "bearer": "{{tokenBearer}}"
+    },
+    "tests": []
+  },
+  {
+    "_id": "8944bbac-6a04-4b7b-80d6-85e1f6066751",
+    "colId": "22bdf32b-b59e-4097-b228-0412b0016bf0",
+    "containerId": "e69c24a7-7284-40bd-85ca-ce91aded43fb",
+    "name": "update",
+    "url": "127.0.0.1:3333/api/v1/allAppSettings",
+    "method": "PATCH",
+    "sortNum": 30000,
+    "created": "2021-12-23T12:24:56.626Z",
+    "modified": "2022-01-19T08:08:05.501Z",
+    "headers": [
+      {
+        "name": "Content-Type",
+        "value": "application/json",
+        "isDisabled": true
+      },
+      {
+        "name": "Content-Type",
+        "value": "multipart/form-data",
+        "isDisabled": true
+      }
+    ],
+    "params": [],
+    "body": {
+      "type": "formdata",
+      "raw": "",
+      "form": [
+        {
+          "name": "appTitle",
+          "value": "Bonjour La Maison",
+          "isDisabled": true
+        },
+        {
+          "name": "appSubTitle1",
+          "value": "Je t'aime ma chérie",
+          "isDisabled": true
+        },
+        {
+          "name": "appSubTitle2",
+          "value": "Caca Boudin",
+          "isDisabled": true
+        },
+        {
+          "name": "appSubTitle3",
+          "value": "Pout Prout",
+          "isDisabled": true
+        },
+        {
+          "name": "appTheme",
+          "value": "",
+          "isDisabled": true
+        },
+        {
+          "name": "appCompanyName",
+          "value": "",
+          "isDisabled": true
+        },
+        {
+          "name": "appCompanyAdress",
+          "value": "",
+          "isDisabled": true
+        },
+        {
+          "name": "appCompanyWebsite",
+          "value": "",
+          "isDisabled": true
+        },
+        {
+          "name": "appCompanyEmail",
+          "value": "",
+          "isDisabled": true
+        },
+        {
+          "name": "appCompanyPhoneNumber",
+          "value": "",
+          "isDisabled": true
+        },
+        {
+          "name": "appDefaultLanguage",
+          "value": "",
+          "isDisabled": true
+        }
+      ],
+      "files": [
+        {
+          "name": "appIcon",
+          "value": "..\\..\\..\\Users\\Talbourdet\\OneDrive - Hexa-AI\\05-Marketing\\Images\\EdgeComputer.jpg"
+        },
+        {
+          "name": "appLoginBackground",
+          "value": "..\\..\\..\\Users\\Talbourdet\\OneDrive - Hexa-AI\\05-Marketing\\Images\\StarsBg.png"
+        }
+      ]
+    },
+    "auth": {
+      "type": "bearer",
+      "bearer": "{{tokenBearer}}"
+    },
+    "tests": []
+  },
+  {
+    "_id": "cdd2c084-efc1-4736-b9fa-e814bb7a8938",
+    "colId": "22bdf32b-b59e-4097-b228-0412b0016bf0",
+    "containerId": "e69c24a7-7284-40bd-85ca-ce91aded43fb",
+    "name": "getPublicAppSettings",
+    "url": "127.0.0.1:3333/publicAppSettings",
+    "method": "GET",
+    "sortNum": 10000,
+    "created": "2021-12-23T12:24:56.626Z",
+    "modified": "2021-12-23T12:26:52.247Z",
+    "headers": [],
+    "params": [],
+    "auth": {
+      "type": "bearer",
+      "bearer": "{{tokenBearer}}"
+    },
+    "tests": []
+  },
+  {
+    "_id": "d50dbf97-f6dc-47d3-b6c6-9ed63d638f47",
+    "colId": "22bdf32b-b59e-4097-b228-0412b0016bf0",
+    "containerId": "e69c24a7-7284-40bd-85ca-ce91aded43fb",
+    "name": "getAllAppSettings",
+    "url": "127.0.0.1:3333/api/v1/allAppSettings",
+    "method": "GET",
+    "sortNum": 20000,
+    "created": "2021-12-23T12:26:00.404Z",
+    "modified": "2022-01-12T10:36:17.938Z",
+    "headers": [],
+    "params": [],
+    "auth": {
+      "type": "bearer",
+      "bearer": "{{tokenBearer}}"
+    },
+    "tests": []
+  },
+  {
+    "_id": "1c8b3ea7-4a28-41e3-9add-acf43a253be5",
+    "colId": "22bdf32b-b59e-4097-b228-0412b0016bf0",
+    "containerId": "d847195a-6b24-4a23-a590-dfc4e07f3d93",
+    "name": "show",
+    "url": "127.0.0.1:3333/projects/1/dashboards/1",
+    "method": "GET",
+    "sortNum": 35000,
+    "created": "2021-12-30T08:38:46.649Z",
+    "modified": "2021-12-30T08:48:23.368Z",
+    "headers": [
+      {
+        "name": "Content-Type",
+        "value": "application/json",
+        "isDisabled": true
+      },
+      {
+        "name": "Content-Type",
+        "value": "multipart/form-data",
+        "isDisabled": true
+      }
+    ],
+    "params": [],
+    "auth": {
+      "type": "bearer",
+      "bearer": "{{tokenBearer}}"
+    },
+    "tests": []
+  },
+  {
+    "_id": "1cb5a4ed-861b-4d4f-88db-1c953e6d458c",
+    "colId": "22bdf32b-b59e-4097-b228-0412b0016bf0",
+    "containerId": "d847195a-6b24-4a23-a590-dfc4e07f3d93",
+    "name": "index",
+    "url": "127.0.0.1:3333/api/v1/projects/2/dashboards?page=1&perPage=100&searchKey&stared=true",
+    "method": "GET",
+    "sortNum": 10000,
+    "created": "2021-12-30T08:38:46.649Z",
+    "modified": "2022-01-24T21:45:48.469Z",
+    "headers": [],
+    "params": [
+      {
+        "name": "page",
+        "value": "1",
+        "isPath": false
+      },
+      {
+        "name": "perPage",
+        "value": "100",
+        "isPath": false
+      },
+      {
+        "name": "searchKey",
+        "value": "",
+        "isPath": false
+      },
+      {
+        "name": "stared",
+        "value": "true",
+        "isPath": false
+      }
+    ],
+    "auth": {
+      "type": "bearer",
+      "bearer": "{{tokenBearer}}"
+    },
+    "tests": []
+  },
+  {
+    "_id": "bf5001c4-e267-4c2a-ab2c-724ef79ab185",
+    "colId": "22bdf32b-b59e-4097-b228-0412b0016bf0",
+    "containerId": "d847195a-6b24-4a23-a590-dfc4e07f3d93",
+    "name": "create",
+    "url": "127.0.0.1:3333/api/v1/projects/2/dashboards",
+    "method": "POST",
+    "sortNum": 20000,
+    "created": "2021-12-30T08:38:46.649Z",
+    "modified": "2022-01-24T21:05:19.449Z",
+    "headers": [
+      {
+        "name": "Content-Type",
+        "value": "application/json",
+        "isDisabled": true
+      },
+      {
+        "name": "Content-Type",
+        "value": "multipart/form-data",
+        "isDisabled": true
+      }
+    ],
+    "params": [],
+    "body": {
+      "type": "formdata",
+      "raw": "",
+      "form": [
+        {
+          "name": "name",
+          "value": "Dashboard Synthèse"
+        },
+        {
+          "name": "descriptionL1",
+          "value": "Dashboard de test"
+        },
+        {
+          "name": "descriptionL2",
+          "value": "Test purpose dashboard"
+        },
+        {
+          "name": "descriptionL3",
+          "value": ""
+        },
+        {
+          "name": "body",
+          "value": "<h1>Hello World </h1>"
+        },
+        {
+          "name": "stared",
+          "value": "false"
+        }
+      ]
+    },
+    "auth": {
+      "type": "bearer",
+      "bearer": "{{tokenBearer}}"
+    },
+    "tests": []
+  },
+  {
+    "_id": "e6c8fc0a-e70c-40fb-930b-d4eb2a1226af",
+    "colId": "22bdf32b-b59e-4097-b228-0412b0016bf0",
+    "containerId": "d847195a-6b24-4a23-a590-dfc4e07f3d93",
+    "name": "delete",
+    "url": "127.0.0.1:3333/projects/1/dashboards/1",
+    "method": "DELETE",
+    "sortNum": 40000,
+    "created": "2021-12-30T08:38:46.649Z",
+    "modified": "2021-12-30T08:48:37.542Z",
+    "headers": [
+      {
+        "name": "Content-Type",
+        "value": "application/json",
+        "isDisabled": true
+      },
+      {
+        "name": "Content-Type",
+        "value": "multipart/form-data",
+        "isDisabled": true
+      }
+    ],
+    "params": [],
+    "auth": {
+      "type": "bearer",
+      "bearer": "{{tokenBearer}}"
+    },
+    "tests": []
+  },
+  {
+    "_id": "fbe0baa1-21f4-4391-bd02-b60ea3977aea",
+    "colId": "22bdf32b-b59e-4097-b228-0412b0016bf0",
+    "containerId": "d847195a-6b24-4a23-a590-dfc4e07f3d93",
+    "name": "update",
+    "url": "127.0.0.1:3333/projects/1/dashboards/1",
+    "method": "PATCH",
+    "sortNum": 27500,
+    "created": "2021-12-30T08:47:41.747Z",
+    "modified": "2021-12-30T08:48:04.458Z",
+    "headers": [
+      {
+        "name": "Content-Type",
+        "value": "application/json",
+        "isDisabled": true
+      },
+      {
+        "name": "Content-Type",
+        "value": "multipart/form-data",
+        "isDisabled": true
+      }
+    ],
+    "params": [],
+    "body": {
+      "type": "formdata",
+      "raw": "",
+      "form": [
+        {
+          "name": "name",
+          "value": "Dashboard Test"
+        },
+        {
+          "name": "descriptionL1",
+          "value": "Dashboard de test"
+        },
+        {
+          "name": "descriptionL2",
+          "value": "Test purpose dashboard"
+        },
+        {
+          "name": "descriptionL3",
+          "value": "اختبار الغرض لوحة القيادة \""
+        },
+        {
+          "name": "body",
+          "value": "<h1>Hello World </h1>"
+        },
+        {
+          "name": "stared",
+          "value": "false"
+        }
+      ]
+    },
+    "auth": {
+      "type": "bearer",
+      "bearer": "{{tokenBearer}}"
+    },
+    "tests": []
+  },
+  {
+    "_id": "af47c5a3-3ec0-4022-9fa5-a1f61648ccae",
+    "colId": "22bdf32b-b59e-4097-b228-0412b0016bf0",
+    "containerId": "3b989f88-22ae-4347-a388-8b0ec1d5f28f",
+    "name": "wsStore",
+    "url": "127.0.0.1:3333/api/v1/projects/EZruAeFuiEgBu3ZKEHQCweBbsLE8j.hL0u2.oXTpZe43E8HdfL3QaiNBEPv6Ec0d4em6x979y1k5tF1feTRTQpiACjISMyAKhS.z0hr0pwIBPzA9H._ua4pc.265BSV6BsMD5ZdssWIRR1O0r8NSZtpWmSdBlHcBXIct5YlBf4DejCXuGuJ0CF/documents/wsCreate/1/test.csv",
+    "method": "POST",
+    "sortNum": 90000,
+    "created": "2022-08-18T13:56:14.028Z",
+    "modified": "2022-08-18T13:56:26.523Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "text",
+      "raw": "juju",
+      "form": []
+    },
+    "tests": []
+  }
+]

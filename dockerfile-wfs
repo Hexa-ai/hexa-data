@@ -1,0 +1,5 @@
+FROM warp10io/warpfleetsynchronizer:latest
+
+WORKDIR /data
+
+COPY ./conf.json ./

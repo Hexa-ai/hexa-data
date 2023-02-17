@@ -1,0 +1,27 @@
+server/.vscode
+.vscode
+.DS_STORE
+server/node_modules
+server/build
+server/tmp
+server/.env
+ui/src/*.js
+ui/src/*.js.map
+ui/src/**/*.js
+ui/src/**/*.js.map
+build/*
+build/**/*
+tmp/
+.env
+server/database/*.sqlite
+tmp/*.sqlite3
+storage
+.cache
+install.log
+conf/*
+# Don't push the public folder
+server/public
+public
+# Keep only images
+!server/public/img
+node_modules

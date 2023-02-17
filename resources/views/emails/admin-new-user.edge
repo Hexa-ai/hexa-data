@@ -1,0 +1,47 @@
+<mjml>
+  <mj-head>
+    <mj-style>
+      .footer div {
+        display: flex;
+      	flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        space
+      }
+    </mj-style>
+    <mj-attributes>
+      <mj-all padding="0px"></mj-all>
+      <mj-class name="preheader" color="#000000" font-size="11px" font-family="Ubuntu, Helvetica, Arial, sans-serif" padding="0 20px"></mj-class>
+      <mj-class name="cta" color="#FFFFFF" font-size="13px" border-radius="3px" font-family="Ubuntu, Helvetica, Arial, sans-serif, Helvetica, Arial, sans-serif" padding="20px 25px"></mj-class>
+      <mj-class name="footer-text" align="center" color="#ffffff" font-family="Ubuntu, Helvetica, Arial, sans-serif, Helvetica, Arial, sans-serif" font-size="15px" padding="0 25px"></mj-class>
+      <mj-navbar-link padding="0 35px" font-weight="bold" font-size="12px"></mj-navbar-link>
+    </mj-attributes>
+    <mj-style inline="inline">a { text-decoration: none; color: inherit; }</mj-style>
+  </mj-head>
+  <mj-body background-color="#FFFFFF">
+    <mj-section background-color="#FFFFFF">
+      <mj-column>
+        <mj-text align="center" padding-top="50px" line-height="32px" font-family="Ubuntu, Helvetica, Arial, sans-serif, Helvetica, Arial, sans-serif" font-size="28px" >{{ appTitle }}</mj-text>
+      </mj-column>
+    </mj-section>
+    <mj-section background-color="#FFFFFF">
+      <mj-column>
+        <mj-text align="center" line-height="52px" font-family="Ubuntu, Helvetica, Arial, sans-serif, Helvetica, Arial, sans-serif" font-size="16px" >{{ appSubtitle }}</mj-text>
+        <mj-text align="center" padding-top="50px" font-family="Ubuntu, Helvetica, Arial, sans-serif, Helvetica, Arial, sans-serif" font-size="18px" >{{ name }} vient de créer un compte:</mj-text>
+      </mj-column>
+    </mj-section>
+    <mj-section>
+      <mj-column>
+        <mj-text padding-top="20px" padding-bottom="90px" align="center" font-family="Ubuntu, Helvetica, Arial, sans-serif, Helvetica, Arial, sans-serif" font-size="18px" >{{ email }}</mj-text>
+      </mj-column>
+    </mj-section>
+    <mj-section background-color="#343a40">
+      <mj-column css-class="footer">
+      <mj-text align="center" padding-left="10px" padding-top="20px" color="#FFFFFF" font-family="Ubuntu, Helvetica, Arial, sans-serif, Helvetica, Arial, sans-serif" font-size="14px" >{{ companyName }}</mj-text>
+      <mj-text align="center" padding-left="10px" padding-top="20px" color="#FFFFFF" font-family="Ubuntu, Helvetica, Arial, sans-serif, Helvetica, Arial, sans-serif" font-size="14px" >{{ companyAddress }}</mj-text>
+      <mj-text align="center" padding-left="10px" padding-top="20px" color="#FFFFFF" font-family="Ubuntu, Helvetica, Arial, sans-serif, Helvetica, Arial, sans-serif" font-size="14px" >{{ companyEmail }}</mj-text>
+      <mj-text align="center" padding-left="10px" padding-top="20px" padding-bottom="20px" color="#FFFFFF" font-family="Ubuntu, Helvetica, Arial, sans-serif, Helvetica, Arial, sans-serif" font-size="14px" >{{  companyNumber }}</mj-text>
+      </mj-column>
+    </mj-section>
+  </mj-body>
+</mjml>

@@ -1,0 +1,39 @@
+
+
+<%
+    JSON-> 'gtsCollection' STORE
+    [] 'gtsList' STORE
+
+    $gtsCollection <%
+        'toInsert' STORE
+        $toInsert 'classname' GET 'classname' STORE
+        $toInsert 'labels' GET 'labels' STORE
+        $toInsert 'values' GET 'values' STORE
+
+        // création gts avec le bon type
+        NEWGTS
+        $classname RENAME
+        $labels RELABEL
+
+        $values <%
+            'value' STORE
+            // Test si le timestamp est donné
+            $value 'ts' CONTAINSKEY <% 'ts' GET 'ts' STORE %> <% DROP %> IFTE
+            $value 'value' GET 'v' STORE
+
+            $value 'ts' CONTAINSKEY <% 'ts' GET NaN NaN NaN $v ADDVALUE %> <% DROP %> IFTE
+            $value 'ts' CONTAINSKEY ! <% DROP NOW NaN NaN NaN $v ADDVALUE %> <% DROP %> IFTE
+
+        %> FOREACH
+
+        'g' STORE
+
+        $gtsList $g +! DROP
+
+    %> FOREACH
+
+    $gtsList $writeToken UPDATE
+
+%> 'macro' STORE
+
+@macro

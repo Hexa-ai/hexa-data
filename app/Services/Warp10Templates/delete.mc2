@@ -1,0 +1,44 @@
+// Input data model
+// [{
+//   "classname": "TempSalon3",
+//   "labels": {
+//     "projectId": 1,
+//     "deviceId": 1
+//   },
+//   "attributes": {
+//     "descriptionL1": "Température du salon",
+//     "descriptionL2": "living room temperature",
+//     "descriptionL3": "درجة حرارة غرفة المعيشة"
+//   },
+//   "valueType": 2
+// }]
+
+<%
+    JSON-> 'gtsDescription' STORE
+    0 'gtsDeleted' STORE
+    [] 'errorList' STORE
+
+    $gtsDescription <%
+        'toCreate' STORE
+        $toCreate 'classname' GET 'classname' STORE
+        $toCreate 'labels' GET 'labels' STORE
+
+        // Delete the GTS
+        $writeToken
+        NEWGTS
+        $classname RENAME
+        $labels RELABEL
+        TOSELECTOR
+        NULL
+        NULL
+        1
+        DELETE
+
+        // Increment the number of deleted GTS
+        $gtsDeleted + 'gtsDeleted' STORE
+
+    %> FOREACH
+
+%> 'macro' STORE
+
+ @macro $gtsDeleted

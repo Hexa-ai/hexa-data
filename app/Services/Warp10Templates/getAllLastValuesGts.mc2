@@ -1,0 +1,26 @@
+{
+  'token' $readToken
+  'class' '~.*'
+  'labels' {}
+  'count' 1
+  'end' NOW
+} FETCH 'data' STORE
+
+[] 'result' STORE
+
+
+$data
+<%
+  'value' STORE
+  $value VALUES 0 GET TYPEOF 'type' STORE
+
+  <% $type 'LONG' == $type 'DOUBLE' == OR %>
+  <% 'number' 'type' STORE %>
+  <% $type TOLOWER 'type' STORE %>
+  IFTE
+
+  $result [ { 'id' $value NAME 'name' $value NAME 'value' $value VALUES 0 GET 'type' $type } ] APPEND 'result' STORE
+%>
+FOREACH
+
+$result

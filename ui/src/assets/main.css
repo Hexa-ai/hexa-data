@@ -1,0 +1,32 @@
+/* .menu-body {
+  background-color: v-bind(appMenuBgBodyColor);
+}
+.menu-body-current-element:hover {
+  background-color: v-bind(appMenuBgCurrentOverBodyColor);
+}
+.menu-body-element:hover {
+  background-color: v-bind(appMenuBgOverBodyColor);
+}
+
+
+.menu-body-font * {
+  color: v-bind(appMenuFontBodyColor);
+}
+.menu-body-font {
+  color: v-bind(appMenuFontBodyColor);
+}
+
+
+.menu-body-font:hover * {
+  color: v-bind(appMenuFontOverBodyColor);
+}
+.menu-body-font:hover {
+  color: v-bind(appMenuFontOverBodyColor);
+}
+
+.menu-header {
+  background-color: v-bind(appMenuBgHeaderColor);
+}
+.menu-header-font {
+  color: v-bind(appMenuFontHeaderColor);
+} */
