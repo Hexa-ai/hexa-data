@@ -63,6 +63,8 @@ jobs:
       #   with:
       #     name: build-env
       #     path: .
+      - name: Display version
+        run: cat build.env
       - name: Set version
         run: export $(cat build.env | xargs)
       - name: Change directory
