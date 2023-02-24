@@ -51,8 +51,20 @@ jobs:
         run: npm install --legacy-peer-deps
       - name: Update version
         run: echo VERSION=$(node -p "require('./package.json').version") >> build.env
+      # - name: Upload build env
+      #   uses: actions/upload-artifact@v2
+      #   with:
+      #     name: build-env
+      #     path: build.env
       - name: Build
         run: npm run build
+      # - name: Download build env
+      #   uses: actions/download-artifact@v2
+      #   with:
+      #     name: build-env
+      #     path: .
+      - name: Set version
+        run: export $(cat build.env | xargs)
       - name: Change directory
         run: cd build
       - name: Create container
