@@ -130,7 +130,7 @@ export default class NotifService {
         msg
         .from(Env.get('EMAIL_FROM'))
         .to(admin?.email)
-        .subject('Un nouvelle utilisateur s\'est inscrit')
+        .subject('Un nouvel utilisateur s\'est inscrit')
         .html(htmlRender)
       })
     });
