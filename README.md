@@ -1,30 +1,56 @@
-# Hexa-Data
+<h1 align="center">Welcome to Hexa-Data 👋</h1>
+<p>
+  <img alt="Version" src="https://img.shields.io/badge/version-1.2.17-blue.svg?cacheSeconds=2592000" />
+  <a href="https://www.gnu.org/licenses/" target="_blank">
+    <img alt="License: AGPL--3.0" src="https://img.shields.io/badge/License-AGPL--3.0-yellow.svg" />
+  </a>
+</p>
 
-Monitoring and data collection platform dedicated to industrial applications
+> Backend Monitoring and data collection application dedicated to industrial applications
 
-## Prerequisite
+## Prerequisites
 
-* Docker ( Version >= 20.0.0 )
-* Bash
+- node v16
+- docker >= v20
+- docker-compose
 
-## Installation
-
-Enter this command at the root of the directory
-
-```./install.sh```
-## Testing
-To test the application, go to the /server directory and execute the command below
-
+```sh
+node -v && docker -v && docker-compose -v
 ```
+
+## Install
+
+```sh
+chmod +x install.sh
+./install.sh
+```
+
+## Usage
+
+Go to the [application](http://localhost:3333)
+
+## Run tests
+
+```sh
 node -r @adonisjs/assembler/build/register japaFile.ts
 ```
 To exclude all tests using external services, notably for continuous integration, add the '-ci' argument
-```
+```sh
 node -r @adonisjs/assembler/build/register japaFile.ts -ci
 ```
-## Documentation
 
-- [Tags CSV export](Documentation/tagsExport.md)
-- [MQTT data acquisition](Documentation/mqttDataAcquisition.md)
-- [WARP10 data structure](Documentation/warp10DataStructure.md)
+## Author
 
+👤 **Julien Talbourdet**
+
+* Website: www.hexa-ai.fr
+* Github: [@jtalbourdet](https://github.com/jtalbourdet)
+
+## Show your support
+
+Give a ⭐️ if this project helped you!
+
+## 📝 License
+
+Copyright © 2023 [Julien Talbourdet](https://github.com/jtalbourdet).<br />
+This project is [AGPL--3.0](https://www.gnu.org/licenses/) licensed.

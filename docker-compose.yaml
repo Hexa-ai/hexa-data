@@ -1,43 +1,14 @@
 version: '3.4'
 services:
-  # reverse-proxy:
-  #   restart: unless-stopped
-  #   image: traefik:${TRAEFIK_VERSION}
-  #   ports:
-  #   - 443:443
-  #   - 80:80
-  #   - 8883:8883
-  #   command:
-  #   - --entrypoints.web.address=:80
-  #   - --entrypoints.webSecure.address=:443
-  #   - --entrypoints.mqttSecure.address=:8883
-  #   - --entrypoints.web.http.redirections.entrypoint.to=webSecure
-  #   - --entrypoints.web.http.redirections.entrypoint.scheme=https
-  #   - --providers.docker=true
-  #   - --providers.docker.exposedbydefault=false
-  #   - --certificatesresolvers.le.acme.email=contact@hexa-ai.fr
-  #   - --certificatesresolvers.le.acme.storage=./acme.json
-  #   - --certificatesresolvers.le.acme.tlschallenge=true
-  #   volumes:
-  #   - /var/run/docker.sock:/var/run/docker.sock
-  # hd-service:
-  #   build:
-  #     context: .
-  #     dockerfile: dockerfile-hd
-  #   # ports:
-  #   # - 80:3333
-  #   restart: unless-stopped
-  #   volumes:
-  #   - v_hexa-data:/usr/src/app/storage
-    # labels:
-    # - "traefik.enable=true"
-    # - "traefik.http.routers.hd-service.rule=Host(`beta.hexa-data.fr`)"
-    # - "traefik.http.routers.hd-service.entrypoints=webSecure,web"
-    # - "traefik.http.services.hd-service.loadbalancer.server.port=3333"
-    # - "traefik.http.routers.hd-service.tls=true"
-    # - "traefik.http.middlewares.hd-service.redirectscheme.scheme=webSecure"
-    # - "traefik.http.middlewares.hd-service.redirectscheme.permanent=true"
-    # - "traefik.http.routers.hd-service.tls.certresolver=le"
+  hd-service:
+    build:
+      context: .
+      dockerfile: dockerfile-hd
+    ports:
+    - 3333:3333
+    restart: unless-stopped
+    volumes:
+    - v_hexa-data:/usr/src/app/storage
   queue-redis-service:
     image: redis:${QUEUE_REDIS_VERSION}
     restart: always
@@ -57,15 +28,6 @@ services:
       - MYSQL_DATABASE=hexa-data
     volumes:
       - v_mysql:/var/lib/mysql
-  # node-red:
-  #   image: nodered/node-red:${NODE_RED_VERSION}
-  #   environment:
-  #     - TZ=Europe/Paris
-  #   ports:
-  #     - "1880:1880"
-  #   volumes:
-  #     - v_node-red:/data
-  #     - ./nodeRedConf/settings.js:/data/settings.js
   emqx-service:
     image: emqx/emqx:${EMQX_VERSION}
     environment:
@@ -83,11 +45,6 @@ services:
     - 8883:8883
     - 1883:1883
     - 3000:18083
-    # labels:
-    # - "traefik.enable=true"
-    # - "traefik.tcp.services.emqx-service.loadbalancer.server.port=8883"
-    # - "traefik.tcp.routers.tcpr_mqtt.entrypoints=mqtt"
-    # - "traefik.tcp.routers.tcpr_mqtt.rule=HostSNI(`beta.hexa-data.fr`)"
 
     extra_hosts:
     - "host.docker.internal:host-gateway"
@@ -137,7 +94,6 @@ services:
     volumes:
       - v_warpfleetsynchronizer:/data
 
-
 volumes:
   v_mysql:
   v_emqx-data:
@@ -148,4 +104,3 @@ volumes:
   v_node-red:
   v_redis:
   v_warpfleetsynchronizer:
-
