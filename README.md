@@ -8,26 +8,38 @@
 
 > Backend Monitoring and data collection application dedicated to industrial applications
 
+### Installation
+
 ## Prerequisites
 
-- node v16
 - docker >= v20
-- docker-compose
+- docker-compose >= v1.28
 
 ```sh
-node -v && docker -v && docker-compose -v
+docker -v && docker-compose -v
 ```
 
 ## Install
 
 ```sh
-chmod +x install.sh
-./install.sh
+curl -sSL https://raw.githubusercontent.com/Hexa-ai/hexa-data/master/install.sh | bash
 ```
 
 ## Usage
 
 Go to the [application](http://localhost:3333)
+
+### Development
+
+## Prerequisites
+
+- node v16
+- docker >= v20
+- docker-compose >= v1.28
+
+```sh
+node -v && docker -v && docker-compose -v
+```
 
 ## Run tests
 
