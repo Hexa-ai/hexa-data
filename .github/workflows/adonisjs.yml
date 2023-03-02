@@ -57,6 +57,8 @@ jobs:
         run: cat build.env
       - name: Set version
         run: export $(cat build.env | xargs)
+      - name: Display version name
+        run: echo $VERSION
       - name: Change directory
         run: cd build
       - name: Create container
