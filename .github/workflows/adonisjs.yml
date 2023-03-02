@@ -51,18 +51,8 @@ jobs:
         run: npm install --legacy-peer-deps
       - name: Update version
         run: echo VERSION=$(node -p "require('./package.json').version") >> build.env
-      # - name: Upload build env
-      #   uses: actions/upload-artifact@v2
-      #   with:
-      #     name: build-env
-      #     path: build.env
       - name: Build
         run: npm run build
-      # - name: Download build env
-      #   uses: actions/download-artifact@v2
-      #   with:
-      #     name: build-env
-      #     path: .
       - name: Display version
         run: cat build.env
       - name: Set version
@@ -74,7 +64,7 @@ jobs:
       - name: Build an push container
         run: |
           echo ${{ secrets.TOKEN }} | docker login ghcr.io -u maximemrf --password-stdin
-          docker buildx build --platform linux/amd64,linux/arm64,linux/arm/v7 --push --file dockerfile-hd -t ghcr.io/maximemrf/hexa-data:latest -t ghcr.io/maximemrf/hexa-data:latest .
+          docker buildx build --platform linux/amd64,linux/arm64,linux/arm/v7 --push --file dockerfile-hd -t ghcr.io/maximemrf/hexa-data:${{ env.VERSION }} -t ghcr.io/maximemrf/hexa-data:latest .
       # - name: Login to GitHub Container Registry
       #   uses: docker/login-action@v1
       #   with:

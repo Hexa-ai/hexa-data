@@ -8,7 +8,7 @@
 
 > Backend Monitoring and data collection application dedicated to industrial applications
 
-### Installation
+# Installation
 
 ## Prerequisites
 
@@ -29,7 +29,7 @@ curl -sSL https://raw.githubusercontent.com/Hexa-ai/hexa-data/master/install.sh 
 
 Go to the [application](http://localhost:3333)
 
-### Development
+# Development
 
 ## Prerequisites
 
