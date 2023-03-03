@@ -116,11 +116,11 @@ export default class NotifService {
     })
   }
   /**
-   * @method sendAdminEmail This method is used to send an information email to the admin about a new user
-   * @param usser {User} The new user who has been created
+   * @method sendAdminNewUserEmail This method is used to send an information email to the admin about a new user
+   * @param user {User} The new user who has been created
    * @returns void
    */
-  public async sendAdminEmail(user: User) {
+  public async sendAdminNewUserEmail(user: User) {
     const settings = await AppSettings.query().select('appTitle', 'appSubTitle1', 'appCompanyName', 'appCompanyAdress', 'appCompanyEmail', 'appCompanyPhoneNumber').firstOrFail()
     const appSettings = settings.$attributes
     const admins = await User.query().select('name', 'email').where('isAdmin', true)
@@ -134,7 +134,36 @@ export default class NotifService {
         .html(htmlRender)
       })
     });
-
+  }
+  /**
+   * @method sendAdminAddUserToProjectEmail This method is used to send an information email to the admin about a user added to a project
+   * @param user {User} The new user who has been added to a project
+   * @returns void
+   */
+  public async sendAdminAddUserToProjectEmail(user: User, project: Project) {
+    const settings = await AppSettings.query().select('appTitle', 'appSubTitle1', 'appCompanyName', 'appCompanyAdress', 'appCompanyEmail', 'appCompanyPhoneNumber').firstOrFail()
+    const appSettings = settings.$attributes
+    const admins = await User.query().select('name', 'email').where('isAdmin', true)
+    admins.forEach(async (admin) => {
+      const htmlRender = mjml(await View.render('emails/admin-add-user-project', {
+        appTitle: appSettings.appTitle,
+        appSubtitle: appSettings.appSubTitle1,
+        email: user.email,
+        name: user.name,
+        companyName: appSettings.appCompanyName,
+        companyAddress: appSettings.appCompanyAdress,
+        companyEmail: appSettings.appCompanyEmail,
+        companyNumber: appSettings.appCompanyPhoneNumber,
+        projectName: project.name,
+      })).html
+      await Mail.sendLater((msg) => {
+        msg
+        .from(Env.get('EMAIL_FROM'))
+        .to(admin?.email)
+        .subject('Un nouvel utilisateur s\'est inscrit')
+        .html(htmlRender)
+      })
+    });
   }
   /**
    * @method sendResetPasswordEmail This method is used to send new password to the user

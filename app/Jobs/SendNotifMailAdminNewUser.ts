@@ -4,6 +4,6 @@ import User from 'App/Modules/Users/Models/User'
 export default class SendNotifMailWelcome {
   public async handle(user: User) {
     const notifService = new NotifService()
-    await notifService.sendAdminEmail(user)
+    await notifService.sendAdminNewUserEmail(user)
   }
 }

@@ -165,6 +165,8 @@ export default class TagsController {
         'device_id',
       ])
       .where('project_id', +params.projectId)
+      // export only variables
+      .where('type', 1)
 
     response.send(CsvService.toCsv(tagList))
   }

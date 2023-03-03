@@ -174,8 +174,7 @@
           </div>
         </div>
       </div>
-      <BannerVue v-if="store.publicAppSettings.isLicenseActivated == false" :msg="t('licence.invalidKey')" />
-      <nav id="appNavTool" v-if="showToolBar && store.publicAppSettings.isLicenseActivated == true"
+      <nav id="appNavTool" v-if="showToolBar"
         class="sticky top-16 flex-shrink-0 h-16 flex bg-white shadow-sm">
         <slot name="menuLeft" class="flex-none"></slot>
         <div class="flex-grow"></div>

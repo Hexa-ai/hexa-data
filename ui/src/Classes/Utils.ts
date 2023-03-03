@@ -10,7 +10,7 @@ export type HierarchizedData = Array<HierarchizedDataProps>
 export class Utils {
   public static camelCase(str: string) {
     return str
-      .replace(/[^a-z ]/gi, '')
+      .replace(/[^a-z0-9 ]/gi, '')
       .replace(/(?:^\w|[A-Z]|\b\w)/g, function (word, index) {
         return index == 0 ? word.toLowerCase() : word.toUpperCase()
       })
