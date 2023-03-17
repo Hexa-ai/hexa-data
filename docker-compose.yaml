@@ -1,7 +1,7 @@
 version: '3.4'
 services:
   hd-service:
-    image: ghcr.io/maximemrf/hexa-data:latest
+    image: ghcr.io/hexa-ai/hexa-data:latest
     ports:
     - 3333:3333
     restart: unless-stopped
