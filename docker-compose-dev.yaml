@@ -1,14 +1,14 @@
 version: '3.4'
 services:
-  hd-service:
-    build:
-      context: .
-      dockerfile: dockerfile-hd
-    ports:
-    - 3333:3333
-    restart: unless-stopped
-    volumes:
-    - v_hexa-data:/usr/src/app/storage
+  # hd-service:
+  #   build:
+  #     context: .
+  #     dockerfile: dockerfile-hd
+  #   ports:
+  #   - 3333:3333
+  #   restart: unless-stopped
+  #   volumes:
+  #   - v_hexa-data:/usr/src/app/storage
   queue-redis-service:
     image: redis:${QUEUE_REDIS_VERSION}
     restart: always
@@ -99,7 +99,7 @@ volumes:
   v_emqx-data:
   v_emqx-etc:
   v_emqx-log:
-  v_warp10:
+  # v_warp10:
   v_hexa-data:
   v_node-red:
   v_redis:

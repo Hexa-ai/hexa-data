@@ -61,18 +61,5 @@ jobs:
         run: docker buildx create --name mybuilder --driver docker-container --bootstrap --use
       - name: Build an push container
         run: |
-          echo ${{ secrets.TOKEN }} | docker login ghcr.io -u maximemrf --password-stdin
-          docker buildx build --platform linux/amd64,linux/arm64,linux/arm/v7 --push --file dockerfile-hd -t ghcr.io/maximemrf/hexa-data:${{ env.VERSION }} -t ghcr.io/maximemrf/hexa-data:latest .
-      # - name: Login to GitHub Container Registry
-      #   uses: docker/login-action@v1
-      #   with:
-      #     registry: ghcr.io
-      #     username: maximemrf
-      #     password: ${{ secrets.TOKEN }}
-      # - name: Build and push
-      #   uses: docker/build-push-action@v2
-      #   with:
-      #     context: .
-      #     file: ./dockerfile-hd
-      #     push: true
-      #     tags: ghcr.io/maximemrf/hexa-data:latest
+          echo ${{ secrets.TOKEN }} | docker login ghcr.io -u hexa-ai --password-stdin
+          docker buildx build --platform linux/amd64,linux/arm64,linux/arm/v7 --push --file dockerfile-hd -t ghcr.io/hexa-ai/hexa-data:${{ env.VERSION }} -t ghcr.io/hexa-ai/hexa-data:latest .
