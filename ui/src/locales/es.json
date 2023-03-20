@@ -222,6 +222,8 @@
 		"device": "Equipo",
 		"valueType": "Tipo de variable",
 		"alarm": "Alarma",
+    "minTreshold": "Umbral mínimo",
+    "maxTreshold": "Umbral máximo",
 		"import": "Importación CSV",
 		"export": "exportación CSV",
 		"warpScriptEditor": "Editor de WarpScript",

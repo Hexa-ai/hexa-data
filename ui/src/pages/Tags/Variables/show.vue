@@ -136,6 +136,28 @@
                   ></InputField>
                 </div>
               </div>
+              <div class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6" v-if="showTresholdField">
+                <div class="sm:col-span-2">
+                  <InputField
+                    :title="$t('tags.minTreshold')"
+                    v-model="refTag!.minTreshold"
+                    :isRequired="true"
+                    :isDisabled="false"
+                    :type="FieldType.NUMBER"
+                  ></InputField>
+                </div>
+              </div>
+              <div class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6" v-if="showTresholdField">
+                <div class="sm:col-span-2">
+                  <InputField
+                    :title="$t('tags.maxTreshold')"
+                    v-model="refTag!.maxTreshold"
+                    :isRequired="true"
+                    :isDisabled="false"
+                    :type="FieldType.NUMBER"
+                  ></InputField>
+                </div>
+              </div>
               <div class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
                 <div class="sm:col-span-2">
                   <Btn
@@ -157,7 +179,7 @@
 import WarpChart from './../../../components/WarpChart.vue'
 import VarWarpChart from './../../../components/VarWarpChart.vue'
 import { useI18n } from 'vue-i18n'
-import { inject, ref } from 'vue';
+import { inject, ref, computed } from 'vue';
 import BaseLayoutVue from '../../../layouts/BaseLayout.vue'
 import { useRouter, useRoute } from 'vue-router'
 import Store from './../../../store/Store'
@@ -189,6 +211,8 @@ const refDeviceName =ref<string[]>([])
 const refDeviceId =ref<number[]>([])
 
 const edit = ref(false)
+
+const showTresholdField = computed(() =>  refTag.value.alarm === true && (refTag.value.valueType == 2 || refTag.value.valueType == 3))
 
 let ws = ref("")
 
@@ -242,7 +266,10 @@ async function init() {
   )
 }
 async function update(){
-  await crudController.update(refTag.value,true)
+  const data = refTag.value
+  data.minTreshold = Number(data.minTreshold)
+  data.maxTreshold = Number(data.maxTreshold)
+  await crudController.update(data, true)
   edit.value=false
   init()
 }

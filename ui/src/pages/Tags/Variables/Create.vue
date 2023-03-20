@@ -112,6 +112,28 @@
                   ></InputField>
                 </div>
               </div>
+              <div class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6" v-if="showTresholdField">
+                <div class="sm:col-span-2">
+                  <InputField
+                    :title="$t('tags.minTreshold')"
+                    v-model="refTag!.minTreshold"
+                    :isRequired="true"
+                    :isDisabled="false"
+                    :type="FieldType.NUMBER"
+                  ></InputField>
+                </div>
+              </div>
+              <div class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6" v-if="showTresholdField">
+                <div class="sm:col-span-2">
+                  <InputField
+                    :title="$t('tags.maxTreshold')"
+                    v-model="refTag!.maxTreshold"
+                    :isRequired="true"
+                    :isDisabled="false"
+                    :type="FieldType.NUMBER"
+                  ></InputField>
+                </div>
+              </div>
               <div class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
                 <div class="sm:col-span-2">
                   <Btn :text="$t('save')" :primary="true" class=""></Btn>
@@ -127,7 +149,7 @@
 
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
-import { inject, ref } from 'vue';
+import { computed, inject, ref } from 'vue';
 import BaseLayoutVue from '../../../layouts/BaseLayout.vue'
 import { useRouter, useRoute } from 'vue-router'
 import Store from './../../../store/Store'
@@ -138,7 +160,6 @@ import FieldType from './../../../Contracts/FieldType';
 import { BaseController, ModelCollection } from './../../../Classes/BaseController'
 import { RouteService } from '../../../Classes/RouteService'
 import DeviceModel from '../../../Models/DeviceModel';
-import { Utils } from '../../../Classes/Utils';
 
 const router = useRouter()
 const route = useRoute()
@@ -147,6 +168,7 @@ const routePrefix = '/projects/' + route.params.id
 const breadCrumb = ref()
 const { t } = useI18n()
 
+
 const refTag = ref(new TagModel())
 const refDevice = ref(new DeviceModel())
 const refDeviceCollection = ref(new ModelCollection<DeviceModel>())
@@ -154,6 +176,8 @@ const refDeviceCollection = ref(new ModelCollection<DeviceModel>())
 const refDeviceName =ref<string[]>([])
 const refDeviceId =ref<number[]>([])
 const edit = ref(false)
+
+const showTresholdField = computed(() =>  refTag.value.alarm === true && (refTag.value.valueType == 2 || refTag.value.valueType == 3))
 
 let ws = ref("")
 

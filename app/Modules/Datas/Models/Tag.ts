@@ -33,6 +33,12 @@ export default class Tag extends BaseModel {
   public alarm: boolean;
 
   @column()
+  public minTreshold: number;
+
+  @column()
+  public maxTreshold: number;
+
+  @column()
   public script: string;
 
   @column()

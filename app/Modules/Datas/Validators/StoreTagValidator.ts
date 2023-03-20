@@ -14,6 +14,8 @@ export default class StoreTagValidator {
     type: this.ctx.request.input('type'),
     valueType: this.ctx.request.input('valueType'),
     alarm: this.ctx.request.input('alarm'),
+    minTreshold: this.ctx.request.input('minTreshold'),
+    maxTreshold: this.ctx.request.input('maxTreshold'),
     script: this.ctx.request.input('script'),
     scriptOutput: this.ctx.request.input('scriptOutput'),
     scriptInterval: this.ctx.request.input('scriptInterval'),
@@ -39,6 +41,14 @@ export default class StoreTagValidator {
         rules.requiredWhen('type', '=', '1')
       ]),
       alarm: schema.boolean.optional(),
+      minTreshold: schema.number.optional([
+        rules.requiredWhen('alarm', '=', true),
+        rules.requiredWhen('type', 'in', ['2', '3']),
+      ]),
+      maxTreshold: schema.number.optional([
+        rules.requiredWhen('alarm', '=', true),
+        rules.requiredWhen('type', 'in', ['2', '3']),
+      ]),
       script: schema.string.optional(),
       scriptOutput: schema.string.optional(),
       scriptInterval: schema.number.optional(),

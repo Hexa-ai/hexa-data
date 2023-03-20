@@ -222,6 +222,8 @@
     "device": "Equipement",
     "valueType": "Type de variable",
     "alarm": "Alarme",
+    "minTreshold": "Seuil min",
+    "maxTreshold": "Seuil max",
     "import": "Import CSV",
     "export": "Export CSV",
     "warpScriptEditor": "Editeur WarpScript",
