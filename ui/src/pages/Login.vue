@@ -150,7 +150,8 @@ if (localStorage.getItem("rememberMe") == 'true') {
 checkUserProfile()
 
 async function checkUserProfile() {
-  if (localStorage.getItem("authUser")!=undefined) {
+  console.log(localStorage.getItem("authUser"))
+  if (localStorage.getItem("authUser")) {
     router.push('/projects')
   }
 }
