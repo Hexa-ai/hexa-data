@@ -30,6 +30,9 @@ export default class Tag extends BaseModel {
   public valueType: number; // value_type values -> 1 Boolean, 2 -> Integer, 3 -> Float, 4 -> String
 
   @column()
+  public alarm: boolean;
+
+  @column()
   public script: string;
 
   @column()

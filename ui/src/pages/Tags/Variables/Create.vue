@@ -102,6 +102,18 @@
               </div>
               <div class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
                 <div class="sm:col-span-2">
+                  <InputField
+                    :title="$t('tags.alarm')"
+                    v-model="refTag!.alarm"
+                    :isRequired="true"
+                    :isDisabled="false"
+                    :index-is-value="true"
+                    :type="FieldType.CHECKBOX"
+                  ></InputField>
+                </div>
+              </div>
+              <div class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
+                <div class="sm:col-span-2">
                   <Btn :text="$t('save')" :primary="true" class=""></Btn>
                 </div>
               </div>

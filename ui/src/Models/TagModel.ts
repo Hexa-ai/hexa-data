@@ -11,6 +11,7 @@ export default class Tag extends BaseModel {
   public unit: string =''
   public type: number =0 // type values -> 1 GTS, 2 GTS for Text traduction, 3 WARPScript
   public valueType: number =0 // value_type values -> 1 Boolean, 2 -> Integer, 3 -> Float, 4 -> String
+  public alarm?: boolean = false
   public script: string =''
   public scriptOutput: string =''
   public scriptInterval: number =0

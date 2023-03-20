@@ -221,6 +221,7 @@
     "newMacro": "Nouvelle Macro",
     "device": "Equipement",
     "valueType": "Type de variable",
+    "alarm": "Alarme",
     "import": "Import CSV",
     "export": "Export CSV",
     "warpScriptEditor": "Editeur WarpScript",

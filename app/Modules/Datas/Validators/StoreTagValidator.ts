@@ -13,6 +13,7 @@ export default class StoreTagValidator {
     unit: this.ctx.request.input('unit'),
     type: this.ctx.request.input('type'),
     valueType: this.ctx.request.input('valueType'),
+    alarm: this.ctx.request.input('alarm'),
     script: this.ctx.request.input('script'),
     scriptOutput: this.ctx.request.input('scriptOutput'),
     scriptInterval: this.ctx.request.input('scriptInterval'),
@@ -37,6 +38,7 @@ export default class StoreTagValidator {
       valueType: schema.number.optional([
         rules.requiredWhen('type', '=', '1')
       ]),
+      alarm: schema.boolean.optional(),
       script: schema.string.optional(),
       scriptOutput: schema.string.optional(),
       scriptInterval: schema.number.optional(),

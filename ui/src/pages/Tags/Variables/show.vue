@@ -126,6 +126,18 @@
               </div>
               <div class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
                 <div class="sm:col-span-2">
+                  <InputField
+                    :title="$t('tags.alarm')"
+                    v-model="refTag!.alarm"
+                    :isRequired="true"
+                    :isDisabled="false"
+                    :index-is-value="true"
+                    :type="FieldType.CHECKBOX"
+                  ></InputField>
+                </div>
+              </div>
+              <div class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
+                <div class="sm:col-span-2">
                   <Btn
                     :text="$t('save')"
                     :primary="true"
@@ -203,6 +215,7 @@ init()
 async function init() {
   await RouteService.getProjectInfos(route)
   refTag.value = await crudController.show(Number(route.params.tagId))
+  refTag.value.alarm = refTag.value.alarm && (refTag.value.alarm as unknown as number) === 1
   refDeviceCollection.value=await crudDeviceController.index(1,100,'')
   refDeviceName.value=[]
   refDeviceId.value=[]
