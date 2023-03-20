@@ -6,6 +6,7 @@ import UpdateDashboardValidator from '../Validators/UpdateDashboardValidator'
 import Dashboard from '../Models/Dashboard'
 import { ModelPaginatorContract } from '@ioc:Adonis/Lucid/Orm'
 import { Attachment } from '@ioc:Adonis/Addons/AttachmentLite'
+import { join } from 'node:path'
 
 export default class DashboardsController {
   /**
@@ -107,39 +108,32 @@ export default class DashboardsController {
    * @param {response} ResponseContract
    * @param {Bouncer} ActionsAuthorizerContract<User>
    */
-  public async index({ params, request, response, bouncer }: HttpContextContract) {
+  public async index({ auth, params, request, response, bouncer }: HttpContextContract) {
     await bouncer.with('DashboardPolicy').authorize('index', params.projectId)
-    const requestParams = request.qs()
-    let dashboards: ModelPaginatorContract<Dashboard>
-    if (typeof requestParams.stared != 'undefined' && requestParams.stared != '') {
-      if (typeof requestParams.searchKey != 'undefined' && requestParams.searchKey != '') {
-        dashboards = await Dashboard.query()
-          .where('project_id', params.projectId)
-          .andWhere('stared', requestParams.stared)
-          .andWhere('name', 'LIKE', '%' + requestParams.searchKey + '%')
-          .orderBy('name')
-          .paginate(requestParams.page, requestParams.perPage)
-      } else {
-        dashboards = await Dashboard.query()
-          .where('project_id', params.projectId)
-          .andWhere('stared', requestParams.stared)
-          .orderBy('name')
-          .paginate(requestParams.page, requestParams.perPage)
-      }
-    } else {
-      if (typeof requestParams.searchKey != 'undefined' && requestParams.searchKey != '') {
-        dashboards = await Dashboard.query()
-          .where('project_id', params.projectId)
-          .andWhere('name', 'LIKE', '%' + requestParams.searchKey + '%')
-          .orderBy('name')
-          .paginate(requestParams.page, requestParams.perPage)
-      } else {
-        dashboards = await Dashboard.query()
-          .where('project_id', params.projectId)
-          .orderBy('name')
-          .paginate(requestParams.page, requestParams.perPage)
-      }
+
+    const { page, perPage, stared = '', searchKey = '' } = request.qs()
+
+    let query = Dashboard.query().where('dashboards.project_id', params.projectId)
+
+    if (stared !== '') {
+      query = query.andWhere('stared', stared)
     }
+
+    if (searchKey !== '') {
+      query = query.andWhere('name', 'LIKE', `%${searchKey}%`)
+    }
+
+    query = query.leftJoin('project_user', (join) => {
+      join.on('project_user.project_id', '=', 'dashboards.project_id')
+      join.andOnVal('project_user.user_id', '=', `${auth.user!.id}`)
+    })
+
+    query = query.where((where) => {
+      where.where('project_user.role', '>=', 2).andWhere('project_user.role', '=', 2)
+    })
+
+    const dashboards = await query.orderBy('name').paginate(page, perPage)
+
     response.send(dashboards)
   }
   /**

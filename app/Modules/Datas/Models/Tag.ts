@@ -33,6 +33,9 @@ export default class Tag extends BaseModel {
   public alarm: boolean;
 
   @column()
+  public triggerType?: 'rising' | 'falling'
+
+  @column()
   public minTreshold: number;
 
   @column()

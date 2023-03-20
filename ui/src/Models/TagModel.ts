@@ -14,6 +14,7 @@ export default class Tag extends BaseModel {
   public alarm?: boolean = false
   public minTreshold?: number = 0
   public maxTreshold?: number = 0
+  public triggerType?: 'rising' | 'falling'
   public script: string =''
   public scriptOutput: string =''
   public scriptInterval: number =0
