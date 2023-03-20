@@ -317,7 +317,7 @@ async function saveDiscovery() {
   refDashboardBackend.value.name=refDashboard.value.name
   refDashboardBackend.value.stared=Number(refStared.value)
   refDashboardBackend.value.type=refDashboard.value.type
-  await crudController.update(refDashboard.value, true)
+  await crudController.update(refDashboardBackend.value, true)
 
   refEdit.value = false
   init()
