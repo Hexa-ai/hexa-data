@@ -224,6 +224,7 @@
     "alarm": "Alarme",
     "minTreshold": "Seuil min",
     "maxTreshold": "Seuil max",
+    "triggerType": "Type de déclenchement",
     "import": "Import CSV",
     "export": "Export CSV",
     "warpScriptEditor": "Editeur WarpScript",

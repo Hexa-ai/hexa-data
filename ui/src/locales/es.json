@@ -224,6 +224,7 @@
 		"alarm": "Alarma",
     "minTreshold": "Umbral mínimo",
     "maxTreshold": "Umbral máximo",
+	"triggerType": "Tipo de disparador",
 		"import": "Importación CSV",
 		"export": "exportación CSV",
 		"warpScriptEditor": "Editor de WarpScript",

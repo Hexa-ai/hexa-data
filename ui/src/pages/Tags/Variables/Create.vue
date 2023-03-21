@@ -134,6 +134,18 @@
                   ></InputField>
                 </div>
               </div>
+              <div class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6" v-if="showTresholdField">
+                <div class="sm:col-span-2">
+                  <InputField
+                    :title="$t('tags.triggerType')"
+                    v-model="refTag!.triggerType"
+                    :isDisabled="false"
+                    :type="FieldType.SELECT"
+                    :index-is-value="true"
+                    :choices="['', 'Déclenchement sur front montant', 'Déclenchement sur front descendent']"
+                  ></InputField>
+                </div>
+              </div>
               <div class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
                 <div class="sm:col-span-2">
                   <Btn :text="$t('save')" :primary="true" class=""></Btn>

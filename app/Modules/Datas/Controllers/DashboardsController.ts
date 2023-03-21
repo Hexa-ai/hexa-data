@@ -128,8 +128,8 @@ export default class DashboardsController {
       join.andOnVal('project_user.user_id', '=', `${auth.user!.id}`)
     })
 
-    query = query.where((where) => {
-      where.where('project_user.role', '>=', 2).andWhere('project_user.role', '=', 2)
+    query = query.andWhere((table) => {
+      table.where('dashboards.name', 'NOT LIKE', '%\\\\%').orWhere('project_user.role', '>=', 2)
     })
 
     const dashboards = await query.orderBy('name').paginate(page, perPage)
