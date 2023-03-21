@@ -225,6 +225,10 @@
     "minTreshold": "Seuil min",
     "maxTreshold": "Seuil max",
     "triggerType": "Type de déclenchement",
+    "triggerTypes": {
+      "rising": "Déclenchement sur front montant",
+      "falling": "Déclenchement sur front descendant"
+    },
     "import": "Import CSV",
     "export": "Export CSV",
     "warpScriptEditor": "Editeur WarpScript",

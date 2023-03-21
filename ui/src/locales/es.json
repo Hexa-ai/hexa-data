@@ -222,9 +222,13 @@
 		"device": "Equipo",
 		"valueType": "Tipo de variable",
 		"alarm": "Alarma",
-    "minTreshold": "Umbral mínimo",
-    "maxTreshold": "Umbral máximo",
-	"triggerType": "Tipo de disparador",
+		"minTreshold": "Umbral mínimo",
+		"maxTreshold": "Umbral máximo",
+		"triggerType": "Tipo de disparador",
+		"triggerTypes": {
+			"rising": "Gatillo en flanco ascendente",
+			"falling": "Disparador de borde descendente"
+		},
 		"import": "Importación CSV",
 		"export": "exportación CSV",
 		"warpScriptEditor": "Editor de WarpScript",

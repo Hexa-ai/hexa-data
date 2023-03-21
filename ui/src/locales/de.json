@@ -225,6 +225,10 @@
     	"minTreshold": "Mindestschwelle",
     	"maxTreshold": "Maximaler Schwellenwert",
 		"triggerType": "Auslöseart",
+		"triggerTypes": {
+			"falling": "Trigger für fallende Flanke",
+			"rising": "Trigger für steigende Flanke"
+		},
 		"import": "CSV-Import",
 		"export": "CSV-Export",
 		"warpScriptEditor": "WarpScript-Editor",

@@ -142,7 +142,7 @@
                     :isDisabled="false"
                     :type="FieldType.SELECT"
                     :index-is-value="true"
-                    :choices="['', 'Déclenchement sur front montant', 'Déclenchement sur front descendent']"
+                    :choices="['', $t('tags.triggerTypes.falling'), $t('tags.triggerTypes.rising')]"
                   ></InputField>
                 </div>
               </div>
@@ -226,7 +226,13 @@ async function init() {
   breadCrumb.value = [{ name: 'Projects', href: '/projects' }, { name: store.currentProject.name, href: routePrefix }, { name: t('navigation.variables'), href: routePrefix + '/variables' }, { name: t('tags.newVariable'), href: routePrefix + '/variables/create' }]
 }
 async function create() {
-  await crudController.store(refTag.value)
+  const triggerTypeIndex = Number(refTag.value.triggerType)
+
+  await crudController.store({...refTag.value,
+    triggerType: triggerTypeIndex === undefined ? undefined : (
+      triggerTypeIndex === 1 ? 'rising' : 'falling'
+    )
+  })
   router.push(routePrefix + '/variables')
 }
 

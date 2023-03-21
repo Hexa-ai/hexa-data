@@ -183,7 +183,7 @@ class BaseController<Model>{
     this.model=model
     for (const key in this.model) {
       if (this.fileFields.find(x => x.name == key)?.name!=key) {
-        if (this.model[key]!=null){
+        if (this.model[key]!=undefined){
           formData.append(key, String(this.model[key]))
         }
       }

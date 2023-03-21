@@ -158,6 +158,18 @@
                   ></InputField>
                 </div>
               </div>
+              <div class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6" v-if="showTresholdField">
+                <div class="sm:col-span-2">
+                  <InputField
+                    :title="$t('tags.triggerType')"
+                    v-model="refTag!.triggerType"
+                    :isDisabled="false"
+                    :type="FieldType.SELECT"
+                    :index-is-value="true"
+                    :choices="['', $t('tags.triggerTypes.falling'), $t('tags.triggerTypes.rising')]"
+                  ></InputField>
+                </div>
+              </div>
               <div class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
                 <div class="sm:col-span-2">
                   <Btn
@@ -176,7 +188,6 @@
 </template>
 
 <script setup lang="ts">
-import WarpChart from './../../../components/WarpChart.vue'
 import VarWarpChart from './../../../components/VarWarpChart.vue'
 import { useI18n } from 'vue-i18n'
 import { inject, ref, computed } from 'vue';
@@ -240,6 +251,8 @@ async function init() {
   await RouteService.getProjectInfos(route)
   refTag.value = await crudController.show(Number(route.params.tagId))
   refTag.value.alarm = refTag.value.alarm && (refTag.value.alarm as unknown as number) === 1
+  // @ts-ignore
+  refTag.value.triggerType = refTag.value.triggerType && (refTag.value.triggerType as unknown as number) === 'rising' ? 1 : 2
   refDeviceCollection.value=await crudDeviceController.index(1,100,'')
   refDeviceName.value=[]
   refDeviceId.value=[]
@@ -267,6 +280,14 @@ async function init() {
 }
 async function update(){
   const data = refTag.value
+  const triggerTypeIndex = Number(data.triggerType)
+  console.log(triggerTypeIndex)
+  if (triggerTypeIndex === 1) {
+    data.triggerType = 'rising'
+  } else if (triggerTypeIndex === 2) {
+    data.triggerType = 'falling'
+  }
+  
   data.minTreshold = Number(data.minTreshold)
   data.maxTreshold = Number(data.maxTreshold)
   await crudController.update(data, true)

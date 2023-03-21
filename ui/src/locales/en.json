@@ -222,9 +222,13 @@
 		"device": "Equipment",
 		"valueType": "Variable type",
 		"alarm": "Alarm",
-    "minTreshold": "Minimum threshold",
-    "maxTreshold": "Maximum threshold",
-	"triggerType": "Trigger type",
+		"minTreshold": "Minimum threshold",
+		"maxTreshold": "Maximum threshold",
+		"triggerType": "Trigger type",
+		"triggerTypes": {
+			"falling": "Falling Edge Trigger",
+			"rising": "Rising Edge Trigger"
+		},
 		"import": "CSV import",
 		"export": "CSV export",
 		"warpScriptEditor": "WarpScript Editor",
