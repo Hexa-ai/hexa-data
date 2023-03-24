@@ -5,11 +5,10 @@ import UpdateDeviceValidator from '../Validators/UpdateDeviceValidator'
 import AuthDeviceValidator from '../Validators/AuthDeviceValidator'
 import AclDeviceValidator from '../Validators/AclDeviceValidator'
 import Hash from '@ioc:Adonis/Core/Hash'
-import Device from "../Models/Device"
+import Device from '../Models/Device'
 import Project from '../../Projects/Models/Project'
 import { ModelPaginatorContract } from '@ioc:Adonis/Lucid/Orm'
 import axios from 'axios'
-
 
 export default class DevicesController {
   /**
@@ -184,11 +183,20 @@ export default class DevicesController {
     const payload = await request.validate(AclDeviceValidator)
     const device = await Device.getByClientId(payload.clientId)
 
+    const deviceProjectId: string = device?.projectId.toString() || ''
+    const project = await Project.query().where('id', deviceProjectId).firstOrFail()
     if (device !== null) {
-
+      const rootProjectPath: string = 'HD/' + project.uuid + '/'
       const rootPath: string = 'HD/' + device!.clientId + '/'
       const condPub: boolean = (payload.topic === (rootPath + 'up') && payload.access === 2)
       const condSub: boolean = (payload.topic === (rootPath + 'down') && payload.access === 1)
+
+      const condSubAll = payload.topic.startsWith(rootProjectPath) && (payload.access === 1 || payload.access === 2 )
+
+      if (condSubAll) {
+        logger.info('MQTT SubAll or Pub authorized ->' + payload.clientId + ' ' + payload.topic)
+        return response.status(200)
+      }
 
       if (condPub) {
         logger.info('MQTT Pub authorized ->' + payload.clientId + ' ' + payload.topic)
@@ -219,7 +227,7 @@ export default class DevicesController {
    * @param {response} ResponseContract
    * @param {Logger} LoggerContract
    */
-  public async wsMsgDown({ params, request, response, logger }: HttpContextContract){
+  public async wsMsgDown({ params, request, response, logger }: HttpContextContract) {
     await Project.query().where('writeToken', params.writeToken).firstOrFail()
 
     const device = await Device.query().where('namespace', params.namespace).firstOrFail()
@@ -228,7 +236,7 @@ export default class DevicesController {
       topic:'HD/' + device.clientId + '/down',
       clientId:'hDApp',
       qos:1,
-      payload:request.raw()
+      payload: request.raw()
     }, {
       auth: {
         username: Env.get('MQTT_API_USER'),
