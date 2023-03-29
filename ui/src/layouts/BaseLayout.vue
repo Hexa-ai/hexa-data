@@ -227,6 +227,9 @@ let mainNav = [
   { name: t('navigation.settings'), visible: store.authUser.isAdmin == 1, href: '/settings', icon: CogIcon, current: route.path == '/settings', subItems: [{ name: "Version", visible: true, href: '/settings/version', icon: CubeIcon, current: route.path == '/settings/version' }] }
 ]
 
+let nodeRedActivated:boolean=false;
+import.meta.env.VITE_NR_ACTIVATED.toLowerCase()=='true'?nodeRedActivated=true:nodeRedActivated=false;
+
 let projectNav = [
   { name: t('navigation.informations'), visible: true, href: routePrefix, icon: InformationCircleIcon, current: route.path == routePrefix, subItems: [] },
   { name: t('navigation.dashboards'), visible: true, href: routePrefix + '/dashboards', icon: CollectionIcon, current: route.path == routePrefix + '/dashboards', subItems: [] },
@@ -235,12 +238,12 @@ let projectNav = [
   { name: t('navigation.devices'), visible: true, href: routePrefix + '/devices', icon: ChipIcon, current: route.path == routePrefix + '/devices', subItems: [] },
   { name: t('navigation.variables'), visible: true, href: routePrefix + '/variables', icon: VariableIcon, current: route.path == routePrefix + '/variables' },
   { name: t('navigation.macros'), visible: (store.authUser.projectRole == RoleType.EDITOR || store.authUser.isAdmin == 1 || store.currentProject.owner.id == store.authUser.id), href: routePrefix + '/macros', icon: CodeIcon, current: route.path == routePrefix + '/macros' },
-  { name: 'Node-Red', visible: (store.authUser.projectRole == RoleType.EDITOR || store.authUser.isAdmin == 1 || store.currentProject.owner.id == store.authUser.id) && store.publicAppSettings.isServerInstance == false, href: routePrefix + '/nodered', icon: PuzzleIcon, current: route.path == routePrefix + '/nodered', subItems: [] },
+  { name: 'Node-Red', visible: ((store.authUser.projectRole == RoleType.EDITOR || store.authUser.isAdmin == 1 || store.currentProject.owner.id == store.authUser.id) && nodeRedActivated), href: routePrefix + '/nodered', icon: PuzzleIcon, current: route.path == routePrefix + '/nodered', subItems: [] },
   { name: t('navigation.users'), visible: (store.authUser.projectRole == RoleType.EDITOR || store.authUser.isAdmin == 1 || store.currentProject.owner.id == store.authUser.id), href: routePrefix + '/users', icon: UsersIcon, current: route.path == routePrefix + '/users', subItems: [] },
   { name: t('navigation.settings'), visible: (store.authUser.projectRole == RoleType.EDITOR || store.authUser.isAdmin == 1 || store.currentProject.owner.id == store.authUser.id), href: routePrefix + '/settings', icon: CogIcon, current: route.path == routePrefix + '/settings', subItems: [] }
 ]
 
-
+console.log(import.meta.env.VITE_NR_ACTIVATED)
 const refdashboard = ref(new DashboardModel())
 const refdashboardCollection = ref(new ModelCollection<DashboardModel>())
 
