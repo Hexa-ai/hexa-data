@@ -68,7 +68,7 @@ export default class AppBuild extends BaseCommand {
       fs.mkdirSync(usersPhotosDir, { recursive: true })
     }
 
-    await fs.copyFile('./docker-compose.yaml', buildDir + 'docker-compose.yaml')
+    await fs.copyFile('./docker-compose.yml', buildDir + 'docker-compose.yml')
     await fs.copyFile('./.env.example', buildDir + '.env')
     await fs.copyFile('./ecosystem.config.js', buildDir + 'ecosystem.config.js')
     await fs.copyFile('./dockerfile-hd', buildDir + 'dockerfile-hd')
