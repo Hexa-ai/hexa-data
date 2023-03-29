@@ -8,6 +8,7 @@ declare module '*.vue' {
 }
 interface ImportMetaEnv {
   VITE_API_PREFIX: string
+  VITE_NR_ACTIVATED: string
 }
 declare module 'vue-writer'
 declare module 'tinycolor2'
