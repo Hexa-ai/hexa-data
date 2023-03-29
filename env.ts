@@ -36,7 +36,6 @@ export default Env.rules({
   HD_SCRIPT_INTERVAL_FACTOR: Env.schema.number(),
   HD_VERSION: Env.schema.string(),
   HD_API_URL: Env.schema.string(),
-  HD_LICENSE_KEY: Env.schema.string(),
   QUEUE_REDIS_HOST:Env.schema.string({ format: 'host' }),
   QUEUE_REDIS_PORT:Env.schema.number(),
   QUEUE_REDIS_PASSWORD:Env.schema.string(),
