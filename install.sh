@@ -3,7 +3,7 @@
 # curl -sSL https://raw.githubusercontent.com/MaximeMRF/test-autoinstall/main/install.sh | bash
 
 # Get the .env file
-curl -o .env https://raw.githubusercontent.com/Hexa-ai/hexa-data/master/.env.install
+curl -o .env https://raw.githubusercontent.com/Hexa-ai/hexa-data/master/.env.example
 
 # Get the conf file for warpfleet
 curl -O https://raw.githubusercontent.com/Hexa-ai/hexa-data/master/conf.json
