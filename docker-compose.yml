@@ -6,7 +6,8 @@ services:
     - 3333:3333
     restart: unless-stopped
     volumes:
-    - v_hexa-data:/usr/src/app/storage
+    - .env:/home/node/app/.env
+    - v_hexa-data:/home/node/app/storage
   queue-redis-service:
     image: redis:${QUEUE_REDIS_VERSION}
     restart: always
