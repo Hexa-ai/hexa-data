@@ -58,8 +58,11 @@ jobs:
       - name: Change directory
         run: cd build
       - name: Create container
-        run: docker buildx create --name mybuilder --driver docker-container --bootstrap --use
+        run: |
+          cd build
+          docker buildx create --name mybuilder --driver docker-container --bootstrap --use
       - name: Build an push container
         run: |
+          cd build
           echo ${{ secrets.TOKEN }} | docker login ghcr.io -u hexa-ai --password-stdin
           docker buildx build --platform linux/amd64,linux/arm64,linux/arm/v7 --push --file dockerfile-hd -t ghcr.io/hexa-ai/hexa-data:${{ env.VERSION }} -t ghcr.io/hexa-ai/hexa-data:latest .
