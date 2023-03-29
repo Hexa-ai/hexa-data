@@ -99,7 +99,7 @@ volumes:
   v_emqx-data:
   v_emqx-etc:
   v_emqx-log:
-  # v_warp10:
+  v_warp10:
   v_hexa-data:
   v_node-red:
   v_redis:
