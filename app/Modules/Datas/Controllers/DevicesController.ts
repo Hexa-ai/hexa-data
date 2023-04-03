@@ -183,9 +183,10 @@ export default class DevicesController {
     const payload = await request.validate(AclDeviceValidator)
     const device = await Device.getByClientId(payload.clientId)
 
-    const deviceProjectId: string = device?.projectId.toString() || ''
-    const project = await Project.query().where('id', deviceProjectId).firstOrFail()
+
     if (device !== null) {
+      const deviceProjectId: string = device?.projectId.toString() || ''
+      const project = await Project.query().where('id', deviceProjectId).firstOrFail()
       const rootProjectPath: string = 'HD/' + project.uuid + '/'
       const rootPath: string = 'HD/' + device!.clientId + '/'
       const condPub: boolean = (payload.topic === (rootPath + 'up') && payload.access === 2)
