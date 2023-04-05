@@ -102,45 +102,49 @@ export default class DocumentsController {
       .andWhere('name', params.name)
       .first()
 
-    if (existingDoc != null) {
+    if (existingDoc != null && extension == 'pdf') {
       var file: any = null
       try {
         Logger.info('-----> Writing report Project: ' + project.name + ' Rapport: ' + params.name)
         file = await Drive.get(existingDoc.file!.name!)
       } catch (e) {
-        Logger.warn(
-          '-----> Writing report to too high cadence Project: ' +
-            project.name +
-            ' Rapport: ' +
-            params.name
-        )
+        Logger.warn('-----> Writing report to too high cadence Project: ' + project.name + ' Rapport: ' + params.name)
       }
       if (file != null) {
         await (await Document.find(existingDoc.id))!.delete()
+
       } else {
         response.status(500)
       }
     }
-    const document = await Document.updateOrCreate(
-      { name: params.name },
-      {
-        type: 1,
-        name: params.name,
-        projectId: project.id,
-        inProgress: true,
-        file: fileAttachment,
-      }
-    )
-
-    await Drive.put(fileAttachment.name, <string>request.raw())
-    // Csv Convertion and persist job
-    await Queue.dispatch('App/Jobs/GenerateDoc', {
-      filePath: fileAttachment.name,
-      fileData: request.raw(),
-      extName: extension,
-      fileType: params.type,
-      docId: document.id,
-    })
+    if ((existingDoc != null && extension == 'pdf') || (existingDoc == null)) {
+      var document = await Document.updateOrCreate(
+        { name: params.name },
+        {
+          type: 1,
+          name: params.name,
+          projectId: project.id,
+          inProgress: true,
+          file: fileAttachment,
+        }
+      )
+      //await Drive.put(fileAttachment.name, '')
+      await Queue.dispatch('App/Jobs/GenerateDoc', {
+        filePath: fileAttachment.name,
+        fileData: request.raw(),
+        extName: extension,
+        fileType: params.type,
+        docId: document.id,
+      })
+    } else {
+      await Queue.dispatch('App/Jobs/GenerateDoc', {
+        filePath: existingDoc.file?.name,
+        fileData: request.raw(),
+        extName: existingDoc.file?.extname,
+        fileType: params.type,
+        docId: existingDoc.id,
+      })
+    }
 
     response.status(200)
   }
