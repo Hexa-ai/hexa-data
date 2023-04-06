@@ -76,7 +76,7 @@ export default class DocumentsController {
     response.send(documents)
   }
   /**
-   * Create Repport (WarpScript).
+   * Create or append to Repport (WarpScript).
    * POST projects/:writeToken/wsReport/store/:name
    *
    * @param {params} Record<string, any>
@@ -85,58 +85,12 @@ export default class DocumentsController {
    */
   public async wsReportStore({ params, request, response }: HttpContextContract) {
     const project = await Project.query().where('writeToken', params.writeToken).firstOrFail()
+    const existingDoc = await Document.query().where('projectId', project.id).andWhere('name', params.name).first()
 
     const asplitedName = params.name.split('.')
     const extension = asplitedName[asplitedName.length - 1].toLowerCase()
-    const fileAttachment = new Attachment({
-      extname: extension,
-      mimeType: <string>mime.lookup(extension),
-      size: (<string>request.raw()).length,
-      name: 'projectsDocuments/' + cuid() + '.' + extension,
-    })
-    fileAttachment.isPersisted = true
 
-    // Check the existence of the previous file and delete it (avoid problems related to the queue)
-    const existingDoc = await Document.query()
-      .where('projectId', project.id)
-      .andWhere('name', params.name)
-      .first()
-
-    if (existingDoc != null && extension == 'pdf') {
-      var file: any = null
-      try {
-        Logger.info('-----> Writing report Project: ' + project.name + ' Rapport: ' + params.name)
-        file = await Drive.get(existingDoc.file!.name!)
-      } catch (e) {
-        Logger.warn('-----> Writing report to too high cadence Project: ' + project.name + ' Rapport: ' + params.name)
-      }
-      if (file != null) {
-        await (await Document.find(existingDoc.id))!.delete()
-
-      } else {
-        response.status(500)
-      }
-    }
-    if ((existingDoc != null && extension == 'pdf') || (existingDoc == null)) {
-      var document = await Document.updateOrCreate(
-        { name: params.name },
-        {
-          type: 1,
-          name: params.name,
-          projectId: project.id,
-          inProgress: true,
-          file: fileAttachment,
-        }
-      )
-      //await Drive.put(fileAttachment.name, '')
-      await Queue.dispatch('App/Jobs/GenerateDoc', {
-        filePath: fileAttachment.name,
-        fileData: request.raw(),
-        extName: extension,
-        fileType: params.type,
-        docId: document.id,
-      })
-    } else {
+    if (existingDoc != null ) {
       await Queue.dispatch('App/Jobs/GenerateDoc', {
         filePath: existingDoc.file?.name,
         fileData: request.raw(),
@@ -144,8 +98,29 @@ export default class DocumentsController {
         fileType: params.type,
         docId: existingDoc.id,
       })
+    } else {
+      const fileAttachment = new Attachment({
+        extname: extension,
+        mimeType: <string>mime.lookup(extension),
+        size: (<string>request.raw()).length,
+        name: 'projectsDocuments/' + cuid() + '.' + extension,
+      })
+      fileAttachment.isPersisted = true
+      var document = await Document.create({
+        name: params.name,
+        type: 1,
+        projectId: project.id,
+        inProgress: true,
+        file: fileAttachment,
+      })
+      await Queue.dispatch('App/Jobs/GenerateDoc', {
+        filePath: fileAttachment.name,
+        fileData: request.raw(),
+        extName: extension,
+        fileType: params.type,
+        docId: document.id,
+      })
     }
-
     response.status(200)
   }
   /**
