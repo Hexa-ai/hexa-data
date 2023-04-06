@@ -14,7 +14,7 @@
               :type-and-size-text="''" id="imgBg" v-model="refDocument!.file"
               v-model:fileToUploadValue="fileToUpload"
               :isRequired="false"
-              :isDisabled="!(store.authUser.projectRole == RoleType.EDITOR || store.authUser.isAdmin == 1 || store.currentProject.owner.id == store.authUser.id)"
+              :isDisabled="!(store.authUser.projectRole == RoleType.USER || store.authUser.projectRole == RoleType.EDITOR || store.authUser.isAdmin == 1 || store.currentProject.owner.id == store.authUser.id)"
               :type="FieldType.FILE"
               @update:file-to-upload-value="create"></InputField>
 

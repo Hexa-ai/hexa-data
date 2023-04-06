@@ -60,14 +60,14 @@ export default class DocumentsController {
     if (typeof requestParams.searchKey != 'undefined' && requestParams.searchKey != '') {
       documents = await Document.query()
         .where('project_id', project.id)
-        .andWhere('type', 1)
+        .andWhere('type', Number(requestParams.type??1))
         .andWhere('name', 'LIKE', '%' + requestParams.searchKey + '%')
         .orderBy('updated_at')
         .paginate(requestParams.page, requestParams.perPage)
     } else {
       documents = await Document.query()
         .where('project_id', project.id)
-        .andWhere('type', 1)
+        .andWhere('type', Number(requestParams.type??1))
         .orderBy('updated_at')
         .paginate(requestParams.page, requestParams.perPage)
     }

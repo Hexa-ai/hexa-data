@@ -218,6 +218,7 @@ export default class Warp10Service {
     let fullScript: string =''
     fullScript = Warp10Service.wsAppendWarpScript(fullScript,script)
     fullScript = Warp10Service.wsAuth(fullScript)
+    fullScript = Warp10Service.wsAppendVar(fullScript,'hdUrl',Env.get('HD_API_URL').split('/api/v1')[0])
     fullScript = Warp10Service.wsAppendVar(fullScript,'hdApiUrl',Env.get('HD_API_URL'))
     fullScript = Warp10Service.wsAppendToken(fullScript,readToken,'readToken')
     fullScript = Warp10Service.wsAppendToken(fullScript,writeToken,'writeToken')
@@ -247,6 +248,7 @@ export default class Warp10Service {
       fullScript = Warp10Service.wsAppendVar(fullScript,key,<string>value)
     }
     fullScript = Warp10Service.wsAuth(fullScript)
+    fullScript = Warp10Service.wsAppendVar(fullScript,'hdUrl',Env.get('HD_API_URL').split('/api/v1')[0])
     fullScript = Warp10Service.wsAppendVar(fullScript,'hdApiUrl',Env.get('HD_API_URL'))
     fullScript = Warp10Service.wsAppendToken(fullScript,readToken,'readToken')
     fullScript = Warp10Service.wsAppendToken(fullScript,writeToken,'writeToken')
