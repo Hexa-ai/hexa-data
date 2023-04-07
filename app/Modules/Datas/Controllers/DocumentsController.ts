@@ -6,8 +6,6 @@ import { Attachment } from '@ioc:Adonis/Addons/AttachmentLite'
 import mime from 'mime-types'
 import { Queue } from '@ioc:Setten/Queue'
 import { cuid } from '@poppinss/utils/build/helpers'
-import Drive from '@ioc:Adonis/Core/Drive'
-import Logger from '@ioc:Adonis/Core/Logger'
 
 export default class DocumentsController {
   /**
