@@ -23,6 +23,7 @@ export default class UpdateTagValidator {
     scriptLastExec: this.ctx.request.input('scriptLastExec'),
     projectId: this.ctx.params.projectId,
     deviceId: this.ctx.request.input('deviceId'),
+    physicalUnit: this.ctx.request.input('physicalUnit'),
   }
   public schema: ParsedTypedSchema<any>
 
@@ -61,6 +62,7 @@ export default class UpdateTagValidator {
           },
         }),
       ]),
+      physicalUnit: schema.string.optional(),
     })
   }
   public refs = schema.refs({

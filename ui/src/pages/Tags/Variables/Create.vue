@@ -13,9 +13,9 @@
           <div class="space-y-8 divide-y divide-gray-200">
             <div>
               <div>
-                <h3
-                  class="text-lg leading-6 font-medium text-gray-900"
-                >{{ $t('tags.newVariable') }}</h3>
+                <h3 class="text-lg leading-6 font-medium text-gray-900">
+                  {{ $t('tags.newVariable') }}
+                </h3>
                 <p class="mt-1 text-sm text-gray-500"></p>
               </div>
               <div class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
@@ -94,7 +94,13 @@
                     v-model="refTag!.valueType"
                     :isRequired="false"
                     :isDisabled="false"
-                    :choices="['', $t('tags.boolean'), $t('tags.integer'), $t('tags.real'), $t('tags.string')]"
+                    :choices="[
+                      '',
+                      $t('tags.boolean'),
+                      $t('tags.integer'),
+                      $t('tags.real'),
+                      $t('tags.string'),
+                    ]"
                     :index-is-value="true"
                     :type="FieldType.SELECT"
                   ></InputField>
@@ -112,7 +118,10 @@
                   ></InputField>
                 </div>
               </div>
-              <div class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6" v-if="showTresholdField">
+              <div
+                class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6"
+                v-if="showTresholdField"
+              >
                 <div class="sm:col-span-2">
                   <InputField
                     :title="$t('tags.minTreshold')"
@@ -123,7 +132,10 @@
                   ></InputField>
                 </div>
               </div>
-              <div class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6" v-if="showTresholdField">
+              <div
+                class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6"
+                v-if="showTresholdField"
+              >
                 <div class="sm:col-span-2">
                   <InputField
                     :title="$t('tags.maxTreshold')"
@@ -134,7 +146,10 @@
                   ></InputField>
                 </div>
               </div>
-              <div class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6" v-if="showTresholdField">
+              <div
+                class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6"
+                v-if="showTresholdField"
+              >
                 <div class="sm:col-span-2">
                   <InputField
                     :title="$t('tags.triggerType')"
@@ -144,6 +159,32 @@
                     :index-is-value="true"
                     :choices="['', $t('tags.triggerTypes.falling'), $t('tags.triggerTypes.rising')]"
                   ></InputField>
+                </div>
+              </div>
+              <div class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
+                <div class="sm:col-span-2 space-y-6">
+                  <InputField
+                    :title="$t('tags.physicalUnit')"
+                    v-model="refTag!.physicalUnit"
+                    :isDisabled="false"
+                    :type="FieldType.SELECT"
+                    :choices="[
+                      $t('tags.physicalUnitTypes.duration'),
+                      $t('tags.physicalUnitTypes.flow'),
+                      $t('tags.physicalUnitTypes.temperature'),
+                      ...refUsedPhysicalUnits,
+
+                      $t('other'),
+                    ]"
+                    :values="['Duration', 'Flow', 'Temperature', ...refUsedPhysicalUnits, '']"
+                  />
+                  <InputField
+                    v-if="showPhysicalUnitInput"
+                    v-model="refTag!.physicalUnit"
+                    :type="FieldType.TEXT"
+                    :is-disabled="false"
+                    :title="$t('tags.physicalUnit')"
+                  />
                 </div>
               </div>
               <div class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
@@ -161,17 +202,18 @@
 
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
-import { computed, inject, ref } from 'vue';
+import { computed, inject, ref } from 'vue'
 import BaseLayoutVue from '../../../layouts/BaseLayout.vue'
 import { useRouter, useRoute } from 'vue-router'
 import Store from './../../../store/Store'
-import TagModel from './../../../Models/TagModel';
+import TagModel from './../../../Models/TagModel'
 import Btn from './../../../components/Btn.vue'
-import InputField from './../../../components/InputField.vue';
-import FieldType from './../../../Contracts/FieldType';
+import InputField from './../../../components/InputField.vue'
+import FieldType from './../../../Contracts/FieldType'
 import { BaseController, ModelCollection } from './../../../Classes/BaseController'
 import { RouteService } from '../../../Classes/RouteService'
-import DeviceModel from '../../../Models/DeviceModel';
+import DeviceModel from '../../../Models/DeviceModel'
+import { Utils } from '../../../Classes/Utils'
 
 const router = useRouter()
 const route = useRoute()
@@ -180,24 +222,26 @@ const routePrefix = '/projects/' + route.params.id
 const breadCrumb = ref()
 const { t } = useI18n()
 
-
 const refTag = ref(new TagModel())
+const refTagCollection = ref(new ModelCollection<TagModel>())
 const refDevice = ref(new DeviceModel())
 const refDeviceCollection = ref(new ModelCollection<DeviceModel>())
+const refUsedPhysicalUnits = ref<string[]>(['Duration', 'Flow', 'Temperature'])
 
-const refDeviceName =ref<string[]>([])
-const refDeviceId =ref<number[]>([])
-const edit = ref(false)
+const refDeviceName = ref<string[]>([])
+const refDeviceId = ref<number[]>([])
 
-const showTresholdField = computed(() =>  refTag.value.alarm === true && (refTag.value.valueType == 2 || refTag.value.valueType == 3))
+const showTresholdField = computed(
+  () => refTag.value.alarm === true && (refTag.value.valueType == 2 || refTag.value.valueType == 3)
+)
 
-let ws = ref("")
+let ws = ref('')
 
 const crudController = new BaseController<TagModel>(
   '/tags',
   [],
   refTag.value,
-  store.authUser.token['token'],
+  store.authUser.token['token']
 )
 
 crudController.setRoutePrefix(routePrefix)
@@ -206,34 +250,51 @@ const crudDeviceController = new BaseController<DeviceModel>(
   '/devices',
   [],
   refDevice.value,
-  store.authUser.token['token'],
+  store.authUser.token['token']
 )
 
 crudDeviceController.setRoutePrefix(routePrefix)
 
 init()
 
+const showPhysicalUnitInput = computed(() => {
+  return (
+    !refTag!.value.physicalUnit ||
+    (refTag!.value.physicalUnit !== 'Duration' &&
+      refTag!.value.physicalUnit !== 'Flow' &&
+      refTag!.value.physicalUnit !== 'Temperature' &&
+      !refUsedPhysicalUnits.value.includes(refTag!.value.physicalUnit))
+  )
+})
 async function init() {
   await RouteService.getProjectInfos(route)
-  refDeviceCollection.value=await crudDeviceController.index(1,100,'')
-  refTag.value.type=1
-  refDeviceName.value=[]
-  refDeviceId.value=[]
+  refDeviceCollection.value = await crudDeviceController.index(1, 100, '')
+  refTagCollection.value = await crudController.index(1, 1000, '')
+  refUsedPhysicalUnits.value.push(
+    ...Utils.getUsedPhysicalUnitsFromTags(refTagCollection.value.data)
+  )
+  refTag.value.type = 1
+  refDeviceName.value = []
+  refDeviceId.value = []
   for (const device of refDeviceCollection.value.data) {
     refDeviceName.value.push(device.name)
     refDeviceId.value.push(device.id)
   }
-  breadCrumb.value = [{ name: 'Projects', href: '/projects' }, { name: store.currentProject.name, href: routePrefix }, { name: t('navigation.variables'), href: routePrefix + '/variables' }, { name: t('tags.newVariable'), href: routePrefix + '/variables/create' }]
+  breadCrumb.value = [
+    { name: 'Projects', href: '/projects' },
+    { name: store.currentProject.name, href: routePrefix },
+    { name: t('navigation.variables'), href: routePrefix + '/variables' },
+    { name: t('tags.newVariable'), href: routePrefix + '/variables/create' },
+  ]
 }
 async function create() {
   const triggerTypeIndex = Number(refTag.value.triggerType)
 
-  await crudController.store({...refTag.value,
-    triggerType: triggerTypeIndex === undefined ? undefined : (
-      triggerTypeIndex === 1 ? 'rising' : 'falling'
-    )
+  await crudController.store({
+    ...refTag.value,
+    triggerType:
+      triggerTypeIndex === undefined ? undefined : triggerTypeIndex === 1 ? 'rising' : 'falling',
   })
   router.push(routePrefix + '/variables')
 }
-
 </script>

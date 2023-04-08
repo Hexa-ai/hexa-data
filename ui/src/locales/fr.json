@@ -13,12 +13,13 @@
   "interval": "Interval",
   "close": "Fermer",
   "initTemplate": "Initialiser le modèle",
+  "other": "Autre",
   "loader": {
     "msg": "Chargement"
   },
   "licence": {
-		"invalidKey": "Licence non valide"
-	},
+    "invalidKey": "Licence non valide"
+  },
   "forgotPasswordPage": {
     "infos": "Entrez votre adresse e-mail, nous vous enverrons un e-mail avec votre nouveau mot de passe.",
     "resetPassword": "Réinitialiser le mot de passe"
@@ -90,10 +91,10 @@
     "dragAndDropText": " ou glisser et déposer",
     "typeAndSizeText": "PNG, JEPG, SVG jusqu'à 5MB",
     "save": "Enregistrer",
-    "libHdWsMacroTitle":"Bibliothèque hd-warpscript-macros",
-    "libHdWsMacroDescription":"Mise à jour de la bibliothèque depuis de dépot GitHub Hexa-ai/hd-warpscript-macros",
-    "libHdWsMacroLastUpdate":"Dernière mise à jour",
-    "libHdWsMacroUpdate":"Mettre à jour",
+    "libHdWsMacroTitle": "Bibliothèque hd-warpscript-macros",
+    "libHdWsMacroDescription": "Mise à jour de la bibliothèque depuis de dépot GitHub Hexa-ai/hd-warpscript-macros",
+    "libHdWsMacroLastUpdate": "Dernière mise à jour",
+    "libHdWsMacroUpdate": "Mettre à jour",
     "features": "Fonctionnalités",
     "bugfixs": "Correctifs",
     "version": "Version",
@@ -152,7 +153,7 @@
     "typeAndSizeTextSettingsFile": "ZIP jusqu'à 5MB",
     "comfirmImport": "Importer",
     "importSettingsInfos": "Attention l'import écrasera les paramètres actuels de ce projet",
-    "title":"Titre"
+    "title": "Titre"
   },
   "projectIndex": {
     "open": "Ouvrir",
@@ -249,7 +250,13 @@
     "execLogs": "Résultats",
     "newText": "Nouveau texte",
     "stared": "Favoris",
-    "exec": "Executer"
+    "exec": "Executer",
+    "physicalUnit": "Grandeur physique",
+    "physicalUnitTypes": {
+      "duration": "Durée",
+      "flow": "Débit",
+      "temperature": "Température"
+    }
   },
   "dashboards": {
     "imgBg": "Image de fond",
@@ -258,13 +265,13 @@
     "type": "Type",
     "preview": "Prévisualier",
     "newDashboard": "Nouveau tableau de bord",
-    "float":"Flottant",
-    "showOutline":"Contour",
-    "titleColor":"Couleur du titre",
+    "float": "Flottant",
+    "showOutline": "Contour",
+    "titleColor": "Couleur du titre",
     "continuumDesigner": "Editeur Continuum",
-    "autoRefresh":"Actualisation automatique",
-    "import":"Import",
-    "export":"Export"
+    "autoRefresh": "Actualisation automatique",
+    "import": "Import",
+    "export": "Export"
   },
   "users": {
     "users": "Utilisateurs",
@@ -296,7 +303,7 @@
     "role": "Role",
     "profileOf": "Profil de"
   },
-  "documents":{
+  "documents": {
     "deleteConfirmMsg": "Souhaitez vous réelement supprimer ce document?",
     "deleteConfirmTitle": "Suppression document"
   }
