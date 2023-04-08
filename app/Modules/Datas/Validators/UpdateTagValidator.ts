@@ -13,16 +13,21 @@ export default class UpdateTagValidator {
     unit: this.ctx.request.input('unit'),
     type: this.ctx.request.input('type'),
     valueType: this.ctx.request.input('valueType'),
+    minTreshold: this.ctx.request.input('minTreshold'),
+    maxTreshold: this.ctx.request.input('maxTreshold'),
+    triggerType: this.ctx.request.input('triggerType'),
+    alarm: this.ctx.request.input('alarm'),
     script: this.ctx.request.input('script'),
     scriptOutput: this.ctx.request.input('scriptOutput'),
     scriptInterval: this.ctx.request.input('scriptInterval'),
     scriptLastExec: this.ctx.request.input('scriptLastExec'),
     projectId: this.ctx.params.projectId,
     deviceId: this.ctx.request.input('deviceId'),
+    physicalUnit: this.ctx.request.input('physicalUnit'),
   }
   public schema: ParsedTypedSchema<any>
 
-  public static buildSchema(id:number) {
+  public static buildSchema(id: number) {
     return schema.create({
       name: schema.string({ trim: true }),
       descriptionL1: schema.string.optional({ trim: true }),
@@ -30,9 +35,17 @@ export default class UpdateTagValidator {
       descriptionL3: schema.string.optional({ trim: true }),
       unit: schema.string.optional(),
       type: schema.number(),
-      valueType: schema.number.optional([
-        rules.requiredWhen('type', '=', '1'),
+      valueType: schema.number.optional([rules.requiredWhen('type', '=', '1')]),
+      alarm: schema.boolean.optional(),
+      minTreshold: schema.number.optional([
+        rules.requiredWhen('alarm', '=', true),
+        rules.requiredWhen('valueType', 'in', ['2', '3']),
       ]),
+      maxTreshold: schema.number.optional([
+        rules.requiredWhen('alarm', '=', true),
+        rules.requiredWhen('valueType', 'in', ['2', '3']),
+      ]),
+      triggerType: schema.enum.optional(['rising', 'falling'] as const),
       script: schema.string.optional(),
       scriptOutput: schema.string.optional(),
       scriptInterval: schema.number.optional(),
@@ -47,12 +60,13 @@ export default class UpdateTagValidator {
           where: {
             id: id,
           },
-        })
+        }),
       ]),
+      physicalUnit: schema.string.optional(),
     })
   }
   public refs = schema.refs({
-    id : <number>this.ctx.params.id!,
+    id: <number>this.ctx.params.id!,
   })
   public messages = {}
 }

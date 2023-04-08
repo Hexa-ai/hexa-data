@@ -287,13 +287,17 @@ const hasCustomLogo = computed(() => {
 const hasProfilePicture = computed(() => {
   return store.authUser.photo != null
 })
-/**
- * App logout
- *
- */
+
+
 async function logout() {
   localStorage.removeItem("authUser")
-  router.push('/login')
+
+  await router.isReady()
+
+  for (let attempts = 0; attempts < 3; attempts++) {
+    const result = await router.push('/login');
+    if (!result) break
+  }
 }
 
 async function profile() {

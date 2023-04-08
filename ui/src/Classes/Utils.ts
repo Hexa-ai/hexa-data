@@ -93,4 +93,21 @@ export class Utils {
       }
     }
   }
+
+  public static getUsedPhysicalUnitsFromTags(tags: TagModel[]) {
+    const defaultPhysicalUnit = ['Duration', 'Flow', 'Temperature']
+    const physicalUnits: string[] = []
+
+    for (const tag of tags) {
+      if (
+        tag.physicalUnit &&
+        !physicalUnits.includes(tag.physicalUnit) &&
+        !defaultPhysicalUnit.includes(tag.physicalUnit)
+      ) {
+        physicalUnits.push(tag.physicalUnit)
+      }
+    }
+
+    return physicalUnits
+  }
 }

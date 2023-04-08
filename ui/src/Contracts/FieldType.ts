@@ -7,7 +7,7 @@ enum FieldType {
   SELECT=6,
   FILE=7,
   CHECKBOX=8,
-  NUMBER=9
+  NUMBER=9,
 }
 
 export default FieldType
