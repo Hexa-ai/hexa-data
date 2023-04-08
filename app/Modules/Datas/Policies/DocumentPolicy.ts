@@ -15,6 +15,6 @@ export default class DocumentPolicy extends BasePolicy {
     return await user.hasProjectRights(projectId, Role.EDITOR)
   }
   public async store(user: User, projectId: number) {
-    return await user.hasProjectRights(projectId, Role.EDITOR)
+    return await user.hasProjectRights(projectId)
   }
 }

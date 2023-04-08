@@ -1,4 +1,5 @@
 import Drive from '@ioc:Adonis/Core/Drive'
+import fs from 'fs'
 import Document from './../Modules/Datas/Models/Document'
 
 export default class GenerateCsv {
@@ -27,12 +28,14 @@ export default class GenerateCsv {
 
     if (payload.extName === 'pdf') {
       await Drive.put(payload.filePath, Buffer.from(payload.fileData.data))
-    } else if (payload.extName === 'csv') {
-      content = JSON.parse(payload.fileData)
-      await Drive.put(payload.filePath, this.toCSV(content, ';'))
     } else {
       content = JSON.parse(payload.fileData)
-      await Drive.put(payload.filePath, content)
+      const csvData = this.toCSV(content, ';')
+      if (fs.existsSync('./storage/' + payload.filePath)) {
+        fs.appendFileSync('./storage/' + payload.filePath, '\n' + csvData)
+      } else {
+        fs.writeFileSync('./storage/' + payload.filePath, csvData)
+      }
     }
 
     // Update document state
