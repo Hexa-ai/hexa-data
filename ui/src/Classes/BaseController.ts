@@ -14,40 +14,69 @@ class Pagination {
   currentPage:number=0
 }
 class BaseController<Model>{
+  /**
+   * Constructor to initialize the BaseController class with required properties
+   *
+   * @param apiUrl - Base URL of the API
+   * @param bearerTokenHeader - Authorization bearer token to be used for the API requests
+   * @param model - Instance of the model being used
+   * @param fileFields - Array of file fields to be included in the requests
+   */
   constructor(route:string, fileFields:I_FileField[],model:Model, bearertoken?:string) {
     function createModelInstance<M>(m: new () => M): M {
       return new m();
     }
-    this.model=model
+    this.model={...model}
     this.route=route
     this.bearerTokenHeader= bearertoken ?? ''
     this.fileFields=fileFields
     this.initFileFields()
   }
+  /** The current model instance */
   public model:Model
-
+  /** The files fields, an array containing the name of each file field and a reference to it */
   public fileFields:I_FileField[]
-
+  /** Gets the base URL for the HTTP requests */
   public getUrl(): string {
     return window.location.origin + import.meta.env.VITE_API_PREFIX + this.routePrefix + this.route
   }
+  /** The route prefix for the HTTP requests */
   public routePrefix:string = ''
-
+  /** The API route for the HTTP requests */
   public route:string
-
+  /** The bearer token for the HTTP requests */
   public bearerTokenHeader:string
-
+  /**
+   * Sets the route prefix for the HTTP requests
+   * @param prefix the prefix to set
+   */
   public setRoutePrefix(prefix:string){
     this.routePrefix=prefix
   }
+  /**
+   * Initializes the file fields by setting their value to a new ref
+   */
   protected initFileFields(){
     for(const index in this.fileFields ) {
       this.fileFields[index].field = ref<FileList>()
     }
   }
+  /**
+   * Gets the value of a file field by its name
+   * @param fieldName the name of the file field to get the value of
+   * @returns a ref containing the value of the file field
+   */
   public getFileList(fieldName:string): Ref<FileList | undefined> {
     return this.fileFields.find(obj => obj.name==fieldName)!.field!
   }
+  /**
+   * Retrieves a collection of models from the API
+   * @param page the page number of the models to retrieve
+   * @param perPage the number of models to retrieve per page
+   * @param searchKey the search key to filter the models by
+   * @param opt any additional query parameters to send with the request
+   * @returns a ModelCollection object containing the retrieved models and their pagination data
+   */
   public async index(page?:number,perPage?:number,searchKey?:string, opt?:{[key:string]:string}): Promise<ModelCollection<Model>> {
     const modelCollection = new ModelCollection<Model>()
     modelCollection.data=[]
@@ -84,11 +113,11 @@ class BaseController<Model>{
       this.model[key]=res.data[key]
     }
 
-    return this.model
+    return {...this.model}
   }
   /**
-   * 
-   * @param id 
+   *
+   * @param id
    * @returns Model
    */
   public async remove<Model>(id?:number): Promise<any> {
@@ -104,16 +133,16 @@ class BaseController<Model>{
     return this.model
   }
   /**
-   * 
-   * @param routeSufix 
-   * @param data 
+   *
+   * @param routeSufix
+   * @param data
    * @param fileFields?: I_FileField[]
    * @returns Promise<any>
    */
   public async post<Model>(routeSufix:string,data?:any,fileFields?:I_FileField[]): Promise<any> {
     const formData = new FormData()
     let res: AxiosResponse<any, any>
-    
+
     for (const key in data) {
       if ((fileFields!=null) && (fileFields.find(x => x.name == key)?.name!=key)) {
         if (data[key]!=null){
@@ -134,7 +163,7 @@ class BaseController<Model>{
     return res.data
   }
   /**
-   * 
+   *
    * @param routeSufix : string
    * @returns Promise<any>
    */
@@ -146,9 +175,9 @@ class BaseController<Model>{
     return res.data
   }
   /**
-   * 
-   * @param routeSufix: string 
-   * @param data?: any 
+   *
+   * @param routeSufix: string
+   * @param data?: any
    * @param fileFields?: I_FileField[]
    * @returns Promise<any>
    */

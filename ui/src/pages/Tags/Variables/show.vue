@@ -201,7 +201,7 @@
                   <InputField
                     :title="$t('tags.physicalUnit')"
                     v-model="refTag!.physicalUnit"
-                    :isDisabled="false"
+                    :isDisabled="true"
                     :type="FieldType.SELECT"
                     :choices="[
                       $t('tags.physicalUnitTypes.duration'),
@@ -338,13 +338,6 @@ async function init() {
     { name: store.currentProject.name, href: routePrefix },
     { name: t('navigation.variables'), href: routePrefix + '/variables' },
   ]
-
-  if (refTag.value.device?.namespace) {
-    breadCrumb.value.push({
-      name: refTag.value.device?.namespace,
-      href: routePrefix + '/variables?namespace=' + refTag.value.device?.namespace,
-    })
-  }
 
   breadCrumb.value.push({
     name: refTag.value.device?.namespace + '.' + refTag.value.name,
