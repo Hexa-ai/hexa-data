@@ -198,26 +198,11 @@
               </div>
               <div class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
                 <div class="sm:col-span-2 space-y-6">
-                  <InputField
+                  <Combobox
                     :title="$t('tags.physicalUnit')"
-                    v-model="refTag!.physicalUnit"
-                    :isDisabled="true"
-                    :type="FieldType.SELECT"
-                    :choices="[
-                      $t('tags.physicalUnitTypes.duration'),
-                      $t('tags.physicalUnitTypes.flow'),
-                      $t('tags.physicalUnitTypes.temperature'),
-                      ...refUsedPhysicalUnits,
-                      $t('other'),
-                    ]"
-                    :values="['Duration', 'Flow', 'Temperature', ...refUsedPhysicalUnits, '']"
-                  />
-                  <InputField
-                    v-if="showPhysicalUnitInput"
-                    v-model="refTag!.physicalUnit"
-                    :type="FieldType.TEXT"
                     :is-disabled="false"
-                    :title="$t('tags.physicalUnit')"
+                    :choices="refUsedPhysicalUnits"
+                    v-model="refTag!.physicalUnit"
                   />
                 </div>
               </div>
@@ -251,6 +236,7 @@ import ComfirmPopup from '../../../components/ComfirmPopup.vue'
 import DeviceModel from '../../../Models/DeviceModel'
 import RoleType from '../../../Contracts/RoleType'
 import { Utils } from '../../../Classes/Utils'
+import Combobox from '../../../components/Combobox.vue'
 
 const router = useRouter()
 const route = useRoute()
@@ -318,7 +304,7 @@ async function init() {
   refTag.value.alarm = refTag.value.alarm && (refTag.value.alarm as unknown as number) === 1
   // @ts-ignore
   refTag.value.triggerType =
-    refTag.value.triggerType && (refTag.value.triggerType as unknown as number) === 'rising' ? 1 : 2
+    refTag.value.triggerType && refTag.value.triggerType === 'rising' ? 1 : 2
   refDeviceCollection.value = await crudDeviceController.index(1, 100, '')
   refDeviceName.value = []
   refDeviceId.value = []

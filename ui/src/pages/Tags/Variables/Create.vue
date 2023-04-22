@@ -167,6 +167,7 @@
                     :title="$t('tags.physicalUnit')"
                     :is-disabled="false"
                     :choices="refUsedPhysicalUnits"
+                    v-model="refTag!.physicalUnit"
                   />
                 </div>
               </div>
@@ -219,8 +220,6 @@ const showTresholdField = computed(
   () => refTag.value.alarm === true && (refTag.value.valueType == 2 || refTag.value.valueType == 3)
 )
 
-let ws = ref('')
-
 const crudController = new BaseController<TagModel>(
   '/tags',
   [],
@@ -241,15 +240,6 @@ crudDeviceController.setRoutePrefix(routePrefix)
 
 init()
 
-const showPhysicalUnitInput = computed(() => {
-  return (
-    !refTag!.value.physicalUnit ||
-    (refTag!.value.physicalUnit !== 'Duration' &&
-      refTag!.value.physicalUnit !== 'Flow' &&
-      refTag!.value.physicalUnit !== 'Temperature' &&
-      !refUsedPhysicalUnits.value.includes(refTag!.value.physicalUnit))
-  )
-})
 async function init() {
   await RouteService.getProjectInfos(route)
   refDeviceCollection.value = await crudDeviceController.index(1, 100, '')
