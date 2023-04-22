@@ -129,7 +129,7 @@ export default class DashboardsController {
     })
 
     query = query.andWhere((table) => {
-      table.where('dashboards.name', 'NOT LIKE', '%\\\\%').orWhere('project_user.role', '>=', 2)
+      table.where('dashboards.name', 'NOT LIKE', '\\_%').orWhere('project_user.role', '>=', 2)
     })
 
     const dashboards = await query.orderBy('name').paginate(page, perPage)
