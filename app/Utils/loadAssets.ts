@@ -20,9 +20,9 @@ const loadAssets = async () => {
     for(const css of pageImports.css){
       assetsData.css.push(`/${css}`)
     }
-    for(const imp of pageImports.file){
-      assetsData.js.push(`/${imp}`)
-    }
+//     for(const imp of pageImports.file){
+//       assetsData.js.push(`/${imp}`)
+//     }
     assetsData.js.push(`/${pageImports.file}`);
   } catch (e) {
     if (!e.errno || e.errno !== -4058) {
