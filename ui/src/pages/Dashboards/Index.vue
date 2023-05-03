@@ -27,7 +27,12 @@
             route-suffix="/dashboards/"
           />
           <ul role="list" class="divide-y divide-gray-200">
-            <li v-for="dashboard in refdashboardCollection.data" :key="dashboard.id">
+            <li
+              v-for="dashboard in refdashboardCollection.data.filter(
+                (dashboard) => dashboard.name.split('.').length === 1
+              )"
+              :key="dashboard.id"
+            >
               <router-link
                 :to="routePrefix + /dashboards/ + dashboard.id"
                 class="block hover:bg-gray-50"
