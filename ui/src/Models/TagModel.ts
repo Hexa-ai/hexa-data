@@ -23,4 +23,5 @@ export default class Tag extends BaseModel {
   public physicalUnit?: string = 'Duration'
   public device?: DeviceModel
   public updatedAt?: string
+  public settings?: string = ''
 }

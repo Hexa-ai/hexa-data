@@ -178,13 +178,13 @@
                       >
                       </InputField>
                     </div>
-                    <div class="pt-2">
+                    <div class="pt-2" v-if="refTemplate?.variablesType">
                       <Combobox
                         title="Vars"
                         :is-disabled="false"
                         :choices="refTagCollection.data.map((tag) => tag.name)"
                         v-model="refData.vars"
-                        multiple
+                        :multiple="refTemplate?.variablesType === 'multi'"
                       />
                     </div>
                     <div>
@@ -255,6 +255,7 @@ import { BaseController, ModelCollection } from '../Classes/BaseController'
 import TagModel from '../Models/TagModel'
 import { useRoute } from 'vue-router'
 import Combobox from './Combobox.vue'
+import { Template } from '../Contracts/Template'
 
 const store: Store = inject('store')!
 
@@ -287,6 +288,7 @@ const route = useRoute()
 const refSearch = ref('')
 const refTag = ref(new TagModel())
 const refTagCollection = ref(new ModelCollection<TagModel>())
+const refTemplate = ref<Template | null>(null)
 const refNamespace = ref<string>(
   route.query['namespace'] ? route.query['namespace'].toString() : ''
 )
@@ -324,13 +326,21 @@ onUpdated(() => {
   }
 })
 
-async function fetchScriptForType(type: string): Promise<string> {
+async function getTileTemplate(chartType: string): Promise<string> {
   try {
-    const { tile } = await import(`../templates/${type}.ts`)
-    console.log({ tile })
-    return tile.script
+    const { tile } = await import(`../templates/${chartType}.ts`)
+    return tile
   } catch (error) {
     return ''
+  }
+}
+
+async function fetchTemplateForType(type: string): Promise<Template | null> {
+  try {
+    const { tile } = await import(`../templates/${type}.ts`)
+    return tile
+  } catch (error) {
+    return null
   }
 }
 
@@ -342,17 +352,18 @@ async function onChangeChartType(event: Event) {
 
   const target = event.target as HTMLInputElement
   const type = target.value
-  const script = await fetchScriptForType(type)
-  if (script) {
-    refData.value.script = script
+  const template = await fetchTemplateForType(type)
+  if (template) {
+    refData.value.script = template.script
+    refTemplate.value = template
   }
 }
 
 async function initializeTemplate() {
   const type = refData.value.chartType
-  const script = await fetchScriptForType(type)
-  if (script) {
-    refData.value.script = script
+  const template = await fetchTemplateForType(type)
+  if (template) {
+    refData.value.script = template.script
   }
 }
 
