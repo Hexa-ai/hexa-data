@@ -1,4 +1,5 @@
-export const tile = {
+import { Template } from '../Contracts/Template'
+export const tile: Template = {
   script: `{
   'token' $readToken
   'class' 'YOUR VARIABLE/GTS NAME' // Start with ~ for regex (Eg: '~.*' select all classnames)
@@ -24,6 +25,5 @@ export const tile = {
       //   <% 'gray' %> 4 SWITCH
     }
   ]
-}`
+}`,
 }
-

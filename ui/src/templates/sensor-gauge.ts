@@ -1,3 +1,2 @@
-export const tile = {
-  script: `type:sensor-gauge`
-}
+import { Template } from '../Contracts/Template'
+export const tile: Template = { variablesType: 'mono', script: `type:sensor-gauge` }

@@ -1,5 +1,5 @@
 <template>
-  <Combobox as="div" v-model="selectedChoice">
+  <Combobox as="div" v-model="selectedChoice" :multiple="multiple">
     <ComboboxLabel class="block text-sm font-medium text-gray-700">{{ title }}</ComboboxLabel>
     <div class="relative mt-1">
       <ComboboxInput
@@ -17,11 +17,9 @@
         class="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
       >
         <ComboboxOption v-if="query && !filteredChoices.includes(query)" :value="query">
-          <li
-              :class="['relative select-none py-2 pl-3 pr-9 cursor-pointer text-gray-900']"
-            >
-          Ajouter "{{ query }}"
-        </li>
+          <li :class="['relative select-none py-2 pl-3 pr-9 cursor-pointer text-gray-900']">
+            Ajouter "{{ query }}"
+          </li>
         </ComboboxOption>
         <ComboboxOption
           v-for="choice in filteredChoices"
@@ -73,6 +71,7 @@ import {
 const props = defineProps<{
   title: string
   choices: string[]
+  multiple?: boolean
 }>()
 
 const emit = defineEmits<{

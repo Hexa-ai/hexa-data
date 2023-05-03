@@ -1,4 +1,5 @@
-export const tile = {
+import { Template } from '../Contracts/Template'
+export const tile: Template = {
   script: `//
 // Fetching datas
 // $dtStart and $dtEnd come from the dashboard date picker
@@ -43,6 +44,5 @@ $dtEnd $dtStart - 'interval' STORE
   // 'params' [
   //   { 'datasetColor' '#dc3545' 'xAxis' 0 'type' 'area' }
   // ]
-}`
+}`,
 }
-
