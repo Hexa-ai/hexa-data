@@ -40,14 +40,8 @@ export default class StoreTagValidator {
       type: schema.number(),
       valueType: schema.number.optional([rules.requiredWhen('type', '=', '1')]),
       alarm: schema.boolean.optional(),
-      minTreshold: schema.number.optional([
-        rules.requiredWhen('alarm', '=', true),
-        rules.requiredWhen('type', 'in', ['2', '3']),
-      ]),
-      maxTreshold: schema.number.optional([
-        rules.requiredWhen('alarm', '=', true),
-        rules.requiredWhen('type', 'in', ['2', '3']),
-      ]),
+      minTreshold: schema.number.optional([]),
+      maxTreshold: schema.number.optional([]),
       triggerType: schema.enum.optional(['rising', 'falling'] as const),
       script: schema.string.optional(),
       scriptOutput: schema.string.optional(),
