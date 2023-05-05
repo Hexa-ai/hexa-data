@@ -125,16 +125,8 @@ export default class DashboardsController {
     }
 
     if (await (auth.user!.hasProjectRights(params.projectId, Role.EDITOR))==false) {
-      query = query.andWhere('name', 'NOT LIKE', '@%')
+      query = query.andWhere('name', 'NOT LIKE', '\\_%').andWhere('name', 'NOT LIKE', '%.\\_%')
     }
-    // query = query.leftJoin('project_user', (join) => {
-    //   join.on('project_user.project_id', '=', 'dashboards.project_id')
-    //   join.andOnVal('project_user.user_id', '=', `${auth.user!.id}`)
-    // })
-
-    // query = query.andWhere((table) => {
-    //   table.where('dashboards.name', 'NOT LIKE', '%\\\\%').orWhere('project_user.role', '>=', 2)
-    // })
 
     const dashboards = await query.orderBy('name').paginate(page, perPage)
 
