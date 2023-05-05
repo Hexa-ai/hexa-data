@@ -127,11 +127,15 @@ export default class DashboardsController {
       join.andOnVal('project_user.user_id', '=', `${auth.user!.id}`)
     })
 
-    if (await (auth.user!.hasProjectRights(params.projectId, Role.EDITOR))==false) {
+    if ((await auth.user!.hasProjectRights(params.projectId, Role.EDITOR)) == false) {
       query = query.andWhere('name', 'NOT LIKE', '\\_%').andWhere('name', 'NOT LIKE', '%.\\_%')
     }
 
-    const dashboards = await query.orderBy('name').paginate(page, perPage)
+    const dashboards = await query
+      .orderBy('name')
+      .select('dashboards.*', 'project_user.role as role')
+      .paginate(page, perPage)
+    console.log(dashboards.at(0)?.$original)
 
     response.send(dashboards)
   }

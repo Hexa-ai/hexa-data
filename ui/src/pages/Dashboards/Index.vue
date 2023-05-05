@@ -136,6 +136,7 @@ async function init() {
   const page = route.query['page'] ? Number(route.query['page']) : 1
 
   const dashboards = await dashboardCrudController.index(page, 1000, refSearch.value)
+  console.log('dashboards', dashboards)
   refdashboardCollection.value = dashboards
   console.log(DashboardsHierarchizer.hierarchize(dashboards.data))
   console.log(dashboards.data)
