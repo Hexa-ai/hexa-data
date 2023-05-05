@@ -11,6 +11,8 @@ ui/src/**/*.js
 ui/src/**/*.js.map
 build/*
 build/**/*
+tmp/*
+tmp/*.sqlite3
 .env
 server/database/*.sqlite
 storage
