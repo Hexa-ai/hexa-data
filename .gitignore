@@ -13,7 +13,6 @@ build/*
 build/**/*
 .env
 server/database/*.sqlite
-tmp/*.sqlite3
 storage
 .cache
 install.log
