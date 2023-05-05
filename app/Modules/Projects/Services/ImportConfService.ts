@@ -160,15 +160,19 @@ export default class ImportConfService {
       const idMapping: number[] = []
       for (const dashboard of dashboards) {
         dashboard['project_id'] = this.project.id
+        Logger.info('* Import dashboard test:OKOK')
         const oldId = dashboard['id']
 
         delete (dashboard['id'])
+        delete (dashboard['img_bg'])
         delete (dashboard['updated_at'])
         delete (dashboard['created_at'])
 
         const nwDashboard = new Dashboard()
+        Logger.info('* Import dashboard test:OKOKOK')
+        console.log(dashboard)
         await nwDashboard.merge(dashboard).save()
-
+        Logger.info('* Import dashboard test:OKOKeeeee')
         idMapping[oldId] = nwDashboard.id
       }
       Logger.info('* Import dashboard model: OK')
