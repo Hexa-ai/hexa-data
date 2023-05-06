@@ -4,7 +4,6 @@ import Warp10Service from '../../../Services/Warp10Service'
 import StoreDashboardValidator from '../Validators/StoreDashboardValidator'
 import UpdateDashboardValidator from '../Validators/UpdateDashboardValidator'
 import Dashboard from '../Models/Dashboard'
-import { ModelPaginatorContract } from '@ioc:Adonis/Lucid/Orm'
 import { Attachment } from '@ioc:Adonis/Addons/AttachmentLite'
 import Role from 'App/Modules/Projects/Contracts/enums/Roles'
 
