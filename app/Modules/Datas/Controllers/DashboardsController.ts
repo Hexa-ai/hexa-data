@@ -6,7 +6,6 @@ import UpdateDashboardValidator from '../Validators/UpdateDashboardValidator'
 import Dashboard from '../Models/Dashboard'
 import { ModelPaginatorContract } from '@ioc:Adonis/Lucid/Orm'
 import { Attachment } from '@ioc:Adonis/Addons/AttachmentLite'
-import { join } from 'node:path'
 import Role from 'App/Modules/Projects/Contracts/enums/Roles'
 
 export default class DashboardsController {
