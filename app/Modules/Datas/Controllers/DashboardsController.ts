@@ -4,9 +4,8 @@ import Warp10Service from '../../../Services/Warp10Service'
 import StoreDashboardValidator from '../Validators/StoreDashboardValidator'
 import UpdateDashboardValidator from '../Validators/UpdateDashboardValidator'
 import Dashboard from '../Models/Dashboard'
-import { ModelPaginatorContract } from '@ioc:Adonis/Lucid/Orm'
 import { Attachment } from '@ioc:Adonis/Addons/AttachmentLite'
-import { join } from 'node:path'
+import Role from 'App/Modules/Projects/Contracts/enums/Roles'
 
 export default class DashboardsController {
   /**
@@ -128,9 +127,9 @@ export default class DashboardsController {
       join.andOnVal('project_user.user_id', '=', `${auth.user!.id}`)
     })
 
-    query = query.andWhere((table) => {
-      table.where('dashboards.name', 'NOT LIKE', '\\_%').orWhere('project_user.role', '>=', 2)
-    })
+    if (await (auth.user!.hasProjectRights(params.projectId, Role.EDITOR))==false) {
+      query = query.andWhere('name', 'NOT LIKE', '\\_%').andWhere('name', 'NOT LIKE', '%.\\_%')
+    }
 
     const dashboards = await query.orderBy('name').paginate(page, perPage)
 

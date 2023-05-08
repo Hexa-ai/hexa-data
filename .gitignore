@@ -11,10 +11,10 @@ ui/src/**/*.js
 ui/src/**/*.js.map
 build/*
 build/**/*
-tmp/
+tmp/*
+tmp/*.sqlite3
 .env
 server/database/*.sqlite
-tmp/*.sqlite3
 storage
 .cache
 install.log
