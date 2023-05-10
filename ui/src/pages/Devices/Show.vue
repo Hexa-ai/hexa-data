@@ -180,6 +180,7 @@
                     v-model="refDevice!.password"
                     :isRequired="false"
                     :isDisabled="!edit"
+                    :confirm="true"
                     :type="FieldType.PASSWORD"
                   ></InputField>
                 </div>
