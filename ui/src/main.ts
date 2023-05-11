@@ -123,7 +123,7 @@ const doc = document.documentElement;
 
 // Fonction pour définir le niveau de zoom
 function setZoom(zoom:number) {
-  doc.style.zoom = zoom;
+  (doc.style as any).zoom = zoom;
  }
 
 setZoom(0.88);
