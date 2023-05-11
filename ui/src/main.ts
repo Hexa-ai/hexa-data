@@ -1,9 +1,10 @@
 import { createApp } from 'vue'
 import { createI18n } from 'vue-i18n'
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHistory, useRoute } from 'vue-router'
 import VueWriter from 'vue-writer'
 import './index.css'
 import App from './App.vue'
+import { RouteService } from '../src/Classes/RouteService'
 
 const Login = () => import('./pages/Login.vue')
 const Register = () => import('./pages/Register.vue')
@@ -100,6 +101,16 @@ const router = createRouter({
   history: createWebHistory(),
   routes, // short for `routes: routes`
 })
+
+router.beforeEach( async (to, from, next) => {
+  // Vérifiez si l'utilisateur navigue vers une route commençant par /projects
+  if (to.path.startsWith('/projects/')) {
+    console.log(to)
+    await RouteService.getProjectInfos(to)
+  }
+  // Continuez de naviguer vers la route demandée
+  next();
+});
 
 const app = createApp(App)
 app.use(router)
