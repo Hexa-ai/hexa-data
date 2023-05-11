@@ -17,6 +17,8 @@ import TileModel from "../Models/TileModel";
 let grid: GridStack;
 let newTileId = 0
 
+
+
 const emits = defineEmits(['update:save', 'update:add', 'save']);
 
 const dashboardData = ref<DashboardModel>(new DashboardModel())
@@ -57,6 +59,7 @@ watch(
     }
   }
 )
+
 
 onMounted(() => {
   grid = GridStack.init({ float: props.float, disableOneColumnMode:true});

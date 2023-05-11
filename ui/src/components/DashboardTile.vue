@@ -43,7 +43,7 @@
                         <discovery-tile class="" v-show="data.chartType != ''" :chart-title="warpName" :id="'tile' + String(id)"
                             :url="url"
                             :options="{ 'eventHandler': props.data.eventHandler , 'autoRefresh': props.data.autoRefresh , 'httpHeaders': { 'Authorization': 'Bearer ' + store.authUser.token.token },
-                            'showLoader': true,
+                            'showLoader': false,
                             'customStyles': {
                               'h2' :' text-align: ' + props.data.headerJustify + ' !important; font-size: 1rem; color: ' + props.data.headerColor + '!important; margin: 3px; line-height: normal;',
                               'button':'border-color: rgb(209 213 219)!important; color: rgb(107 114 128)!important; border-width: 1px!important; border-radius: 0.375rem!important; background-color:white!important; box-shadow:0 0 #0000!important; font-size: 0.875rem!important; font-weight: 500!important;',
