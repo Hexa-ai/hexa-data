@@ -39,19 +39,19 @@
             <div>
               <div class="mt-6 grid grid-cols-6 gap-y-6 gap-x-4">
                 <div class="col-span-6 md:col-span-2">
-                  <InputField :title="$t('users.name')" v-model="refUser!.name" :isRequired="false" :isDisabled="!refEdit"
+                  <InputField :title="$t('users.name')" v-model="refUser!.name" :isRequired="false" :isDisabled="true"
                     :type="FieldType.TEXT"></InputField>
                 </div>
               </div>
               <div class="mt-6 grid grid-cols-6 gap-y-6 gap-x-4">
                 <div class="col-span-6 md:col-span-2">
                   <InputField :title="$t('users.email')" v-model="refUser!.email" :isRequired="false"
-                    :isDisabled="!refEdit" :type="FieldType.EMAIL"></InputField>
+                    :isDisabled="true" :type="FieldType.EMAIL"></InputField>
                 </div>
               </div>
               <div class="mt-6 grid grid-cols-6 gap-y-6 gap-x-4">
                 <div class="col-span-6 md:col-span-2">
-                  <InputField :title="$t('users.number')" v-model="refUser!.number" :isRequired="false" :isDisabled="!refEdit"
+                  <InputField :title="$t('users.number')" v-model="refUser!.number" :isRequired="false" :isDisabled="true"
                     :type="FieldType.TEXT"></InputField>
                 </div>
               </div>
@@ -61,14 +61,14 @@
                     :title="$t('users.tags')"
                     v-model="refTags"
                     :isRequired="false"
-                    :isDisabled="!refEdit"
+                    :isDisabled="true"
                     :type="FieldType.TEXT"></InputField>
                 </div>
               </div>
               <div class="mt-6 grid grid-cols-6 gap-y-6 gap-x-4">
                 <div class="col-span-6 md:col-span-1">
                   <InputField :title="$t('users.language')" v-model="refUser.lang" :choices="languages"
-                    :values="languages" :isRequired="false" :isDisabled="!refEdit" :type="FieldType.SELECT"></InputField>
+                    :values="languages" :isRequired="false" :isDisabled="true" :type="FieldType.SELECT"></InputField>
                 </div>
               </div>
               <div class="mt-6 grid grid-cols-6 gap-y-6 gap-x-4">
