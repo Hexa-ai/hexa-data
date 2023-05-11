@@ -106,3 +106,16 @@ app.use(router)
 app.use(i18n)
 app.use(VueWriter)
 app.mount('#app')
+
+
+const doc = document.documentElement;
+
+// Fonction pour définir le niveau de zoom
+function setZoom(zoom:number) {
+  doc.style.zoom = zoom;
+  // doc.style.webkitTransform = `scale(${zoom})`;
+  // doc.style.msTransform = `scale(${zoom})`;
+  // doc.style.transform = `scale(${zoom})`;
+ }
+
+setZoom(0.88);
