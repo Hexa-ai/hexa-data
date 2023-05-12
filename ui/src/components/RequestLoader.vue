@@ -1,10 +1,10 @@
 <template>
-  <div  class="loader"><div v-show="isLoading" class="spinner"></div></div>
+  <div  class="loader"><div v-show="isLoadingNb!=0" class="spinner"></div></div>
 </template>
 
 <script setup lang="ts">
   import { ref } from 'vue'
-  const isLoading = ref(false)
+  const isLoadingNb = ref(0)
 
   const originalOpen = XMLHttpRequest.prototype.open
     const self = this
@@ -14,10 +14,10 @@
     method,
     url
   ];
-    isLoading.value = true
+  isLoadingNb.value = isLoadingNb.value+1
     this.addEventListener('readystatechange', function () {
       if (this.readyState === 4) {
-        isLoading.value = false
+        isLoadingNb.value = isLoadingNb.value-1
       }
     })
     originalOpen.apply(this, args)
