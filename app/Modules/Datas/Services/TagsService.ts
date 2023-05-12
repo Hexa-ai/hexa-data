@@ -85,15 +85,8 @@ export default class TagsService {
         gtsCollection.push({
           classname:tag.device.namespace + '.' + tag.name,
           labels:{ projectUuid:this.project.uuid },
-          attributes: {descriptionL1:tag.descriptionL1,descriptionL2:tag.descriptionL2,descriptionL3:tag.descriptionL3,unit:tag.unit},
+          attributes: {descriptionL1:tag.descriptionL1,descriptionL2:tag.descriptionL2,descriptionL3:tag.descriptionL3,unit:tag.unit,alarm:tag.alarm, minTreshold:tag.minTreshold, maxTreshold:tag.maxTreshold},
           valueType: tag.valueType
-        })
-      } else {
-        gtsCollection.push({
-          classname:tag.name,
-          labels:{ projectUuid:this.project.uuid },
-          attributes: {descriptionL1:tag.descriptionL1,descriptionL2:tag.descriptionL2,descriptionL3:tag.descriptionL3},
-          valueType: 1
         })
       }
     }
@@ -122,16 +115,8 @@ export default class TagsService {
         gtsCollection.push({
           classname:tag.device.namespace + '.' + tag.name,
           labels:{ ...{projectUuid:this.project.uuid}, ...await this.generateLabels(tag.name) },
-          attributes: {descriptionL1:tag.descriptionL1,descriptionL2:tag.descriptionL2,descriptionL3:tag.descriptionL3,unit:tag.unit},
+          attributes: {descriptionL1:tag.descriptionL1,descriptionL2:tag.descriptionL2,descriptionL3:tag.descriptionL3,unit:tag.unit,alarm:String(tag.alarm), minTreshold:String(tag.minTreshold), maxTreshold:String(tag.maxTreshold)},
           valueType: tag.valueType
-        })
-      } else {
-        // Text GTS creation
-        gtsCollection.push({
-          classname: tag.name,
-          labels:{ projectUuid:this.project.uuid },
-          attributes: {descriptionL1:tag.descriptionL1,descriptionL2:tag.descriptionL2,descriptionL3:tag.descriptionL3},
-          valueType: 1
         })
       }
 
