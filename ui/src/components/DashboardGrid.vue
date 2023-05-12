@@ -113,8 +113,8 @@ async function resizeGrid() {
     grid.column(2, layout).cellHeight('100');
   } else if (width < 950) {
     grid.column(6, layout).cellHeight('100');
-  } else if (width < 1100) {
-    grid.column(8, layout).cellHeight('100');
+  } else if (width <= 1200) {
+    grid.column(6, layout).cellHeight('100');
   } else {
     grid.column(12, layout).cellHeight('100');
   }
