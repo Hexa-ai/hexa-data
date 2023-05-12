@@ -104,7 +104,8 @@ export default class ImportConfService {
         device['project_id'] = this.project.id
         const oldId = device['id']
         const oldDashboardId = device['dashboard_id']
-
+        device['namespace'] = await this.findNamespace(device['namespace'])
+        device['clientId'] = device['namespace']
         delete (device['id'])
         delete (device['updated_at'])
         delete (device['created_at'])
@@ -121,7 +122,23 @@ export default class ImportConfService {
     }
 
   }
-
+  /**
+   *
+   * Search if namespace is unique
+   *
+   */
+  protected async findNamespace(namespace:string):Promise<string> {
+    if (await Device.query().where('namespace',namespace).select('namespace').first() != null) {
+      const match = namespace.match(/(\d+)$/)
+      if (match!=null) {
+        const prefix = namespace.slice(0, namespace.length - match[1].toString().length)
+        return this.findNamespace(prefix + String(parseInt(match[1],10) + 1 ))
+      } else {
+        return this.findNamespace(namespace +'_1' )
+      }
+    }
+    return  namespace
+  }
   /**
    * Import tags in database from .jon imported object
    *
@@ -160,7 +177,6 @@ export default class ImportConfService {
       const idMapping: number[] = []
       for (const dashboard of dashboards) {
         dashboard['project_id'] = this.project.id
-        Logger.info('* Import dashboard test:OKOK')
         const oldId = dashboard['id']
 
         delete (dashboard['id'])
@@ -169,10 +185,8 @@ export default class ImportConfService {
         delete (dashboard['created_at'])
 
         const nwDashboard = new Dashboard()
-        Logger.info('* Import dashboard test:OKOKOK')
         console.log(dashboard)
         await nwDashboard.merge(dashboard).save()
-        Logger.info('* Import dashboard test:OKOKeeeee')
         idMapping[oldId] = nwDashboard.id
       }
       Logger.info('* Import dashboard model: OK')

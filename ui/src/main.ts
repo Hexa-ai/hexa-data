@@ -104,7 +104,7 @@ const router = createRouter({
 
 router.beforeEach( async (to, from, next) => {
   // Vérifiez si l'utilisateur navigue vers une route commençant par /projects
-  if (to.path.startsWith('/projects/')) {
+  if (to.path.startsWith('/projects/') && !to.path.startsWith('/projects/create')) {
     console.log(to)
     await RouteService.getProjectInfos(to)
   }
