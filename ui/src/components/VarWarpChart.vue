@@ -50,9 +50,9 @@ if (props.valueType==2 || props.valueType==3 || props.valueType==1){
     'params' [ { 'datasetColor' '${store.publicAppSettings.appPrimaryColor}' 'xAxis' 0 } ]
     'globalParams' {
       'thresholds' [
-        { 'value' ${props.minTreshold} 'color' 'red' 'fill' false }
-        { 'value' ${props.maxTreshold} 'color' 'red' 'fill' false }
-      }
+        { 'value' ${props.isAlarm?props.minTreshold:0} 'color' 'red' 'fill' false }
+        { 'value' ${props.isAlarm?props.maxTreshold:0} 'color' 'red' 'fill' false }
+      ]
     }
   }`
 } else if (props.valueType==4) {
