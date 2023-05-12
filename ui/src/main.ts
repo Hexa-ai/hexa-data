@@ -124,6 +124,13 @@ const doc = document.documentElement;
 // Fonction pour définir le niveau de zoom
 function setZoom(zoom:number) {
   (doc.style as any).zoom = zoom;
- }
+}
 
-setZoom(0.88);
+if (Math.abs(window.orientation) === 90) {
+  // exécuter l'action pour les tablettes en orientation paysage
+  setZoom(0.70);
+} else {
+  // exécuter l'action pour les PC ou les tablettes en orientation portrait
+  setZoom(0.88);
+}
+
