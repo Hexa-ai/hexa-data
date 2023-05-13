@@ -136,7 +136,6 @@ export default class DashboardsController {
       .orderBy('name')
       .select('dashboards.*', 'project_user.role as role')
       .paginate(page, perPage)
-    console.log(dashboards.at(0)?.$original)
 
     response.send(dashboards)
   }

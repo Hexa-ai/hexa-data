@@ -153,7 +153,7 @@
                     :title="$t('settings')"
                     v-model="refTag!.settings"
                     :isRequired="false"
-                    :isDisabled="false"
+                    :isDisabled="!edit"
                     :type="FieldType.TEXT"
                   ></InputField>
                 </div>
@@ -164,7 +164,7 @@
                     :title="$t('tags.alarm')"
                     v-model="refTag!.alarm"
                     :isRequired="true"
-                    :isDisabled="false"
+                    :isDisabled="!edit"
                     :index-is-value="true"
                     :type="FieldType.CHECKBOX"
                   ></InputField>
@@ -179,7 +179,7 @@
                     :title="$t('tags.minTreshold')"
                     v-model="refTag!.minTreshold"
                     :isRequired="true"
-                    :isDisabled="false"
+                    :isDisabled="!edit"
                     :type="FieldType.NUMBER"
                   ></InputField>
                 </div>
@@ -193,7 +193,7 @@
                     :title="$t('tags.maxTreshold')"
                     v-model="refTag!.maxTreshold"
                     :isRequired="true"
-                    :isDisabled="false"
+                    :isDisabled="!edit"
                     :type="FieldType.NUMBER"
                   ></InputField>
                 </div>
@@ -206,7 +206,7 @@
                   <InputField
                     :title="$t('tags.triggerType')"
                     v-model="refTag!.triggerType"
-                    :isDisabled="false"
+                    :isDisabled="!edit"
                     :type="FieldType.SELECT"
                     :index-is-value="true"
                     :choices="['', $t('tags.triggerTypes.falling'), $t('tags.triggerTypes.rising')]"
@@ -217,13 +217,13 @@
                 <div class="sm:col-span-2 space-y-6">
                   <Combobox
                     :title="$t('tags.physicalUnit')"
-                    :is-disabled="false"
+                    :isDisabled="true"
                     :choices="refUsedPhysicalUnits"
                     v-model="refTag!.physicalUnit"
                   />
                 </div>
               </div>
-              <div class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
+              <div class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6" v-if="edit">
                 <div class="sm:col-span-2">
                   <Btn :text="$t('save')" :primary="true" class=""></Btn>
                 </div>

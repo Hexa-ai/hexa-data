@@ -1,5 +1,5 @@
 <template>
-  <Combobox as="div" v-model="selectedChoice" :multiple="multiple">
+  <Combobox as="div" v-model="selectedChoice" :multiple="multiple" :disabled="props.isDisabled">
     <ComboboxLabel class="block text-sm font-medium text-gray-700">{{ title }}</ComboboxLabel>
     <div class="relative mt-1">
       <ComboboxInput
@@ -72,6 +72,7 @@ const props = defineProps<{
   title: string
   choices: string[]
   multiple?: boolean
+  isDisabled:boolean
 }>()
 
 const emit = defineEmits<{

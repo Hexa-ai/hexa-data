@@ -79,8 +79,8 @@
                     >{{ $t('tags.parameters') }}</h3>
                     <p class="mt-1 text-sm text-gray-500"></p>
                   </div>
-                  <div class="mt-6 grid grid-cols-6 gap-y-6 gap-x-4">
-                    <div class="col-span-6 md:col-span-4">
+                  <div class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
+                    <div class="sm:col-span-2">
                       <InputField
                         :title="$t('tags.name')"
                         v-model="refTag!.name"
@@ -90,8 +90,8 @@
                       ></InputField>
                     </div>
                   </div>
-                  <div class="mt-6 grid grid-cols-6 gap-y-6 gap-x-4">
-                    <div class="col-span-6 md:col-span-5">
+                  <div class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
+                    <div class="sm:col-span-2">
                       <InputField
                         :title="$t('tags.description') + ' (' + store.currentProject.l1 + ')'"
                         v-model="refTag!.descriptionL1"
@@ -101,8 +101,8 @@
                       ></InputField>
                     </div>
                   </div>
-                  <div class="mt-6 grid grid-cols-6 gap-y-6 gap-x-4">
-                    <div class="col-span-6 md:col-span-5">
+                  <div class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
+                    <div class="sm:col-span-2">
                       <InputField
                         :title="$t('tags.description') + ' (' + store.currentProject.l2 + ')'"
                         v-model="refTag!.descriptionL2"
@@ -112,8 +112,8 @@
                       ></InputField>
                     </div>
                   </div>
-                  <div class="mt-6 grid grid-cols-6 gap-y-6 gap-x-4">
-                    <div class="col-span-6 md:col-span-5">
+                  <div class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
+                    <div class="sm:col-span-2">
                       <InputField
                         :title="$t('tags.description') + ' (' + store.currentProject.l3 + ')'"
                         v-model="refTag!.descriptionL3"
@@ -123,8 +123,8 @@
                       ></InputField>
                     </div>
                   </div>
-                  <div class="mt-6 grid grid-cols-6 gap-y-6 gap-x-4">
-                    <div class="col-span-6 md:col-span-4">
+                  <div class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
+                    <div class="sm:col-span-2">
                       <InputField
                         class="pb-3"
                         :title="$t('tags.execInterval')"
@@ -138,8 +138,8 @@
                       ></InputField>
                     </div>
                   </div>
-                  <div v-if="edit" class="mt-6 grid grid-cols-6 gap-y-6 gap-x-4">
-                    <div class="col-span-2">
+                  <div class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
+                    <div class="sm:col-span-2">
                       <Btn :text="$t('save')" :primary="true" class=""></Btn>
                     </div>
                   </div>
