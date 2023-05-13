@@ -1,4 +1,5 @@
-export const tile = {
+import { Template } from '../Contracts/Template'
+export const tile: Template = {
   script: `{
   'token' $readToken
   'class' 'YOUR VARIABLE/GTS NAME' // Start with ~ for regex (Eg: '~FIRST VARIABLE/GTS|SECOND VARIABLE/GTS' fetch two variables/GTS '~.*' fetch all variables/GTS )
@@ -20,7 +21,5 @@ export const tile = {
       'bgColor' NULL
       'scheme' 'ECTOPLASM' // MATRIX, ECTOPLASM, VIRIDIS, MAGMA, NINETEEN_EIGHTY_FOUR, CTHULHU
     }
-}`
+}`,
 }
-
-

@@ -27,7 +27,12 @@
             route-suffix="/dashboards/"
           />
           <ul role="list" class="divide-y divide-gray-200">
-            <li v-for="dashboard in refdashboardCollection.data" :key="dashboard.id">
+            <li
+              v-for="dashboard in refdashboardCollection.data.filter(
+                (dashboard) => dashboard.name.split('.').length === 1
+              )"
+              :key="dashboard.id"
+            >
               <router-link
                 :to="routePrefix + /dashboards/ + dashboard.id"
                 class="block hover:bg-gray-50"
@@ -131,6 +136,7 @@ async function init() {
   const page = route.query['page'] ? Number(route.query['page']) : 1
 
   const dashboards = await dashboardCrudController.index(page, 1000, refSearch.value)
+  console.log('dashboards', dashboards)
   refdashboardCollection.value = dashboards
   console.log(DashboardsHierarchizer.hierarchize(dashboards.data))
   console.log(dashboards.data)

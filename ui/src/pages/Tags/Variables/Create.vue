@@ -106,6 +106,20 @@
                   ></InputField>
                 </div>
               </div>
+              <div
+                class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6"
+                v-if="refTag!.type == 1"
+              >
+                <div class="sm:col-span-2">
+                  <InputField
+                    :title="$t('settings')"
+                    v-model="refTag!.settings"
+                    :isRequired="false"
+                    :isDisabled="false"
+                    :type="FieldType.TEXT"
+                  ></InputField>
+                </div>
+              </div>
               <div class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
                 <div class="sm:col-span-2">
                   <InputField
@@ -148,7 +162,7 @@
               </div>
               <div
                 class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6"
-                v-if="showTresholdField"
+                v-if="refTag!.valueType == 1"
               >
                 <div class="sm:col-span-2">
                   <InputField
@@ -163,27 +177,11 @@
               </div>
               <div class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
                 <div class="sm:col-span-2 space-y-6">
-                  <InputField
+                  <Combobox
                     :title="$t('tags.physicalUnit')"
-                    v-model="refTag!.physicalUnit"
-                    :isDisabled="false"
-                    :type="FieldType.SELECT"
-                    :choices="[
-                      $t('tags.physicalUnitTypes.duration'),
-                      $t('tags.physicalUnitTypes.flow'),
-                      $t('tags.physicalUnitTypes.temperature'),
-                      ...refUsedPhysicalUnits,
-
-                      $t('other'),
-                    ]"
-                    :values="['Duration', 'Flow', 'Temperature', ...refUsedPhysicalUnits, '']"
-                  />
-                  <InputField
-                    v-if="showPhysicalUnitInput"
-                    v-model="refTag!.physicalUnit"
-                    :type="FieldType.TEXT"
                     :is-disabled="false"
-                    :title="$t('tags.physicalUnit')"
+                    :choices="refUsedPhysicalUnits"
+                    v-model="refTag!.physicalUnit"
                   />
                 </div>
               </div>
@@ -214,6 +212,7 @@ import { BaseController, ModelCollection } from './../../../Classes/BaseControll
 import { RouteService } from '../../../Classes/RouteService'
 import DeviceModel from '../../../Models/DeviceModel'
 import { Utils } from '../../../Classes/Utils'
+import Combobox from '../../../components/Combobox.vue'
 
 const router = useRouter()
 const route = useRoute()
@@ -235,8 +234,6 @@ const showTresholdField = computed(
   () => refTag.value.alarm === true && (refTag.value.valueType == 2 || refTag.value.valueType == 3)
 )
 
-let ws = ref('')
-
 const crudController = new BaseController<TagModel>(
   '/tags',
   [],
@@ -257,15 +254,6 @@ crudDeviceController.setRoutePrefix(routePrefix)
 
 init()
 
-const showPhysicalUnitInput = computed(() => {
-  return (
-    !refTag!.value.physicalUnit ||
-    (refTag!.value.physicalUnit !== 'Duration' &&
-      refTag!.value.physicalUnit !== 'Flow' &&
-      refTag!.value.physicalUnit !== 'Temperature' &&
-      !refUsedPhysicalUnits.value.includes(refTag!.value.physicalUnit))
-  )
-})
 async function init() {
   await RouteService.getProjectInfos(route)
   refDeviceCollection.value = await crudDeviceController.index(1, 100, '')

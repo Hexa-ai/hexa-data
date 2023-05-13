@@ -24,6 +24,7 @@ export default class StoreTagValidator {
     projectId: this.ctx.params.projectId,
     deviceId: this.ctx.request.input('deviceId'),
     physicalUnit: this.ctx.request.input('physicalUnit'),
+    settings: this.ctx.request.input('settings'),
   }
   public schema: ParsedTypedSchema<any>
 
@@ -53,6 +54,7 @@ export default class StoreTagValidator {
         rules.exists({ table: 'devices', column: 'id' }),
       ]),
       physicalUnit: schema.string.optional(),
+      settings: schema.string.optional(),
     })
   }
   public refs = schema.refs({

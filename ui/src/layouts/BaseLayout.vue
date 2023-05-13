@@ -110,6 +110,12 @@
                             :class="[subItem.current ? 'menu-body-font' : 'menu-body-font ', 'mr-3 flex-shrink-0 h-4 w-4']"
                             aria-hidden="true" />
                           {{ subItem.name }}
+                          <span v-if="subItem.tooltip" class="hidden hover:block absolute right-0 mr-4">
+                            <ExclamationCircleIcon class="h-4 w-4 text-gray-400" aria-hidden="true" />
+                          </span>
+                          <div v-if="subItem.tooltip" class="ml-1">
+                            <Tooltip :text="subItem.tooltip" />
+                          </div>
                         </router-link>
                       </li>
                     </template>
@@ -190,17 +196,17 @@
 
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
-import { ref, inject, computed, RenderFunction, onUpdated } from 'vue'
+import { ref, inject, computed, FunctionalComponent, HTMLAttributes, VNodeProps } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import BreadCrumbVue from '../components/BreadCrumb.vue'
-import BannerVue from '../components/Banner.vue'
 import Store from '../store/Store'
 import { Dialog, DialogOverlay, Menu, MenuButton, MenuItem, MenuItems, TransitionChild, TransitionRoot } from '@headlessui/vue'
-import { InformationCircleIcon, TemplateIcon, DocumentReportIcon, TagIcon, PuzzleIcon, ChartBarIcon, FolderIcon, ChipIcon, VariableIcon, CollectionIcon, BookmarkIcon, BookmarkAltIcon, TranslateIcon, CodeIcon, HomeIcon, MenuAlt2Icon, UsersIcon, XIcon, CogIcon, CubeIcon } from '@heroicons/vue/outline'
+import { InformationCircleIcon, TemplateIcon, DocumentReportIcon, ExclamationCircleIcon, PuzzleIcon, FolderIcon, ChipIcon, VariableIcon, CollectionIcon, BookmarkIcon, BookmarkAltIcon, TranslateIcon, CodeIcon, HomeIcon, MenuAlt2Icon, UsersIcon, XIcon, CogIcon, CubeIcon } from '@heroicons/vue/outline'
 import DashboardModel from '../Models/DashboardModel'
 import { BaseController, ModelCollection } from '../Classes/BaseController'
 import RoleType from '../Contracts/RoleType'
 import { RouteService } from '../Classes/RouteService'
+import Tooltip from '../components/Tooltip.vue'
 const { t } = useI18n()
 const router = useRouter()
 const route = useRoute()
@@ -229,7 +235,17 @@ let mainNav = [
 let nodeRedActivated:boolean=false;
 import.meta.env.VITE_NR_ACTIVATED.toLowerCase()=='true'?nodeRedActivated=true:nodeRedActivated=false;
 
-let projectNav = [
+type NavItem = {
+  name: string,
+  tooltip?: string,
+  visible: boolean,
+  href: string,
+  icon?: FunctionalComponent<HTMLAttributes & VNodeProps, {}>
+  current: boolean,
+  subItems?: NavItem[]
+}
+
+let projectNav: NavItem[] = [
   { name: t('navigation.informations'), visible: true, href: routePrefix, icon: InformationCircleIcon, current: route.path == routePrefix, subItems: [] },
   { name: t('navigation.dashboards'), visible: true, href: routePrefix + '/dashboards', icon: CollectionIcon, current: route.path == routePrefix + '/dashboards', subItems: [] },
   { name: t('navigation.reports'), visible: true, href: routePrefix + '/reports', icon: DocumentReportIcon, current: route.path == routePrefix + '/reports', subItems: [] },
@@ -269,7 +285,15 @@ async function initNav() {
 }
 async function updateDashboardsList() {
   for (const dashboard of refdashboardCollection.value.data) {
-    projectNav[1].subItems!.push({ name: dashboard.name, visible: true, href: routePrefix + '/dashboards/' + dashboard.id, icon: TemplateIcon, current: route.path == '/projects' })
+    const splittedName = dashboard.name.split('.')
+    projectNav[1].subItems!.push({
+      name: splittedName[splittedName.length - 1],
+      tooltip: splittedName.length > 1 ? dashboard.name : undefined,
+      visible: true,
+      href: routePrefix + '/dashboards/' + dashboard.id,
+      icon: TemplateIcon,
+      current: route.path == '/projects'
+    })
   }
 }
 /**

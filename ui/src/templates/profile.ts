@@ -1,3 +1,2 @@
-export const tile = {
-  script: `type: profile`
-}
+import { Template } from '../Contracts/Template'
+export const tile: Template = { variablesType: 'mono', script: `type: profile` }

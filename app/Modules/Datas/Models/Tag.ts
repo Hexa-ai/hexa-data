@@ -35,6 +35,9 @@ export default class Tag extends BaseModel {
   public triggerType?: 'rising' | 'falling'
 
   @column()
+  public settings?: string
+
+  @column()
   public minTreshold: number
 
   @column()
