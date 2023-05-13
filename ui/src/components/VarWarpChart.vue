@@ -18,14 +18,43 @@ const props = defineProps<{
   className:string,
   url:string,
   valueType:number,
-  autoRefresh?:number
+  autoRefresh?:number,
+  isAlarm?:boolean,
+  minTreshold?:number,
+  maxTreshold?:number
 }>()
 
 let warpScript = ref('')
 
 if (props.valueType==2 || props.valueType==3 || props.valueType==1){
   chartType.value='area'
-  warpScript.value = "10000000 LIMIT { 'token' $readToken 'class' '" + props.className + "' 'labels' {} 'end' $end TOTIMESTAMP 'start' $start TOTIMESTAMP } FETCH SORT 'data' STORE <% $data SIZE 0 == %> <% [ $readToken '" + props.className + "' {} ] FIND %> <% $data %> IFTE 'data' STORE <% $data 0 GET ATTRIBUTES $language GET 'description' STORE $data 0 GET ATTRIBUTES 'unit' GET 'unit' STORE $data 0 GET { NULL NULL 'i' $description 'u' $unit } SETATTRIBUTES { NULL NULL } RELABEL 'data' STORE %> <% $data 0 GET 'data' STORE %> <% %> TRY $data 10000 LTTB 'data' STORE $data VALUES SIZE 1 - 'lastValueIndex' STORE $data VALUES $lastValueIndex GET 'lastValue' STORE { 'data' $data 'params' [ { 'datasetColor' '" + store.publicAppSettings.appPrimaryColor + "' 'xAxis' 0 } ] }"
+  warpScript.value = `
+  10000000 LIMIT
+  {
+    'token' $readToken
+    'class' '${props.className}'
+    'labels' {}
+    'end' $end TOTIMESTAMP
+    'start' $start TOTIMESTAMP
+  } FETCH SORT 'data' STORE
+  <% $data SIZE 0 == %>
+  <% [ $readToken '${props.className}' {} ] FIND %>
+  <% $data %> IFTE 'data' STORE
+
+  <% $data 0 GET ATTRIBUTES $language GET 'description' STORE $data 0 GET ATTRIBUTES 'unit' GET 'unit' STORE $data 0 GET { NULL NULL 'i' $description 'u' $unit } SETATTRIBUTES { NULL NULL } RELABEL 'data' STORE %> <% $data 0 GET 'data' STORE %>
+  <% %> TRY
+  $data 10000 LTTB 'data' STORE
+  $data VALUES SIZE 1 - 'lastValueIndex' STORE
+  $data VALUES $lastValueIndex GET 'lastValue' STORE
+  { 'data' $data
+    'params' [ { 'datasetColor' '${store.publicAppSettings.appPrimaryColor}' 'xAxis' 0 } ]
+    'globalParams' {
+      'thresholds' [
+        { 'value' ${props.isAlarm?props.minTreshold:0} 'color' 'red' 'fill' false }
+        { 'value' ${props.isAlarm?props.maxTreshold:0} 'color' 'red' 'fill' false }
+      ]
+    }
+  }`
 } else if (props.valueType==4) {
   chartType.value='tabular'
   warpScript.value = "{ 'token' $readToken 'class' '" + props.className + "' 'labels' {} 'end' $end TOTIMESTAMP 'start' $start TOTIMESTAMP } FETCH SORT 'gts' STORE [ $gts [] <% 'values' STORE $values 0 GET 'ts' STORE $values 7 GET 'value' STORE [ $ts $value 0 GET ] [ $ts NaN NaN NaN $value 0 GET ] %> MACROREDUCER ] REDUCE 'gtsResult' STORE"

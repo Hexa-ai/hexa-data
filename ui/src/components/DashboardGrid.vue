@@ -17,6 +17,8 @@ import TileModel from "../Models/TileModel";
 let grid: GridStack;
 let newTileId = 0
 
+
+
 const emits = defineEmits(['update:save', 'update:add', 'save']);
 
 const dashboardData = ref<DashboardModel>(new DashboardModel())
@@ -57,6 +59,7 @@ watch(
     }
   }
 )
+
 
 onMounted(() => {
   grid = GridStack.init({ float: props.float, disableOneColumnMode:true});
@@ -110,8 +113,8 @@ async function resizeGrid() {
     grid.column(2, layout).cellHeight('100');
   } else if (width < 950) {
     grid.column(6, layout).cellHeight('100');
-  } else if (width < 1100) {
-    grid.column(8, layout).cellHeight('100');
+  } else if (width <= 1200) {
+    grid.column(6, layout).cellHeight('100');
   } else {
     grid.column(12, layout).cellHeight('100');
   }

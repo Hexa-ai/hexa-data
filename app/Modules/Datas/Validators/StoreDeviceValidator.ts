@@ -11,7 +11,7 @@ export default class StoreDeviceValidator {
       rules.unique({ table: 'devices', column: 'name ', where: { project_id: this.refs.projectId } }),
     ]),
     namespace: schema.string({ trim: true }, [
-      rules.unique({ table: 'devices', column: 'namespace ', where: { project_id: this.refs.projectId } }),
+      rules.unique({ table: 'devices', column: 'namespace ' }),
     ]),
     description: schema.string.optional({ trim: true }),
     adress: schema.string.optional(),

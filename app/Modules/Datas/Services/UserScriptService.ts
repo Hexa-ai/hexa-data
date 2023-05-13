@@ -121,7 +121,7 @@ export default class UserScriptService {
     this.scriptCollection[index].started = true
     var result:any
     try {
-      result = await this.warp10Service.scriptExec(this.scriptCollection[index].script, this.scriptCollection[index].readToken, this.scriptCollection[index].writeToken)
+      result = await this.warp10Service.scriptExec(this.scriptCollection[index].script, this.scriptCollection[index].readToken, this.scriptCollection[index].writeToken, this.scriptCollection[index].projectId)
     } catch (error) {
       this.scriptCollection[index].scriptOutput[DateTime.now().toMillis()]=String(error)
       this.scriptCollection[index].started = false

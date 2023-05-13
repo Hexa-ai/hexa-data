@@ -38,6 +38,9 @@
           :url="warp10Url"
           :class-name="refTag.device!.namespace + '.' + refTag.name"
           :value-type="refTag.valueType"
+          :min-treshold="refTag.minTreshold"
+          :max-treshold="refTag.maxTreshold"
+          :is-alarm="refTag.alarm"
         ></VarWarpChart>
         <form
           class="m-3 space-y-8 divide-y divide-gray-200"

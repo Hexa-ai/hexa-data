@@ -147,7 +147,7 @@
               </div>
             </form>
           </div>
-          <div v-if="!refEditorSwitch" class="flex-1">
+          <!-- <div v-if="!refEditorSwitch" class="flex-1">
             <div>
               <div class="mt-3 mr-3 px-4 py-5 bg-white shadow rounded-lg overflow-hidden">
                 <div class="mb-3">
@@ -164,7 +164,7 @@
                 </div>
               </div>
             </div>
-          </div>
+          </div> -->
         </div>
         <div v-show="refEditorSwitch" id="warp10Debug" class="" :style="'padding:10px; width: 100%; height: ' + refDebugHeight + 'px;' ">
           <div id="warp10DebugLogs" class="w-full h-full logs overflow-y-scroll" style="background-color: #1E1E1E;">
@@ -173,7 +173,6 @@
             <div v-if="!refWarp10ExecError" v-for="line of refWarp10Result" :class="['w-full', 'text-white ml-3 mr-3']"> {{line}} <br/></div>
             <div v-if="refWarp10ExecError" :class="['w-full', 'text-yellow-600 ml-3 mr-3']"> {{refWarp10Result}} <br/></div>
           </div>
-
         </div>
       </template>
     </BaseLayoutVue>

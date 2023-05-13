@@ -1,5 +1,5 @@
 <template>
-  <InputFieldDate title="" :range="true" v-model="refDateRange" :isRequired="false" @update:model-value="getFullUrl" class="mt-3"></InputFieldDate>
+  <InputFieldDate title="" :range="true" v-model="refDateRange" :isRequired="false" @update:model-value="getFullUrl" class=""></InputFieldDate>
 </template>
 <script setup lang="ts">
 import { ref } from 'vue';

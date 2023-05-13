@@ -27,9 +27,7 @@ export default class UpdateDeviceValidator {
     long: schema.number.optional(),
     username: schema.string.optional(),
     password: schema.string.optional(),
-    dashboardId: schema.number.optional([
-      rules.exists({ table: 'dashboards', column: 'id' })
-    ]),
+    dashboardId: schema.number.optional(),
 
 
   })

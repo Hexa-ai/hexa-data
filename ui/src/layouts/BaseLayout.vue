@@ -207,7 +207,6 @@ import { BaseController, ModelCollection } from '../Classes/BaseController'
 import RoleType from '../Contracts/RoleType'
 import { RouteService } from '../Classes/RouteService'
 import Tooltip from '../components/Tooltip.vue'
-
 const { t } = useI18n()
 const router = useRouter()
 const route = useRoute()
