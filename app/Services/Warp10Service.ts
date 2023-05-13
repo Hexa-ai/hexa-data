@@ -214,7 +214,13 @@ export default class Warp10Service {
     let output: string = os.EOL + addedString + os.EOL + script
     return output
   }
-  public async scriptExec(script: string, readToken: string, writeToken: string): Promise<WsExecResult | WsError> {
+  public static wsReplaceMacroProjectPrefixe(script: string, projectId: number): string {
+    const projectPrefix = "@project/";
+    const replacement = "@" + projectId.toString() + "/";
+
+    return script.replace(new RegExp(projectPrefix, 'g'), replacement);
+  }
+  public async scriptExec(script: string, readToken: string, writeToken: string, projectId:number): Promise<WsExecResult | WsError> {
     let fullScript: string =''
     fullScript = Warp10Service.wsAppendWarpScript(fullScript,script)
     fullScript = Warp10Service.wsAuth(fullScript)
@@ -222,6 +228,7 @@ export default class Warp10Service {
     fullScript = Warp10Service.wsAppendVar(fullScript,'hdApiUrl',Env.get('HD_API_URL'))
     fullScript = Warp10Service.wsAppendToken(fullScript,readToken,'readToken')
     fullScript = Warp10Service.wsAppendToken(fullScript,writeToken,'writeToken')
+    fullScript = Warp10Service.wsReplaceMacroProjectPrefixe(fullScript,projectId)
 
     let result: WsExecResult
 
@@ -238,8 +245,7 @@ export default class Warp10Service {
     }
 
   }
-  public async exec(script: string, readToken:string,writeToken: string, requestParams:any, description?:string): Promise<any> {
-
+  public async exec(script: string, readToken:string,writeToken: string, requestParams:any, projectId:number, description?:string): Promise<any> {
     let fullScript = script
     if (description!=undefined) {
       fullScript = Warp10Service.wsAppendVar(fullScript,'language',<string>description)
@@ -252,7 +258,7 @@ export default class Warp10Service {
     fullScript = Warp10Service.wsAppendVar(fullScript,'hdApiUrl',Env.get('HD_API_URL'))
     fullScript = Warp10Service.wsAppendToken(fullScript,readToken,'readToken')
     fullScript = Warp10Service.wsAppendToken(fullScript,writeToken,'writeToken')
-
+    fullScript = Warp10Service.wsReplaceMacroProjectPrefixe(fullScript,projectId)
     let result: any
     try {
       result = await axios.post(Env.get('WARP10_ENDPOINT') + '/api/v0/exec',fullScript,{
@@ -264,7 +270,6 @@ export default class Warp10Service {
       result = error.response
       Logger.error('Exec Exec error:' + error.toString())
     }
-
     return result
   }
 }

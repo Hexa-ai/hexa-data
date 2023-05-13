@@ -41,6 +41,7 @@ export default class DashboardsController {
       project.readToken,
       project.writeToken,
       requestParams,
+      project.id,
       description
     )
 
