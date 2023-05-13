@@ -88,7 +88,8 @@ export default class DashboardsController {
       project.readToken,
       project.writeToken,
       requestParams,
-      description
+      project.id,
+      description,
     )
 
     response.header('x-warp10-elapsed', result.headers['x-warp10-elapsed'])
