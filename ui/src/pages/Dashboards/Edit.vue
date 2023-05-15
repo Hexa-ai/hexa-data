@@ -8,13 +8,12 @@
       :imgBgUrl="refEditorSwitch==true && refDashboard.type=='Continuum' ? refImgBgUrl:undefined"
       class="h-full">
       <template v-slot:menuTopRight>
-        <div v-show="refEditorSwitch" class="flex grow flex-col items-end" >
-          <InputFieldDateWarp
-          class="w-4/5"
-          :dateRange="initialDateRange"
-          :baseUrl="refWarp10BaseUrl"
-          @update:outputUrl="updateDashboardUrl"
-          ></InputFieldDateWarp>
+        <div v-show="refEditorSwitch" class="flex grow flex-col items-end">
+          <div class="flex items-end mt-3 lg:w-5/6 md:w-full">
+            <RequestLoader class="lg:w-1/6 md:w-1/6"></RequestLoader>
+            <InputFieldDateWarp class=" lg:w-5/6 md:w-4/6" :dateRange="initialDateRange" :baseUrl="refWarp10BaseUrl"
+              @update:outputUrl="updateDashboardUrl"></InputFieldDateWarp>
+          </div>
         </div>
       </template>
       <template v-slot:menuLeft>
@@ -183,6 +182,7 @@ import DashboardGrid from "./../../components/DashboardGrid.vue";
 import TileModel from '../../Models/TileModel';
 import InputFieldDateWarp from '../../components/InputFieldDateWarp.vue';
 import RoleType from '../../Contracts/RoleType';
+import RequestLoader from '../../components/RequestLoader.vue'
 
 const router = useRouter()
 const route = useRoute()

@@ -2,7 +2,7 @@
   <router-link :to="routePrefix + routeSuffix + dashboard.id" class="block bg-white hover:bg-gray-50">
     <div class="px-4 py-1 sm:px-6">
       <div class="flex items-center justify-between">
-        <p class="mt-2 text-sm font-medium text-gray-900 truncate">{{ dashboard.name }}</p>
+        <p class="mt-2 text-sm font-medium text-gray-900 truncate">{{ name }}</p>
         <div class="ml-2 flex-shrink-0 flex">
           <StarIcon class="mt-2 flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" aria-hidden="true"
             :class="dashboard.stared == 1 ? 'fill-yellow-300' : ' '" />
