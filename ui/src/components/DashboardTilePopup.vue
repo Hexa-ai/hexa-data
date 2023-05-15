@@ -178,12 +178,16 @@
                       >
                       </InputField>
                     </div>
+                    <div class="pt-2">
+                      <InputField :title="'Vars'" v-model="refData.vars"
+                        :isRequired="false" :isDisabled="false" :type="FieldType.TEXT">
+                      </InputField>
+                    </div>
                     <div class="pt-2" v-if="refTemplate?.variablesType">
                       <Combobox
                         title="Vars"
                         :is-disabled="false"
                         :choices="refTagCollection.data.map((tag) => tag.name)"
-                        v-model="refData.vars"
                         :multiple="refTemplate?.variablesType === 'multi'"
                       />
                     </div>
