@@ -104,15 +104,23 @@ export default class ImportConfService {
         device['project_id'] = this.project.id
         const oldId = device['id']
         const oldDashboardId = device['dashboard_id']
-        device['namespace'] = await this.findNamespace(device['namespace'])
-        device['clientId'] = device['namespace']
+        let projectDevice = await Device.query().where('name', device['name']).andWhere('project_id',this.project.id).first()
         delete (device['id'])
         delete (device['updated_at'])
         delete (device['created_at'])
         device['dashboard_id']=dashboardIdMapping[oldDashboardId]
-        const nwDevice = new Device()
-        await nwDevice.merge(device).save()
-        idMapping[oldId] = nwDevice.id
+        if(projectDevice!=null) {
+          delete (device['namespace'])
+          delete (device['client_id'])
+          await projectDevice.merge(device).save()
+        } else {
+          device['namespace'] = await this.findNamespace(device['namespace'])
+          device['client_id'] = device['namespace']
+          projectDevice = new Device()
+          await projectDevice.merge(device).save()
+        }
+
+        idMapping[oldId] = projectDevice.id
 
       }
       Logger.info('* Import device model: OK')
@@ -152,13 +160,19 @@ export default class ImportConfService {
       for (const tag of tags) {
         tag['project_id'] = this.project.id
         tag['device_id'] = idMapping[tag['device_id']]
+        let projectTag = await Tag.query().where('name', tag['name']).andWhere('project_id',this.project.id).first()
         delete (tag['id'])
+        delete (tag['compact'])
         delete (tag['updated_at'])
         delete (tag['created_at'])
-
-        const nwTag = new Tag()
-        await nwTag.merge(tag).save()
-        await tagService.createGts([nwTag])
+        if(projectTag!=null) {
+          await projectTag.merge(tag).save()
+          await tagService.createGts([projectTag])
+        } else {
+          projectTag = new Tag()
+          await projectTag.merge(tag).save()
+          await tagService.createGts([projectTag])
+        }
       }
       Logger.info('* Import tag model: OK')
     } catch (error) {
@@ -176,6 +190,7 @@ export default class ImportConfService {
     try {
       const idMapping: number[] = []
       for (const dashboard of dashboards) {
+        let projectDashboard = await Dashboard.query().where('name', dashboard['name']).andWhere('project_id',this.project.id).first()
         dashboard['project_id'] = this.project.id
         const oldId = dashboard['id']
 
@@ -183,11 +198,15 @@ export default class ImportConfService {
         delete (dashboard['img_bg'])
         delete (dashboard['updated_at'])
         delete (dashboard['created_at'])
+        if(projectDashboard!=null) {
+          await projectDashboard.merge(dashboard).save()
+        } else {
+          projectDashboard = new Dashboard()
+          await projectDashboard.merge(dashboard).save()
+        }
 
-        const nwDashboard = new Dashboard()
-        console.log(dashboard)
-        await nwDashboard.merge(dashboard).save()
-        idMapping[oldId] = nwDashboard.id
+
+        idMapping[oldId] = projectDashboard.id
       }
       Logger.info('* Import dashboard model: OK')
       return idMapping
