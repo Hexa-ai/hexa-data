@@ -5,6 +5,7 @@ import CsvService from '../Services/CsvService'
 import Project from '../../Projects/Models/Project'
 import Tag from '../Models/Tag'
 import TagsService from '../Services/TagsService'
+import { Queue } from '@ioc:Setten/Queue'
 
 export default class TagsController {
   /**
@@ -102,6 +103,17 @@ export default class TagsController {
       .firstOrFail()
     const oldTagName = tag.name
     const payload = await request.validate(UpdateTagValidator)
+    if (oldTagName!=payload.name && tag.type==3) {
+      console.log('refactor')
+      await Queue.dispatch('App/Jobs/RefactorWs', {
+        oldTagName: oldTagName,
+        tagName: payload.name,
+        projectId: params.projectId
+      })
+      console.log('old macro name:' + oldTagName)
+      console.log('macro name:' + payload.name)
+      console.log('project Id:' + params.projectId)
+    }
     tag!.merge(payload)
     // Keep the same name if not macro
     if (tag.type == 2 || tag.type == 1) {
