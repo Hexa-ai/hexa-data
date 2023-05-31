@@ -101,7 +101,7 @@ export default class UserScriptService {
   protected checkSriptToStart() {
     const scriptCollection = this.scriptCollection
     for (var index in scriptCollection) {
-      if ((scriptCollection[index].cycleNumber >= scriptCollection[index].scriptInterval*(1000/this.scriptTriggerBaseInterval)) && (scriptCollection[index].scriptInterval > 0) && (scriptCollection[index].started == false)) {
+      if ((scriptCollection[index].cycleNumber >= scriptCollection[index].scriptInterval*(1000/this.scriptTriggerBaseInterval)) && (scriptCollection[index].scriptInterval > 0)) {
         Logger.info('Cycle number: ' + scriptCollection[index].cycleNumber + ' Script Name: ' + scriptCollection[index].name)
         this.startScript(index)
       } else {
@@ -118,19 +118,21 @@ export default class UserScriptService {
    */
   protected async startScript(index: string) {
     Logger.info('Start script:' + index)
-    this.scriptCollection[index].started = true
-    var result:any
-    try {
-      result = await this.warp10Service.scriptExec(this.scriptCollection[index].script, this.scriptCollection[index].readToken, this.scriptCollection[index].writeToken, this.scriptCollection[index].projectId)
-    } catch (error) {
-      this.scriptCollection[index].scriptOutput[DateTime.now().toMillis()]=String(error)
-      this.scriptCollection[index].started = false
-      this.scriptCollection[index].cycleNumber = 1
-    }
-
-    this.scriptCollection[index].scriptOutput[DateTime.now().toMillis()]=result
-    this.scriptCollection[index].started = false
     this.scriptCollection[index].cycleNumber = 1
+    this.warp10Service.scriptExec(this.scriptCollection[index].script, this.scriptCollection[index].readToken, this.scriptCollection[index].writeToken, this.scriptCollection[index].projectId)
+    // this.scriptCollection[index].started = true
+    // var result:any
+    // try {
+    //   result = await this.warp10Service.scriptExec(this.scriptCollection[index].script, this.scriptCollection[index].readToken, this.scriptCollection[index].writeToken, this.scriptCollection[index].projectId)
+    // } catch (error) {
+    //   this.scriptCollection[index].scriptOutput[DateTime.now().toMillis()]=String(error)
+    //   this.scriptCollection[index].started = false
+    //   this.scriptCollection[index].cycleNumber = 1
+    // }
+
+    // this.scriptCollection[index].scriptOutput[DateTime.now().toMillis()]=result
+    // this.scriptCollection[index].started = false
+    // this.scriptCollection[index].cycleNumber = 1
 
   }
   /**
