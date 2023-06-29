@@ -9,6 +9,15 @@ import Warp10Service  from 'App/Services/Warp10Service'
 import Logger from '@ioc:Adonis/Core/Logger'
 import crypto from "crypto"
 
+interface Script {
+  id: number,
+  name: string,
+  projectId: number,
+  script: string,
+  readToken: string,
+  writeToken: string,
+}
+
 export default class MqttSbuscriberService {
   constructor () {
     // Load Env variables
@@ -47,7 +56,7 @@ export default class MqttSbuscriberService {
 
       client.on('connect', function () {
         console.log('---- MQTT Subscriber Connected ----')
-        client.subscribe('$share/g1/HD/+/up', function () {})
+        client.subscribe(['$share/g1/HD/+/up','$share/g1/HD/+/#'], function () {})
       })
       client.on('message', (topic, message) => this.messageReceived(topic, message))
     },5000)
@@ -72,6 +81,9 @@ export default class MqttSbuscriberService {
   // Project Warp10 Token list
   public projectTokenCollection: string[]
 
+  // Project Uuid / ProjectId mapping
+  public gtsProjectUuidMapping: { [index:string] : number }
+
   // GTS / ProjetId mapping
   public gtsProjectIdMapping: { [index:string] : number }
 
@@ -83,7 +95,8 @@ export default class MqttSbuscriberService {
 
   // Authorized device-namespace
   public authorizesDevicesNamespace: { [index:string] : string }
-
+  //
+  protected scriptCollection: { [key: string]: Script }
   /*
   * Initializes Authorized tags list and project tokens list
   */
@@ -98,7 +111,9 @@ export default class MqttSbuscriberService {
   *
   */
   public async tagObserver() {
+    await this.getScriptCollection()
     let gtsProjectIdMapping: { [index:string] : number } = {}
+    let gtsProjectUuidMapping: { [index:string] : number } = {}
     let authorizedTags: { [index:string] : lightTag }[] = []
     let authorizesDevicesProjectId: { [index:string] : number } = {}
     let authorizesDevicesNamespace: { [index:string] : string } = {}
@@ -106,7 +121,7 @@ export default class MqttSbuscriberService {
       .preload('device')
       .preload('project',(projectQuery) => {
         projectQuery.select(['writeToken','uuid'])
-      }).select(['name', 'projectId','deviceId', 'type', 'valueType' ])
+      }).select(['name', 'projectId','deviceId', 'type', 'valueType','physicalUnit' ])
       .where('type',1)
     tags.map(function (tag) {
       const authorizedTag:lightTag = {
@@ -118,7 +133,8 @@ export default class MqttSbuscriberService {
         valueType: tag.valueType,
         clientId: tag.device.clientId,
         namespace: tag.device.namespace,
-        writeToken: tag.project.writeToken
+        writeToken: tag.project.writeToken,
+        physicalUnit:tag.physicalUnit
       }
       if (!authorizedTags[tag.device.clientId]){
         authorizedTags[tag.device.clientId]=[]
@@ -128,10 +144,20 @@ export default class MqttSbuscriberService {
       authorizesDevicesProjectId[tag.device.clientId]=authorizedTag.projectId
       authorizesDevicesNamespace[tag.device.clientId]=authorizedTag.namespace
     })
+    const macros = await Tag.query()
+      .preload('device')
+      .preload('project',(projectQuery) => {
+        projectQuery.select(['writeToken','uuid'])
+      }).select(['name', 'projectId','deviceId', 'type', 'valueType' ])
+      .where('type',3)
+    macros.map(function (macros) {
+      gtsProjectUuidMapping[macros.project.uuid] = macros.projectId
+    })
     this.authorizedTags=authorizedTags
     this.authorizesDevicesProjectId=authorizesDevicesProjectId
     this.authorizesDevicesNamespace=authorizesDevicesNamespace
     this.gtsProjectIdMapping=gtsProjectIdMapping
+    this.gtsProjectUuidMapping=gtsProjectUuidMapping
     Logger.info('Tags list updated')
   }
   /*
@@ -152,20 +178,53 @@ export default class MqttSbuscriberService {
   * Process the new incoming messages
   */
   public async messageReceived(topic:string, message:Buffer){
+    let payload:any = message.toString()
     try {
-      const payload=JSON.parse(message.toString())
       const splitedTopic=topic.split('/')
-      const clientId=splitedTopic[1]
-      this.incrementDeviceMsgCounter(clientId)
-
-      if (payload.protocol=='hdmp') {
-        this.hdmp.processPayload(payload, clientId)
+      if (this.gtsProjectUuidMapping[splitedTopic[1]]!=undefined) {
+        const macroName = 'mqtt.' + topic.split(splitedTopic[0] + '/' + splitedTopic[1] + '/')[1].replace('/','.')
+        console.log(macroName)
+        if (this.scriptCollection[macroName]!=undefined){
+          this.scriptCollection[macroName].script=Warp10Service.wsAppendVar(this.scriptCollection[macroName].script,'payload',payload)
+          this.warp10Service.scriptExec(this.scriptCollection[macroName].script, this.scriptCollection[macroName].readToken, this.scriptCollection[macroName].writeToken, this.scriptCollection[macroName].projectId)
+          return
+        }
+      } else {
+        payload=JSON.parse(payload)
+        if (payload.protocol=='hdmp') {
+          const clientId=splitedTopic[1]
+          this.incrementDeviceMsgCounter(clientId)
+          this.hdmp.processPayload(payload, clientId)
+        }
       }
     } catch(e) {
       Logger.error('Payload MQTT Error')
       Logger.error(e)
     }
-
+  }
+  /**
+   * Retreive script collection from DB tags tab
+   */
+  protected async getScriptCollection() {
+    Logger.info('Script collection update')
+    const tags = await Tag.query()
+      .preload('project', (projectsQuery) => {
+        projectsQuery.select(['readToken', 'writeToken'])
+      }).where('type', 3).select(['id', 'name', 'projectId', 'script', 'type']).andWhere('name', 'LIKE', "mqtt%")
+    const _scriptCollection: { [key: string]: Script } = {}
+    for (const tag of tags) {
+      if (tag.name.split('.')[0]== 'mqtt'.toLowerCase()) {
+        _scriptCollection[tag.name] = {
+          id: tag.id,
+          name: tag.name,
+          projectId: tag.projectId,
+          script: tag.script,
+          readToken: tag.project.readToken,
+          writeToken: tag.project.writeToken
+        }
+      }
+    }
+    this.scriptCollection=_scriptCollection
   }
   /*
   * Increment device message counter
@@ -210,4 +269,5 @@ export default class MqttSbuscriberService {
     }
     this.warp10Service.storeGtsCollection(gtsCollections, this.projectTokenCollection)
   }
+
 }

@@ -1,6 +1,6 @@
 {
   "name": "hexa-data",
-  "version": "1.2.32",
+  "version": "1.2.34",
   "private": true,
   "scripts": {
     "build:adonis": "node ace build --production",

@@ -191,7 +191,6 @@ export default class DevicesController {
       const rootPath: string = 'HD/' + device!.clientId + '/'
       const condPub: boolean = (payload.topic === (rootPath + 'up') && payload.access === 2)
       const condSub: boolean = (payload.topic === (rootPath + 'down') && payload.access === 1)
-
       const condSubAll = payload.topic.startsWith(rootProjectPath) && (payload.access === 1 || payload.access === 2 )
 
       if (condSubAll) {

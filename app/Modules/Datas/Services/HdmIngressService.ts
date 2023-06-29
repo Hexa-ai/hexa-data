@@ -146,13 +146,13 @@ export class HdmIngressService {
           if(typeof(data[2])=='boolean') {
             gtsCollection.push({
               classname: tag.namespace + '.' + gtsName,
-              labels: this.generateLabels(gtsName),
+              labels: {...this.generateLabels(gtsName),...{physicalUnit:tag.physicalUnit}},
               values: [{ts: data[1], value: Number(data[2])}],
             })
           } else {
             gtsCollection.push({
               classname:tag.namespace + '.' + gtsName,
-              labels: this.generateLabels(gtsName),
+              labels: {...this.generateLabels(gtsName),...{physicalUnit:tag.physicalUnit}},
               values: [{ts: data[1], value: data[2]}],
             })
           }

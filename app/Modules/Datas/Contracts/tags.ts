@@ -7,5 +7,6 @@ export interface lightTag {
   valueType:number,
   clientId: string,
   namespace: string,
-  writeToken: string
+  writeToken: string,
+  physicalUnit?: string
 }
