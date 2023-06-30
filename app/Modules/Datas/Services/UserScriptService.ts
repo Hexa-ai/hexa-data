@@ -1,6 +1,5 @@
 import Env from '@ioc:Adonis/Core/Env'
 import Tag from '../Models/Tag'
-import { DateTime } from 'luxon'
 import Warp10Service from 'App/Services/Warp10Service'
 import Logger from '@ioc:Adonis/Core/Logger'
 
