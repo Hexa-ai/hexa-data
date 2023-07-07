@@ -7,7 +7,7 @@
     "@adonisjs/lucid/build/commands",
     "@adonisjs/bouncer/build/commands",
     "adonis5-scheduler/build/commands",
-    "@setten/bull-queue/build/commands",
+    "@rlanz/bull-queue/build/commands",
     "@adonisjs/mail/build/commands"
   ],
   "exceptionHandlerNamespace": "App/Exceptions/Handler",
@@ -32,7 +32,7 @@
     "@adonisjs/attachment-lite",
     "adonis5-scheduler",
     "@adonisjs/view",
-    "@setten/bull-queue",
+    "@rlanz/bull-queue",
     "@adonisjs/mail"
   ],
   "aceProviders": [

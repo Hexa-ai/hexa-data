@@ -1,4 +1,4 @@
-declare module '@ioc:Setten/Queue' {
+declare module '@ioc:Rlanz/Queue' {
   interface JobsList {
     'App/Jobs/ExportProjectConf': number
     'App/Jobs/ImportProjectConf': number

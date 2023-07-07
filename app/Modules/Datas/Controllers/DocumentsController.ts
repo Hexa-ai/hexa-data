@@ -4,7 +4,7 @@ import Document from '../Models/Document'
 import Project from '../../Projects/Models/Project'
 import { Attachment } from '@ioc:Adonis/Addons/AttachmentLite'
 import mime from 'mime-types'
-import { Queue } from '@ioc:Setten/Queue'
+import { Queue } from '@ioc:Rlanz/Queue'
 import { cuid } from '@poppinss/utils/build/helpers'
 
 export default class DocumentsController {
@@ -58,14 +58,14 @@ export default class DocumentsController {
     if (typeof requestParams.searchKey != 'undefined' && requestParams.searchKey != '') {
       documents = await Document.query()
         .where('project_id', project.id)
-        .andWhere('type', Number(requestParams.type??1))
+        .andWhere('type', Number(requestParams.type ?? 1))
         .andWhere('name', 'LIKE', '%' + requestParams.searchKey + '%')
         .orderBy('updated_at')
         .paginate(requestParams.page, requestParams.perPage)
     } else {
       documents = await Document.query()
         .where('project_id', project.id)
-        .andWhere('type', Number(requestParams.type??1))
+        .andWhere('type', Number(requestParams.type ?? 1))
         .orderBy('updated_at')
         .paginate(requestParams.page, requestParams.perPage)
     }
@@ -83,12 +83,15 @@ export default class DocumentsController {
    */
   public async wsReportStore({ params, request, response }: HttpContextContract) {
     const project = await Project.query().where('writeToken', params.writeToken).firstOrFail()
-    const existingDoc = await Document.query().where('projectId', project.id).andWhere('name', params.name).first()
+    const existingDoc = await Document.query()
+      .where('projectId', project.id)
+      .andWhere('name', params.name)
+      .first()
 
     const asplitedName = params.name.split('.')
     const extension = asplitedName[asplitedName.length - 1].toLowerCase()
 
-    if (existingDoc != null ) {
+    if (existingDoc != null) {
       await Queue.dispatch('App/Jobs/GenerateDoc', {
         filePath: existingDoc.file?.name,
         fileData: request.raw(),
