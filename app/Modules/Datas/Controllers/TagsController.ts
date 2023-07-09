@@ -175,6 +175,12 @@ export default class TagsController {
         'type',
         'value_type',
         'device_id',
+        'physicalUnit',
+        'settings',
+        'alarm',
+        'triggerType',
+        'minTreshold',
+        'maxTreshold'
       ])
       .where('project_id', +params.projectId)
       // export only variables
