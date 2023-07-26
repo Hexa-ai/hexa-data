@@ -21,7 +21,8 @@
     "./start/routes",
     "./start/kernel",
     "./start/bouncer",
-    "./start/events"
+    "./start/events",
+    "./start/redis"
   ],
   "providers": [
     "./providers/AppProvider",
@@ -33,7 +34,9 @@
     "adonis5-scheduler",
     "@adonisjs/view",
     "@setten/bull-queue",
-    "@adonisjs/mail"
+    "@adonisjs/mail",
+    "@adonisjs/redis",
+    "./providers/JavascriptRuntimeProvider"
   ],
   "aceProviders": [
     "@adonisjs/repl"

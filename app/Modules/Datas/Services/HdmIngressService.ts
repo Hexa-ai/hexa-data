@@ -95,6 +95,7 @@ export class HdmIngressService {
     for (const gts of gtsCollection) {
       if( !(typeof(this.buffer[gts.classname]) == 'undefined')) {
         this.buffer[gts.classname].values?.push(gts.values![0])
+
         this.bufferSize++
       } else {
         this.buffer[gts.classname] = {

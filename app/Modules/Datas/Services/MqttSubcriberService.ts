@@ -8,9 +8,12 @@ import { WarpGts}  from 'App/Services/Warp10Service'
 import Warp10Service  from 'App/Services/Warp10Service'
 import Logger from '@ioc:Adonis/Core/Logger'
 import crypto from "crypto"
+import Redis from '@ioc:Adonis/Addons/Redis'
+import runtimeManager from '@ioc:JsRuntime/RuntimeManager'
 
 interface Script {
   id: number,
+  type:number,
   name: string,
   projectId: number,
   script: string,
@@ -183,11 +186,25 @@ export default class MqttSbuscriberService {
       const splitedTopic=topic.split('/')
       if (this.gtsProjectUuidMapping[splitedTopic[1]]!=undefined) {
         const macroName = 'mqtt.' + topic.split(splitedTopic[0] + '/' + splitedTopic[1] + '/')[1].replace('/','.')
-        console.log(macroName)
         if (this.scriptCollection[macroName]!=undefined){
-          this.scriptCollection[macroName].script=Warp10Service.wsAppendVar(this.scriptCollection[macroName].script,'payload',payload)
-          this.warp10Service.scriptExec(this.scriptCollection[macroName].script, this.scriptCollection[macroName].readToken, this.scriptCollection[macroName].writeToken, this.scriptCollection[macroName].projectId)
-          return
+          if (this.scriptCollection[macroName].type==3) {
+            this.scriptCollection[macroName].script=Warp10Service.wsAppendVar(this.scriptCollection[macroName].script,'payload',payload)
+            this.warp10Service.scriptExec(this.scriptCollection[macroName].script, this.scriptCollection[macroName].readToken, this.scriptCollection[macroName].writeToken, this.scriptCollection[macroName].projectId)
+            return
+          } else if (this.scriptCollection[macroName].type==4) {
+            const message = {
+              projectId: this.scriptCollection[macroName].projectId,
+              readToken: this.scriptCollection[macroName].readToken,
+              writeToken: this.scriptCollection[macroName].writeToken,
+              macroName:macroName,
+              macroId:this.scriptCollection[macroName].id,
+              script:this.scriptCollection[macroName].script,
+              payload:payload
+            }
+            Redis.publish('mqttHook:'+ macroName, JSON.stringify(message) )
+            return
+          }
+
         }
       } else {
         payload=JSON.parse(payload)
@@ -210,12 +227,13 @@ export default class MqttSbuscriberService {
     const tags = await Tag.query()
       .preload('project', (projectsQuery) => {
         projectsQuery.select(['readToken', 'writeToken'])
-      }).where('type', 3).select(['id', 'name', 'projectId', 'script', 'type']).andWhere('name', 'LIKE', "mqtt%")
+      }).where('type', 3).orWhere('type', 4).select(['id', 'name', 'projectId', 'script', 'type']).andWhere('name', 'LIKE', "mqtt%")
     const _scriptCollection: { [key: string]: Script } = {}
     for (const tag of tags) {
       if (tag.name.split('.')[0]== 'mqtt'.toLowerCase()) {
         _scriptCollection[tag.name] = {
           id: tag.id,
+          type: tag.type,
           name: tag.name,
           projectId: tag.projectId,
           script: tag.script,

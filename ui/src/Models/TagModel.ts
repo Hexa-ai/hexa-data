@@ -24,4 +24,5 @@ export default class Tag extends BaseModel {
   public device?: DeviceModel
   public updatedAt?: string
   public settings?: string = ''
+  public macroUuid?:string  = ''
 }

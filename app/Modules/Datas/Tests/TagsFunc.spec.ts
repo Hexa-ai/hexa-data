@@ -110,11 +110,10 @@ test.group('---> Tags routes <---', (group) => {
       .get('/projects/1/tags')
       .query({ page: 1 })
       .query({ perPage: 10 })
-      .query({ typeFilter: 3 })
       .set('Authorization', token)
       .expect('Content-Type', /json/)
       .expect(200)
-    assert.lengthOf(response.body.data, 0)
+    assert.lengthOf(response.body.data, 1)
   })
   test('Store type GTS with no device ID (Admin)', async () => {
     const token = (await createLoggedUser(BASE_URL)).token

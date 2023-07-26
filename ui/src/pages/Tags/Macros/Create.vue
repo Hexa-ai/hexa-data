@@ -67,9 +67,10 @@
                     :title="$t('tags.type')"
                     v-model="refTag!.type"
                     :isRequired="false"
-                    :isDisabled="!edit"
-                    :choices="['', $t('tags.variable'), $t('tags.text'), $t('tags.warpScript')]"
-                    :index-is-value="true"
+                    :isDisabled="false"
+                    :choices="[$t('tags.warpScript'), $t('tags.javascript')]"
+                    :values="[3,4]"
+                    :index-is-value="false"
                     :type="FieldType.SELECT"
                   ></InputField>
                 </div>

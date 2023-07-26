@@ -26,6 +26,9 @@ export default class MqttSub extends BaseCommand {
   }
 
   public async run() {
+    const runtimeManager = (await import('@ioc:JsRuntime/RuntimeManager')).default
+    runtimeManager.destroy()
+
     const MqttSbuscriberService = (await import('App/Modules/Datas/Services/MqttSubcriberService')).default
     new MqttSbuscriberService()
     this.logger.info('---- MQTT Subscriber Starting -----')

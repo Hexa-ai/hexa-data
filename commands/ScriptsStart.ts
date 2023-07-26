@@ -26,6 +26,9 @@ export default class ScriptsStart extends BaseCommand {
   }
 
   public async run() {
+    const runtimeManager = (await import('@ioc:JsRuntime/RuntimeManager')).default
+    runtimeManager.destroy()
+
     const UserScriptService = (await import('App/Modules/Datas/Services/UserScriptService')).default
     new UserScriptService()
     this.logger.info('---- UserScript Runner Starting -----')
