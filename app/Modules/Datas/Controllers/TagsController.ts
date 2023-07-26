@@ -7,7 +7,7 @@ import Tag from '../Models/Tag'
 import TagsService from '../Services/TagsService'
 import { Queue } from '@ioc:Setten/Queue'
 import Redis from '@ioc:Adonis/Addons/Redis'
-import { ModelObject, ModelPaginatorContract } from '@ioc:Adonis/Lucid/Orm'
+import { ModelObject } from '@ioc:Adonis/Lucid/Orm'
 
 export default class TagsController {
   /**

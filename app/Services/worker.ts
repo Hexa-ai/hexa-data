@@ -8,17 +8,12 @@ parentPort!.on('message', async (inputMsg) => {
   if ('script' in inputMsg) {
     let script = inputMsg.script
     let payload = inputMsg.payload
-    console.log('payload')
-
-    console.log(payload)
 
     let projectId = inputMsg.projectId
     let readToken = inputMsg.readToken
     let writeToken = inputMsg.writeToken
-    let redisConfig = inputMsg.redisConfig
     let macroId = inputMsg.macroId
     let warp10EndPoint = inputMsg.warp10EndPoint
-    let redis = inputMsg.redis
 
     let output:string[]=[]
     let execError = false
@@ -39,7 +34,7 @@ parentPort!.on('message', async (inputMsg) => {
       },
       setInterval:setInterval,
       setTimeout:setTimeout,
-      hd: new HexaData(redis, projectId, warp10EndPoint, readToken, writeToken, parentPort, macroId),
+      hd: new HexaData( projectId, warp10EndPoint, readToken, writeToken, parentPort, macroId),
       readToken: readToken,
       writeToken: writeToken,
       payload:payload

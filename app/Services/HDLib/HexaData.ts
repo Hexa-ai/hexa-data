@@ -1,23 +1,18 @@
-// const { Context } = require('./HDLib/Context')
-// const Redis = require('ioredis')
-// const Warp10 = require('@senx/warp10')
 import { Context } from './Context'
-import Redis from 'ioredis'
 import { Warp10 } from '@senx/warp10'
 
 export class HexaData {
-  constructor (redis:Redis.Redis, projectId:number, warp10EndPoint:string, readToken:string, writeToken:string, parentPort:any,macroId?:number) {
+  constructor (projectId:number, warp10EndPoint:string, readToken:string, writeToken:string, parentPort:any,macroId?:number) {
     this.projectId=projectId
     this.macroId=macroId
-    this.redis=redis
     this.warp10EndPoint=warp10EndPoint
     this.readToken=readToken
     this.writeToken=writeToken
     this.warp10 = new Warp10(this.warp10EndPoint)
     this.parentPort = parentPort
-    this.macroCtx = new Context(this.redis, 'Project-' + this.projectId.toString() + ':Macro-' + this.macroId?.toString()??'_', this.parentPort)
-    this.projectCtx = new Context(this.redis, 'Project-' + this.projectId.toString(), this.parentPort)
-    this.appCtx = new Context(this.redis, 'App', this.parentPort)
+    this.macroCtx = new Context('Project-' + this.projectId.toString() + ':Macro-' + this.macroId?.toString()??'_', this.parentPort)
+    this.projectCtx = new Context('Project-' + this.projectId.toString(), this.parentPort)
+    this.appCtx = new Context('App', this.parentPort)
 
 
 
@@ -38,6 +33,7 @@ export class HexaData {
    * Project Warp10 WriteToken
    *
    */
+  // @ts-ignore
   private writeToken:string
   /**
    *
@@ -45,12 +41,6 @@ export class HexaData {
    *
    */
   private warp10EndPoint:string
-  /**
-   *
-   * Redis connexion instance
-   *
-   */
-  private redis:Redis.Redis
   /**
    *
    * Macro Id
@@ -94,7 +84,7 @@ export class HexaData {
    * @returns Promise<{output: any[], execError:string, elapsed:number}>
    */
   public async wsExec(warpscript:string):Promise<string | null> {
-    return new Promise<string | null> ((resolve, reject) => {
+    return new Promise<string | null> ((resolve) => {
       this.parentPort.postMessage({wsExec:{script:warpscript}});
 
       const messageHandler = (payload) => {
@@ -102,7 +92,7 @@ export class HexaData {
             resolve(payload.wsExec_response);
           }
       };
-
+      // @ts-ignore
       this.parentPort.on('message', messageHandler);
     });
   }
@@ -126,7 +116,7 @@ export class HexaData {
    * @returns Promise<any>
    */
   public async import(name:string):Promise<string | null> {
-    return new Promise<string | null> ((resolve, reject) => {
+    return new Promise<string | null> ((resolve) => {
       this.parentPort.postMessage({jsImport:{name:name}});
 
       const messageHandler = (payload) => {
@@ -134,7 +124,7 @@ export class HexaData {
             resolve(payload.jsImport_response);
           }
       };
-
+      // @ts-ignore
       this.parentPort.on('message', messageHandler);
     });
   }

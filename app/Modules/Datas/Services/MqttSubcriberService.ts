@@ -9,7 +9,6 @@ import Warp10Service  from 'App/Services/Warp10Service'
 import Logger from '@ioc:Adonis/Core/Logger'
 import crypto from "crypto"
 import Redis from '@ioc:Adonis/Addons/Redis'
-import runtimeManager from '@ioc:JsRuntime/RuntimeManager'
 
 interface Script {
   id: number,

@@ -10,7 +10,7 @@ export default class JsRuntimeMgmtService {
         this.stopMacro(uuid)
       }
     })
-
+    // @ts-ignore
     Redis.psubscribe('mqttHook:*', async (channel:string,message:string)  => {
       const messageObj = JSON.parse(message)
       await this.exec(

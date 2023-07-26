@@ -1,19 +1,9 @@
-import Redis from 'ioredis';
-import { parentPort } from 'worker_threads';
-
 export class Context {
-  constructor(redis: Redis.Redis, scope: string,parentPort:any) {
-    this.redis = redis
+  constructor(scope: string,parentPort:any) {
     this.scope = scope
     this.parentPort=parentPort
   }
-  private parentPort:MessagePort
-  /**
-   *
-   * Redis connection instance
-   *
-   */
-  private redis: Redis.Redis
+  private parentPort:any
   /**
    *
    * Macro ProjectId
@@ -25,7 +15,7 @@ export class Context {
    * set, write context var
    */
   public async set(name: string, value: any): Promise<boolean> {
-    return new Promise<boolean>((resolve, reject) => {
+    return new Promise<boolean>((resolve) => {
       this.parentPort.postMessage({ redisHset: { scope:this.scope, name: name, value: value } });
 
       const messageHandler = (payload) => {
@@ -33,7 +23,7 @@ export class Context {
             resolve(payload.redisHset_response);
           }
       };
-
+      // @ts-ignore
       this.parentPort.on('message', messageHandler);
     });
   }
@@ -43,7 +33,7 @@ export class Context {
    */
   public async get(name: string): Promise<string | null> {
     //return await this.redis.hget(this.scope, name);
-    return new Promise<string | null>((resolve, reject) => {
+    return new Promise<string | null>((resolve) => {
       this.parentPort.postMessage({ redisHget: { scope:this.scope, name: name } });
 
       const messageHandler = (payload) => {

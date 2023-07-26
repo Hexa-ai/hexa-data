@@ -81,9 +81,8 @@ export default class MacrosController {
   * @param {params} Record<string, any>
   * @param {request} RequestContract
   * @param {response} ResponseContract
-  * @param {Bouncer} ActionsAuthorizerContract<User>
   */
-  public async jsExec({ params, request, response, bouncer }: HttpContextContract) {
+  public async jsExec({ params, request, response }: HttpContextContract) {
     const project = await Project.query().where('writeToken', params.writeToken).firstOrFail()
     const payload = JSON.parse(request.raw()!)
     const macro = await Tag.query().where('projectId', project.id).andWhere('name', params.name ).firstOrFail()
