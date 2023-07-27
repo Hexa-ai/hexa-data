@@ -31,8 +31,11 @@ export default class TagsController {
       .orderBy('name', 'asc')
 
     if (requestParams.typeFilter=='macro') {
-      query.andWhere('type', 3 )
-      query.orWhere('type', 4 )
+      query.andWhere((query) => {
+        query
+          .where('type', 3 )
+          .orWhere('type', 4 )
+      })
     } else {
       query.andWhere('type', 1 )
     }
