@@ -192,7 +192,7 @@ const refWarp10ErrorLine = ref()
 const refWarp10Elapsed = ref()
 
 const javascriptUrl = window.location.origin + import.meta.env.VITE_API_PREFIX + '/projects/' + route.params.id + '/jsExec/' + route.params.tagId
-const refJavascriptResult = ref([])
+const refJavascriptResult = ref([''])
 const refJavascriptExecError = ref(false)
 const refJavascriptElapsed = ref()
 
@@ -297,10 +297,11 @@ async function init() {
   })
   socket.on('connect_error', (err) => {
             if (err.message === 'not authorized') {
-               console.log(err)
+               console.log('PB connexion: ' + err)
             }
         });
   socket.on('macro-log:' + refTag.value.macroUuid, (data) => {
+    console.log(data)
     refJavascriptResult.value.push(data)
     const messageList = document.getElementById('javascriptDebugLogs');
     messageList!.scrollTo(0, messageList!.scrollHeight);
@@ -308,7 +309,9 @@ async function init() {
   socket.on('macro-result-log:' + refTag.value.macroUuid, (data) => {
     if (data.execError == true) {
       refJavascriptExecError.value = true
-      refJavascriptResult.value.push(data.output)
+      data.output.forEach((element: string) => {
+        refJavascriptResult.value.push(element)
+      });
     } else {
       refJavascriptExecError.value = false
     }

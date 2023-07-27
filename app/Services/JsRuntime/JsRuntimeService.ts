@@ -1,13 +1,11 @@
 import { Worker } from 'worker_threads';
 import Config from '@ioc:Adonis/Core/Config'
 import Env from '@ioc:Adonis/Core/Env'
-//import Redis from 'ioredis';
 import Redis from '@ioc:Adonis/Addons/Redis'
 import Warp10Service from 'App/Services/Warp10Service'
-//import Tag from 'App/Modules/Datas/Models/Tag';
 import Ws from 'App/Services/Ws'
 import Tag from 'App/Modules/Datas/Models/Tag';
-
+import Application from '@ioc:Adonis/Core/Application'
 
 type CallbackFunction = () => void;
 
@@ -124,7 +122,12 @@ export default class JsRuntimeService {
 
   private startWorker(script:string, payload:{}) {
     return new Promise((resolve, reject) => {
-      this.worker = new Worker(`./app/Services/worker.ts`),{ type: 'module' };
+      if(Application.inProduction){
+        this.worker = new Worker(`./app/Services/worker.js`),{ type: 'module' };
+      }else{
+        this.worker = new Worker(`./app/Services/worker.ts`),{ type: 'module' };
+      }
+
 
       this.worker.on('message', async (payload) => {
         if ('execResult' in payload) {
