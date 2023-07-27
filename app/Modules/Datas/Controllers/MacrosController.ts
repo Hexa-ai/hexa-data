@@ -52,9 +52,11 @@ export default class MacrosController {
       }
     }
 
-    runtimeManager.startMacro(project.id, project.readToken, project.writeToken, macro.name, macro.id, macro.script,{description:description})
+    await runtimeManager.startMacro(project.id, project.readToken, project.writeToken, macro.name, macro.id, macro.script,{description:description})
 
-    response.send('ok')
+    const uuid = await Redis.get('macro-' + macro.id.toString())
+
+    response.send({ uuid:uuid})
   }
  /**
   * Stop javascript programme.

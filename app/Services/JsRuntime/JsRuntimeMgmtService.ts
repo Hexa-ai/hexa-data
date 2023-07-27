@@ -48,9 +48,9 @@ export default class JsRuntimeMgmtService {
   public async startMacro(projectId: number, readToken: string, writeToken: string, macroName:string, macroId:number, script:string, payload?:{}): Promise<string|null>{
     if ((await Redis.get('macro-' + macroId.toString())) == null) {
       const uuid = uuidv4()
+      await Redis.set('macro-' + macroId.toString(), uuid)
       this.runtimesPoll[uuid] = new JsRuntimeService(projectId,readToken,writeToken,macroName,macroId,uuid,()=>{delete this.runtimesPoll[uuid]})
       this.runtimesPoll[uuid].start(script,payload??{})
-      await Redis.set('macro-' + macroId.toString(), uuid)
       return uuid
     } else {
       return null

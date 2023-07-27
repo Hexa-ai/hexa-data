@@ -196,7 +196,11 @@ const refJavascriptResult = ref([''])
 const refJavascriptExecError = ref(false)
 const refJavascriptElapsed = ref()
 
-
+const socket = io({
+    extraHeaders: {
+    "Authorization": "Bearer " + store.authUser.token.token
+    }
+  })
 
 
 
@@ -253,53 +257,34 @@ async function playWs() {
   }
   document.getElementById('warp10DebugLogs')!.scrollTo(0, 0)
 }
+/**
+ * Start javascript macro éxecution
+ *
+ */
 async function playJs() {
   const res = await axios.post(javascriptUrl + '/play', refTag.value.script, { headers: { Authorization: `Bearer ${store.authUser.token['token']}` } })
-
-  if (res.data.execError == true) {
-    refJavascriptExecError.value = true
-    refJavascriptResult.value = res.data.output
-  } else {
-    refJavascriptExecError.value = false
-    refJavascriptResult.value = res.data.output
-  }
-  refJavascriptElapsed.value = res.data.elapsed
-  document.getElementById('javascriptDebugLogs')!.scrollTo(0, 0)
   refJavascriptResult.value = []
-  await init()
-
-
+  refTag.value.macroUuid = res.data.uuid
+  suscribMsg()
+  document.getElementById('javascriptDebugLogs')!.scrollTo(0, 0)
 }
+/**
+ * Stop javascript macro éxecution
+ *
+ */
 async function stopJs() {
   await axios.post(javascriptUrl + '/stop', refTag.value.script, { headers: { Authorization: `Bearer ${store.authUser.token['token']}` } })
   init()
 }
+
 const crudController = new BaseController<TagModel>(
   '/tags',
   [],
   refTag.value,
   store.authUser.token['token'],
 )
-
 crudController.setRoutePrefix(routePrefix)
-
-
-
-async function init() {
-
-  await RouteService.getProjectInfos(route)
-  refTag.value = await crudController.show(Number(route.params.tagId))
-  // Suscribe to execution log messages
-  const socket = io({
-    extraHeaders: {
-    "Authorization": "Bearer " + store.authUser.token.token
-    }
-  })
-  socket.on('connect_error', (err) => {
-            if (err.message === 'not authorized') {
-               console.log('PB connexion: ' + err)
-            }
-        });
+async function suscribMsg() {
   socket.on('macro-log:' + refTag.value.macroUuid, (data) => {
     console.log(data)
     refJavascriptResult.value.push(data)
@@ -320,6 +305,21 @@ async function init() {
     messageList!.scrollTo(0, messageList!.scrollHeight);
     refTag.value.macroUuid=undefined
   })
+}
+
+
+async function init() {
+
+  await RouteService.getProjectInfos(route)
+  refTag.value = await crudController.show(Number(route.params.tagId))
+  // Suscribe to execution log messages
+
+  socket.on('connect_error', (err) => {
+            if (err.message === 'not authorized') {
+               console.log('PB connexion: ' + err)
+            }
+        });
+  suscribMsg()
   refScript.value = refTag.value.script
   refLogs.value = JSON.parse(refTag.value.scriptOutput)
 
