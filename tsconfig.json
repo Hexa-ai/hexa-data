@@ -9,7 +9,9 @@
     "ui"
   ],
   "compilerOptions": {
-    "lib": ["DOM"],
+    "lib": [
+      "DOM"
+    ],
     "outDir": "build",
     "rootDir": "./",
     "sourceMap": true,
@@ -37,7 +39,8 @@
       "adonis5-scheduler",
       "@adonisjs/view",
       "@rlanz/bull-queue",
-      "@adonisjs/mail"
+      "@adonisjs/mail",
+      "@adonisjs/redis"
     ]
   }
 }

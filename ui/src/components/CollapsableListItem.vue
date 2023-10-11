@@ -10,31 +10,33 @@
           </p>
         </div>
         <div class="ml-2 flex-shrink-0 flex">
+          <div v-if="tag.type==4 && tag.macroUuid == null" class="ml-2 flex-shrink-0 flex">
+            <p class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-800 text-gray-100">
+              {{ $t('tags.stopped') }}
+            </p>
+          </div>
+          <div v-if="tag.type==4 && tag.macroUuid != null" class="ml-2 flex-shrink-0 flex">
+            <p class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-600 text-gray-100">
+              {{ $t('tags.running') }}
+            </p>
+          </div>
           <div v-if="tag.valueType == 1" class="ml-2 flex-shrink-0 flex">
-            <p
-              class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-indigo-500 text-gray-100"
-            >
+            <p class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-indigo-500 text-gray-100">
               Boolean
             </p>
           </div>
           <div v-if="tag.valueType == 2" class="ml-2 flex-shrink-0 flex">
-            <p
-              class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-indigo-500 text-gray-100"
-            >
+            <p class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-indigo-500 text-gray-100">
               Integer
             </p>
           </div>
           <div v-if="tag.valueType == 3" class="ml-2 flex-shrink-0 flex">
-            <p
-              class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-indigo-500 text-gray-100"
-            >
+            <p class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-indigo-500 text-gray-100">
               Float
             </p>
           </div>
           <div v-if="tag.valueType == 4" class="ml-2 flex-shrink-0 flex">
-            <p
-              class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-indigo-500 text-gray-100"
-            >
+            <p class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-indigo-500 text-gray-100">
               String
             </p>
           </div>
@@ -48,11 +50,12 @@
           </p>
         </div>
         <div class="mt-2 flex items-center text-sm text-gray-500 sm:mt-0">
-          <p
-            v-if="tag.unit != '' && tag.unit != null"
-            class="px-2 inline-flex text-xs leading-5 font-semibold text-gray-800"
-          >
+          <p v-if="tag.unit != '' && tag.unit != null"
+            class="px-2 inline-flex text-xs leading-5 font-semibold text-gray-800">
             {{ $t('tags.unit') + ': ' + tag.unit }}
+          </p>
+          <p v-if="tag.type == 3 || tag.type == 4" class="px-2 inline-flex text-xs leading-5 font-semibold text-gray-800">
+            {{ (tag.type == 3 ? 'WarpScript' : 'Javascript') }}
           </p>
         </div>
       </div>

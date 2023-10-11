@@ -82,7 +82,7 @@ async function init() {
   await RouteService.getProjectInfos(route)
 
   const page = route.query.page ? Number(route.query.page) : 1
-  const opt: any = { typeFilter: '3' }
+  const opt: any = { typeFilter: 'macro' }
   if (refNamespace.value) {
     opt.namespace = refNamespace.value
   }

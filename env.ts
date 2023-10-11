@@ -41,4 +41,5 @@ export default Env.rules({
   QUEUE_REDIS_PASSWORD:Env.schema.string(),
   WARPFLEET_SYNCHRONISER_URL_PREFIX:Env.schema.string(),
   EMAIL_FROM:Env.schema.string(),
+  APP_DOMAIN:Env.schema.string(),
 })

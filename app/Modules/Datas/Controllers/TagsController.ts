@@ -6,6 +6,8 @@ import Project from '../../Projects/Models/Project'
 import Tag from '../Models/Tag'
 import TagsService from '../Services/TagsService'
 import { Queue } from '@ioc:Rlanz/Queue'
+import Redis from '@ioc:Adonis/Addons/Redis'
+import { ModelObject } from '@ioc:Adonis/Lucid/Orm'
 
 export default class TagsController {
   /**
@@ -24,12 +26,15 @@ export default class TagsController {
       .where('project_id', params.projectId)
       .preload('device', (query) => {
         query.orderBy('devices.namespace', 'asc')
-        query.orWhere
+        //query.orWhere
       })
       .orderBy('name', 'asc')
 
-    if (requestParams.typeFilter) {
-      query.andWhere('type', requestParams.typeFilter)
+    if (requestParams.typeFilter=='macro') {
+      query.andWhere('type', 3 )
+      query.orWhere('type', 4 )
+    } else {
+      query.andWhere('type', 1 )
     }
 
     if (requestParams.searchKey) {
@@ -42,7 +47,11 @@ export default class TagsController {
       })
     }
 
-    let tags: Tag[] = await query.paginate(requestParams.page, 10000)
+    let tags: { meta: any; data: ModelObject[]; } = (await query.paginate(requestParams.page, 10000)).serialize()
+    // Append macro run/stop state to each macro (if uuid == null then isn't runnig)
+    for (const tag of tags.data) {
+      tag.macroUuid = await Redis.get('macro-' + tag.id.toString())
+    }
 
     response.send(tags)
   }
@@ -56,12 +65,16 @@ export default class TagsController {
    */
   public async show({ params, response, bouncer }: HttpContextContract) {
     await bouncer.with('TagPolicy').authorize('show', params.projectId)
-    const tags = await Tag.query()
+    const tag = await Tag.query()
       .where('project_id', params.projectId)
       .preload('device')
       .andWhere('id', params.id)
       .first()
-    response.send(tags)
+
+    if (tag?.type==4){
+      tag.macroUuid =  await Redis.get('macro-' + tag.id.toString())
+    }
+    response.send(tag)
   }
   /**
    * Create / save new Tag.
@@ -78,6 +91,8 @@ export default class TagsController {
     const tag = new Tag()
     tag.merge(payload)
     await tag.save()
+
+    console.log('reation macro')
     if (tag.type == 2 || tag.type == 1) {
       const project = await Project.find(+params.projectId)
       const tagService = new TagsService(project!)
@@ -175,6 +190,12 @@ export default class TagsController {
         'type',
         'value_type',
         'device_id',
+        'physicalUnit',
+        'settings',
+        'alarm',
+        'triggerType',
+        'minTreshold',
+        'maxTreshold'
       ])
       .where('project_id', +params.projectId)
       // export only variables

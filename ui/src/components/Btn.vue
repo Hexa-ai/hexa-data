@@ -1,6 +1,7 @@
 <template>
   <button type="submit" :class="[primary==true ? 'primary text-white' : 'border-gray-300 text-gray-500 ', 'flex justify-center space-x-2 py-2 px-3 border rounded-md shadow-sm text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 has-tooltip']">
     <slot></slot>
+    <StopIcon v-if="action=='stop'" class="flex-shrink-0 h-5 w-5 text-gray-400"></StopIcon>
     <PlayIcon v-if="action=='play'" class="flex-shrink-0 h-5 w-5 text-gray-400"></PlayIcon>
     <UserAddIcon v-if="action=='addUser'" class="flex-shrink-0 h-5 w-5 text-gray-400"></UserAddIcon>
     <DocumentAddIcon v-if="action=='create'" class="flex-shrink-0 h-5 w-5 text-gray-400"></DocumentAddIcon>
@@ -17,7 +18,7 @@
   </button>
 </template>
 <script setup lang="ts">
-  import { UserAddIcon, DocumentAddIcon, PencilAltIcon, TrashIcon, UploadIcon, DownloadIcon, XIcon, PlayIcon } from '@heroicons/vue/outline'
+  import { UserAddIcon, DocumentAddIcon, PencilAltIcon, TrashIcon, UploadIcon, DownloadIcon, XIcon, PlayIcon, StopIcon } from '@heroicons/vue/outline'
 
   const props = defineProps<{
     text:string,

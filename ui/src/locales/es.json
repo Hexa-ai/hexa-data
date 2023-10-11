@@ -233,6 +233,7 @@
     "import": "Importación CSV",
     "export": "exportación CSV",
     "warpScriptEditor": "Editor de WarpScript",
+    "javaScriptEditor": "Editor de Javascript",
     "preview": "Avance",
     "light": "Tema ligero",
     "cyclicalExec": "ejecución cíclica",
@@ -250,13 +251,17 @@
     "execLogs": "Resultados",
     "newText": "Nuevo texto",
     "stared": "Favoritos",
-    "exec": "Ejecutar",
+    "exec": "Comenzar",
     "physicalUnit": "Unidad física",
     "physicalUnitTypes": {
       "duration": "Duración",
       "flow": "Flujo",
       "temperature": "Temperatura"
-    }
+    },
+    "javascript": "Javascript",
+    "stop": "Parar",
+    "running":"Comenzó",
+    "stopped":"Interrumpido"
   },
   "dashboards": {
     "imgBg": "Imagen de fondo",

@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column, belongsTo, BelongsTo } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, column, computed, belongsTo, BelongsTo } from '@ioc:Adonis/Lucid/Orm'
 import Project from '../../Projects/Models/Project'
 import Device from '../../Datas/Models/Device'
 
@@ -23,7 +23,7 @@ export default class Tag extends BaseModel {
   public unit: string
 
   @column()
-  public type: number // type values -> 1 GTS, 2 GTS for Text traduction, 3 WARPScript
+  public type: number // type values -> 1 GTS, 2 GTS for Text traduction, 3 WARPScript, 4 Javascript
 
   @column()
   public valueType: number // value_type values -> 1 Boolean, 2 -> Integer, 3 -> Float, 4 -> String
@@ -79,4 +79,7 @@ export default class Tag extends BaseModel {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
+
+  @computed()
+  public macroUuid:string | null = null
 }
