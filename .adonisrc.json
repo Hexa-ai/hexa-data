@@ -34,7 +34,7 @@
     "adonis5-scheduler",
     "@adonisjs/view",
     "@rlanz/bull-queue",
-    "@adonisjs/mail"
+    "@adonisjs/mail",
     "@adonisjs/redis",
     "./providers/JavascriptRuntimeProvider"
   ],
