@@ -1,4 +1,4 @@
-import { Queue } from '@ioc:Setten/Queue'
+import { Queue } from '@ioc:Rlanz/Queue'
 import puppeter from 'puppeteer'
 import Project from 'App/Modules/Projects/Models/Project'
 import Document from 'App/Modules/Datas/Models/Document'

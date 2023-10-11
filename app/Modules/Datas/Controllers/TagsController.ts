@@ -5,7 +5,7 @@ import CsvService from '../Services/CsvService'
 import Project from '../../Projects/Models/Project'
 import Tag from '../Models/Tag'
 import TagsService from '../Services/TagsService'
-import { Queue } from '@ioc:Setten/Queue'
+import { Queue } from '@ioc:Rlanz/Queue'
 import Redis from '@ioc:Adonis/Addons/Redis'
 import { ModelObject } from '@ioc:Adonis/Lucid/Orm'
 
@@ -118,12 +118,12 @@ export default class TagsController {
       .firstOrFail()
     const oldTagName = tag.name
     const payload = await request.validate(UpdateTagValidator)
-    if (oldTagName!=payload.name && tag.type==3) {
+    if (oldTagName != payload.name && tag.type == 3) {
       console.log('refactor')
       await Queue.dispatch('App/Jobs/RefactorWs', {
         oldTagName: oldTagName,
         tagName: payload.name,
-        projectId: params.projectId
+        projectId: params.projectId,
       })
       console.log('old macro name:' + oldTagName)
       console.log('macro name:' + payload.name)

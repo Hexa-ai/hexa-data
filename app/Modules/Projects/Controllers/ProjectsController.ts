@@ -5,7 +5,7 @@ import UpdateProjectValidator from '../Validators/UpdateProjectValidator'
 import ImportArchiveValidator from '../Validators/ImportArchiveValidator'
 import Project from '../Models/Project'
 import Warp10Service from '../../../Services/Warp10Service'
-import crypto from "crypto"
+import crypto from 'crypto'
 import Drive from '@ioc:Adonis/Core/Drive'
 import { string } from '@ioc:Adonis/Core/Helpers'
 import { DateTime } from 'luxon'
@@ -14,7 +14,7 @@ import Device from 'App/Modules/Datas/Models/Device'
 import Tag from 'App/Modules/Datas/Models/Tag'
 import Role from '../Contracts/enums/Roles'
 import User from 'App/Modules/Users/Models/User'
-import { Queue } from '@ioc:Setten/Queue'
+import { Queue } from '@ioc:Rlanz/Queue'
 import Event from '@ioc:Adonis/Core/Event'
 
 export default class ProjectsController {

@@ -38,7 +38,7 @@
       "@adonisjs/attachment-lite",
       "adonis5-scheduler",
       "@adonisjs/view",
-      "@setten/bull-queue",
+      "@rlanz/bull-queue",
       "@adonisjs/mail",
       "@adonisjs/redis"
     ]

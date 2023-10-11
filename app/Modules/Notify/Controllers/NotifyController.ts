@@ -3,7 +3,7 @@ import SendEmailValidator from 'App/Modules/Notify/Validators/SendEmailValidator
 import SendSmsValidator from 'App/Modules/Notify/Validators/SendSmsValidator'
 import SendEmailTagValidator from 'App/Modules/Notify/Validators/SendEmailTagValidator'
 import SendSmsTagValidator from 'App/Modules/Notify/Validators/SendSmsTagValidator'
-import { Queue } from '@ioc:Setten/Queue'
+import { Queue } from '@ioc:Rlanz/Queue'
 import Project from 'App/Modules/Projects/Models/Project'
 
 export default class NotifyController {

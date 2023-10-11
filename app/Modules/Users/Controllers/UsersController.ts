@@ -5,7 +5,7 @@ import UpdateUserValidator from '../Validators/UpdateUserValidator'
 import User from '../Models/User'
 import { ModelPaginatorContract } from '@ioc:Adonis/Lucid/Orm'
 import { schema, rules } from '@ioc:Adonis/Core/Validator'
-import { Queue } from '@ioc:Setten/Queue'
+import { Queue } from '@ioc:Rlanz/Queue'
 
 export default class UsersController {
   /**

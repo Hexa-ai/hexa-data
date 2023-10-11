@@ -1,5 +1,5 @@
 import Event from '@ioc:Adonis/Core/Event'
-import { Queue } from '@ioc:Setten/Queue'
+import { Queue } from '@ioc:Rlanz/Queue'
 
 Event.on('new:user', async (user) => {
   await Queue.dispatch('App/Jobs/SendNotifMailWelcome', user)

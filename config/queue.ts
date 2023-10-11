@@ -1,5 +1,5 @@
 import Env from '@ioc:Adonis/Core/Env'
-import type { QueueConfig } from '@ioc:Setten/Queue'
+import type { QueueConfig } from '@ioc:Rlanz/Queue'
 
 const queueConfig: QueueConfig = {
   connection: {
@@ -15,8 +15,8 @@ const queueConfig: QueueConfig = {
   jobs: {
     attempts: 3,
     removeOnComplete: 20,
-    removeOnFail: 20
-  }
+    removeOnFail: 20,
+  },
 }
 
 export default queueConfig
