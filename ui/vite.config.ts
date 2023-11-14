@@ -35,7 +35,9 @@ export default defineConfig({
     plainText(/\.mc2$/),
   ],
   server: {
-    port: 2000
+    host: '0.0.0.0',
+    port: 2000,
+    cors: true,
   }
 })
 
