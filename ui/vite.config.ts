@@ -1,6 +1,8 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import path from 'path'
+import dotenv from 'dotenv'
+dotenv.config()
 
 /**
  * @param {string | RegExp | Function} match
@@ -35,8 +37,8 @@ export default defineConfig({
     plainText(/\.mc2$/),
   ],
   server: {
-    host: '0.0.0.0',
-    port: 2000,
+    host: process.env.VITE_HOST || '127.0.0.1',
+    port: process.env.VITE_PORT ? parseInt(process.env.VITE_PORT) : 2000,
     cors: true,
   }
 })
