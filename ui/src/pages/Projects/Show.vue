@@ -161,52 +161,78 @@
                 </div>
               </div>
               <div class="mt-6 grid grid-cols-6 gap-y-6 gap-x-4">
-                <div class="col-span-6 md:col-span-6">
-                  <InputField
-                    :title="$t('projectInfos.readToken')"
-                    v-model="refProject!.readToken"
-                    :isRequired="false"
-                    :isDisabled="true"
-                    :type="FieldType.TEXT"
-                  ></InputField>
-                </div>
-              </div>
-              <div class="mt-6 grid grid-cols-6 gap-y-6 gap-x-4">
-                <div class="col-span-6 md:col-span-6">
-                  <InputField
-                    :title="$t('projectInfos.writeToken')"
-                    v-model="refProject!.writeToken"
-                    :isRequired="false"
-                    :isDisabled="true"
-                    :type="FieldType.TEXT"
-                  ></InputField>
-                </div>
-              </div>
-              <div class="mt-6 grid grid-cols-6 gap-y-6 gap-x-4">
-                <div class="col-span-6 md:col-span-2">
-                  <InputField
-                    :title="$t('projectInfos.tokenIssuance')"
-                    v-model="refProject!.tokenIssuance"
-                    :isRequired="false"
-                    :isDisabled="true"
-                    :type="FieldType.TEXT"
-                  ></InputField>
-                </div>
-              </div>
-              <div class="mt-6 grid grid-cols-6 gap-y-6 gap-x-4">
-                <div class="col-span-6 md:col-span-2">
-                  <InputField
-                    :title="$t('projectInfos.tokenExpiry')"
-                    v-model="refProject!.tokenExpiry"
-                    :isRequired="false"
-                    :isDisabled="true"
-                    :type="FieldType.TEXT"
-                  ></InputField>
-                </div>
-              </div>
-              <div class="mt-6 grid grid-cols-6 gap-y-6 gap-x-4">
                 <div class="col-span-6 md:col-span-2">
                   <Btn v-if="edit" :text="$t('save')" :primary="true" class=""></Btn>
+                </div>
+              </div>
+              <div class="mt-5 pt-5 sm:border-t sm:border-gray-200">
+                <h3 class="text-lg italic leading-6 font-medium text-gray-900" >
+                  Tokens persistants
+                </h3>
+                <p class="mt-1 text-sm text-gray-500">Créer et gérer des tokens peristants pour accéder directement à la base de données Warp10.</p>
+              </div>
+              <div v-if="edit">
+                <div class="mt-6 grid grid-cols-6 gap-y-6 gap-x-4">
+                  <div class="col-span-6 md:col-span-2">
+                    <InputField
+                      title="Durée de validité des tokens"
+                      v-model="persistentTokensDuration"
+                      :choices="['1 an', '2 ans', '3 ans', '4 ans', '5 ans', '6 ans', '7 ans', '8 ans', '9 ans', '10 ans']"
+                      :values="[31536000, 63072000, 94608000, 126144000, 157680000, 189216000, 220752000, 252288000, 283824000, 315360000]"
+                      :type="FieldType.SELECT"
+                    ></InputField>
+                  </div>
+                </div>
+                <div class="mt-6 grid grid-cols-6 gap-y-6 gap-x-4">
+                  <div class="col-span-6 md:col-span-2">
+                    <Btn :text="refProject!.persistentTokenIssuance ? 'Regénérer les tokens persistants' : 'Générer des tokens persistants'" :primary="true" @click="generatePersistentTokens"></Btn>
+                  </div>
+                </div>
+              </div>
+              <div v-else>
+                <div class="mt-6 grid grid-cols-6 gap-y-6 gap-x-4">
+                  <div class="col-span-6 md:col-span-6">
+                    <InputField
+                      :title="$t('projectInfos.readToken')"
+                      v-model="refProject!.persistentReadToken"
+                      :isRequired="false"
+                      :isDisabled="true"
+                      :type="FieldType.TEXT"
+                    ></InputField>
+                  </div>
+                </div>
+                <div class="mt-6 grid grid-cols-6 gap-y-6 gap-x-4">
+                  <div class="col-span-6 md:col-span-6">
+                    <InputField
+                      :title="$t('projectInfos.writeToken')"
+                      v-model="refProject!.persistentWriteToken"
+                      :isRequired="false"
+                      :isDisabled="true"
+                      :type="FieldType.TEXT"
+                    ></InputField>
+                  </div>
+                </div>
+                <div class="mt-6 grid grid-cols-6 gap-y-6 gap-x-4">
+                  <div class="col-span-6 md:col-span-2">
+                    <InputField
+                      :title="$t('projectInfos.tokenIssuance')"
+                      v-model="refProject!.persistentTokenIssuance"
+                      :isRequired="false"
+                      :isDisabled="true"
+                      :type="FieldType.TEXT"
+                    ></InputField>
+                  </div>
+                </div>
+                <div class="mt-6 grid grid-cols-6 gap-y-6 gap-x-4">
+                  <div class="col-span-6 md:col-span-2">
+                    <InputField
+                      :title="$t('projectInfos.tokenExpiry')"
+                      v-model="refProject!.persistentTokenExpiry"
+                      :isRequired="false"
+                      :isDisabled="true"
+                      :type="FieldType.TEXT"
+                    ></InputField>
+                  </div>
                 </div>
               </div>
               <div class="mt-5 pt-5 sm:border-t sm:border-gray-200">
@@ -305,6 +331,7 @@ import languages from '../../Contracts/languages';
 import ExportCurl from '../../components/ExportCurl.vue';
 import ImportCurl from '../../components/ImportCurl.vue';
 import MiniLoader from '../../components/MiniLoader.vue';
+import axios from 'axios'
 
 const router = useRouter()
 const route = useRoute()
@@ -316,6 +343,7 @@ const isOpen = ref(false)
 
 const refProject = ref(new ProjectModel())
 const refProjectCollection = ref(new ModelCollection<ProjectModel>())
+const persistentTokensDuration = ref(31536000)
 const refExportSettingsEnabled = ref(false)
 const refImportSettingsEnabled = ref(false)
 let setTimourImportExport:any
@@ -343,7 +371,11 @@ async function init() {
     router.go()
   }
   breadCrumb.value = [{ name: 'Projects', href: '/projects' }, { name: store.currentProject.name, href: routePrefix + '/' + route.params.id }, { name: t('settings'), href: routePrefix + '/' + route.params.id + '/settings' }]
-
+}
+async function generatePersistentTokens() {
+  await crudController.post(route.params.id + '/generatePersistentTokens', { duration: persistentTokensDuration.value })
+  edit.value = false
+  init()
 }
 async function exportSettings() {
   crudController.get('export/' + route.params.id)
@@ -354,7 +386,6 @@ async function importSettings() {
   crudController.post('import/' + route.params.id, null, [{ name: 'archive', field: archiveToUpload }],)
   refImportSettingsEnabled.value=true
   setTimourImportExport=setInterval(()=>{init()},3000)
-
 }
 async function update() {
   await crudController.update(refProject.value, true)

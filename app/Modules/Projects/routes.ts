@@ -18,6 +18,9 @@ Route.group(() => {
       Route.delete('projects/:id/users/:userId', 'ProjectsController.removeUsers').namespace(
         'App/Modules/Projects/Controllers'
       )
+      Route.post('projects/:id/generatePersistentTokens', 'ProjectsController.generatePersistentTokens').namespace(
+        'App/Modules/Projects/Controllers'
+      )
     }).middleware(['auth'])
   }).prefix('/v1')
 }).prefix('/api')

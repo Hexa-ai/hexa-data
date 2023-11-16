@@ -56,6 +56,7 @@ export default class ProjectsController {
           'ImportExportParameters',
           'exportLink',
           'exportLinkExpiry',
+          // TODO: Add persistent tokens informations here ?
         ],
       },
     })
@@ -152,6 +153,7 @@ export default class ProjectsController {
             'ImportExportParameters',
             'exportLink',
             'exportLinkExpiry',
+            // TODO: Add persistent tokens informations here ?
           ],
         },
       })
@@ -345,5 +347,33 @@ export default class ProjectsController {
     } else {
       response.status(409)
     }
+  }
+
+  /**
+   * Generate new persistent tokens to the project.
+   * GET projects/:id/generatePersistentTokens
+   *
+   * @param {request} RequestContract
+   * @param {params} Record<string, any>
+   * @param {response} ResponseContract
+   */
+  public async generatePersistentTokens({ params, response, bouncer, request }: HttpContextContract) {
+    await bouncer.with('ProjectPolicy').authorize('generatePersistentTokens', params.id)
+    const project = await Project.findOrFail(params.id)
+    const duration = request.input('duration')
+
+    const warp10Service = new Warp10Service()
+    const tokens = await warp10Service.generatePairOfTokens(
+      { projectUuid: project.uuid },
+      project.uuid,
+      duration
+    )
+
+    project.persistentReadToken = tokens.readToken
+    project.persistentWriteToken = tokens.writeToken
+    project.persistentTokenIssuance = tokens.issuance
+    project.persistentTokenExpiry = tokens.expiry
+
+    await project.save()
   }
 }
