@@ -139,7 +139,7 @@ class BaseController<Model>{
    * @param fileFields?: I_FileField[]
    * @returns Promise<any>
    */
-  public async post<Model>(routeSufix:string,data?:any,fileFields?:I_FileField[]): Promise<any> {
+  public async post<Model>(routeSufix:string,data?:any,fileFields:I_FileField[] = []): Promise<any> {
     const formData = new FormData()
     let res: AxiosResponse<any, any>
 
