@@ -87,6 +87,18 @@ export default class Project extends BaseModel {
   @column()
   public writeToken: string
 
+  @column()
+  public persistentReadToken: string
+
+  @column()
+  public persistentWriteToken: string
+  
+  @column.dateTime()
+  public persistentTokenExpiry: DateTime
+
+  @column.dateTime()
+  public persistentTokenIssuance: DateTime
+
   @column.dateTime()
   public tokenIssuance: DateTime
 
