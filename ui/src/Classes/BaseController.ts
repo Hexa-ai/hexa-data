@@ -157,7 +157,7 @@ class BaseController<Model>{
         }
       })
     }
-    console.log(formData)
+
     res = await axios.post(this.getUrl() + '/' + routeSufix, formData, this.getReqConf())
 
     return res.data
