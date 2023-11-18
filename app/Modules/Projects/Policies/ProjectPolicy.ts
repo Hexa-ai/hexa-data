@@ -40,7 +40,6 @@ export default class ProjectPolicy extends BasePolicy {
     return false
   }
   public async generatePersistentTokens(user: User, projectId: number) {
-    // TODO: is this correct?
     return false
   }
 }

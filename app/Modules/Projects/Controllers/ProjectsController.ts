@@ -52,11 +52,14 @@ export default class ProjectsController {
           'writeToken',
           'tokenIssuance',
           'tokenExpiry',
+          'persistentReadToken',
+          'persistentWriteToken',
+          'persistentTokenIssuance',
+          'persistentTokenExpiry',
           'ImportExportCmd',
           'ImportExportParameters',
           'exportLink',
           'exportLinkExpiry',
-          // TODO: Add persistent tokens informations here ?
         ],
       },
     })
@@ -149,11 +152,14 @@ export default class ProjectsController {
             'writeToken',
             'tokenIssuance',
             'tokenExpiry',
+            'persistentReadToken',
+            'persistentWriteToken',
+            'persistentTokenIssuance',
+            'persistentTokenExpiry',
             'ImportExportCmd',
             'ImportExportParameters',
             'exportLink',
             'exportLinkExpiry',
-            // TODO: Add persistent tokens informations here ?
           ],
         },
       })
