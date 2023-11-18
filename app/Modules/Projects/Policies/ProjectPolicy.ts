@@ -39,7 +39,7 @@ export default class ProjectPolicy extends BasePolicy {
   public async removeUsers() {
     return false
   }
-  public async generatePersistentTokens(user: User, projectId: number) {
+  public async generatePersistentTokens() {
     return false
   }
 }

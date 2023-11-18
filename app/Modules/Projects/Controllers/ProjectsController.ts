@@ -363,7 +363,7 @@ export default class ProjectsController {
    * @param {params} Record<string, any>
    * @param {response} ResponseContract
    */
-  public async generatePersistentTokens({ params, response, bouncer, request }: HttpContextContract) {
+  public async generatePersistentTokens({ params, bouncer, request }: HttpContextContract) {
     await bouncer.with('ProjectPolicy').authorize('generatePersistentTokens', params.id)
     const project = await Project.findOrFail(params.id)
     const duration = request.input('duration')
