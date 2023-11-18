@@ -77,7 +77,9 @@ export default class Warp10Service {
   /**
    * Generate read en write token for a project.
    *
-   * @param name string Project namee
+   * @param labels object Object containing labels for the token
+   * @param actualUuid string the uuid of the project
+   * @param duration duration the duration of the token in seconds (default is WARP10_TOKEN_DURATION)
    * @return TokenInfo Warp10 Tokens for this project
    */
   public async generatePairOfTokens(labels: {}, actualUuid?: string, duration?: number) {
