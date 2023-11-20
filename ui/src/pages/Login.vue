@@ -17,9 +17,9 @@
             src="./../assets/logo-hexa-data.svg"
             alt="AppLogo"
           />
-          <h2
-            class="mt-6 text-3xl font-extrabold text-gray-900"
-          >{{ store.publicAppSettings.appTitle }}</h2>
+          <h2 class="mt-6 text-3xl font-extrabold text-gray-900">
+            {{ store.publicAppSettings.appTitle }}
+          </h2>
           <p class="mt-2 text-sm text-gray-600">
             <VueWriter :array="subTitles" :typeSpeed="20" :eraseSpeed="20" />
           </p>
@@ -55,7 +55,8 @@
                   v-if="invalidCredential == true"
                   for="remember-me"
                   class="ml-2 block italic text-sm text-red-900"
-                >{{ $t("loginPage.invalidCredential") }}</label>
+                  >{{ $t('loginPage.invalidCredential') }}</label
+                >
               </div>
               <div>
                 <Btn :text="$t('loginPage.login')" :primary="true" class="w-full"></Btn>
@@ -71,28 +72,32 @@
                   <div class="w-full border-t border-gray-300" />
                 </div>
                 <div class="relative flex justify-center text-sm">
-                  <span class="px-2 bg-white text-gray-500">{{ $t("loginPage.resetPasswordTitle") }}</span>
+                  <span class="px-2 bg-white text-gray-500">{{
+                    $t('loginPage.resetPasswordTitle')
+                  }}</span>
                 </div>
               </div>
               <div>
                 <router-link
                   to="/forgot-password"
                   class="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
-                >{{ $t("loginPage.forgotPassword") }}</router-link>
+                  >{{ $t('loginPage.forgotPassword') }}</router-link
+                >
               </div>
               <div class="mt-6 relative">
                 <div class="absolute inset-0 flex items-center" aria-hidden="true">
                   <div class="w-full border-t border-gray-300" />
                 </div>
                 <div class="relative flex justify-center text-sm">
-                  <span class="px-2 bg-white text-gray-500">{{ $t("loginPage.signUpTitle") }}</span>
+                  <span class="px-2 bg-white text-gray-500">{{ $t('loginPage.signUpTitle') }}</span>
                 </div>
               </div>
               <div>
                 <router-link
                   to="/register"
                   class="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
-                >{{ $t("loginPage.signUp") }}</router-link>
+                  >{{ $t('loginPage.signUp') }}</router-link
+                >
               </div>
             </form>
           </div>
@@ -117,48 +122,52 @@
 </template>
 <script setup lang="ts">
 import { ref, inject } from 'vue'
-import { onMounted } from "@vue/runtime-core";
+import { onMounted } from '@vue/runtime-core'
 import AlertCard from './../components/AlertCard.vue'
-import axios from "axios"
+import axios from 'axios'
 import { useRouter } from 'vue-router'
-import Store from '../store/Store';
+import Store from '../store/Store'
 import FieldType from './../Contracts/FieldType'
-import Btn from '../components/Btn.vue';
+import Btn from '../components/Btn.vue'
 import InputField from './../components/InputField.vue'
-import { useI18n } from 'vue-i18n';
+import { useI18n } from 'vue-i18n'
 const router = useRouter()
 const i18n = useI18n()
 
 interface I_loginInfos {
-  email: string,
-  password: string;
+  email: string
+  password: string
 }
 
 const store: Store = inject('store')!
 
-
-const subTitles = ref([store.publicAppSettings.appSubTitle1, store.publicAppSettings.appSubTitle2, store.publicAppSettings.appSubTitle3])
+const subTitles = ref([
+  store.publicAppSettings.appSubTitle1,
+  store.publicAppSettings.appSubTitle2,
+  store.publicAppSettings.appSubTitle3,
+])
 let formLogin = ref<I_loginInfos>({ email: '', password: '' })
 let invalidCredential = ref(false)
 let rememberMe = ref(false)
 
-if (localStorage.getItem("rememberMe") == 'true') {
+if (localStorage.getItem('rememberMe') == 'true') {
   rememberMe.value = true
-  formLogin.value.email = localStorage.getItem("email")!
+  formLogin.value.email = localStorage.getItem('email')!
 }
 
 checkUserProfile()
 
 async function checkUserProfile() {
-  console.log(localStorage.getItem("authUser"))
-  if (localStorage.getItem("authUser")) {
+  console.log(localStorage.getItem('authUser'))
+  if (localStorage.getItem('authUser')) {
     router.push('/projects')
   }
 }
 
 async function login() {
-  axios.post(window.location.origin + import.meta.env.VITE_API_PREFIX + '/login', formLogin.value)
-    .then(response => {
+  axios
+    .post(window.location.origin + import.meta.env.VITE_API_PREFIX + '/login', formLogin.value)
+    .then((response) => {
       invalidCredential.value = false
 
       store.authUser.email = response.data.email
@@ -180,18 +189,18 @@ async function login() {
 
       if (rememberMe.value == true) {
         store.authUser.rememberMeToken = true
-        localStorage.setItem("rememberMe", "true")
-        localStorage.setItem("email", response.data.email)
+        localStorage.setItem('rememberMe', 'true')
+        localStorage.setItem('email', response.data.email)
       } else {
         store.authUser.rememberMeToken = false
-        localStorage.removeItem("rememberMe")
-        localStorage.removeItem("email")
+        localStorage.removeItem('rememberMe')
+        localStorage.removeItem('email')
       }
 
-      localStorage.setItem("authUser", JSON.stringify(store.authUser));
+      localStorage.setItem('authUser', JSON.stringify(store.authUser))
       router.push('/projects')
     })
-    .catch(error => {
+    .catch((error) => {
       invalidCredential.value = true
     })
 }

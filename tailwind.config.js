@@ -1,9 +1,6 @@
 const defaultTheme = require('./ui/node_modules/tailwindcss/defaultTheme')
 module.exports = {
-  content: [
-    "./ui/index.html",
-    "./ui/src/**/*.{vue,js,ts,jsx,tsx}",
-  ],
+  content: ['./ui/index.html', './ui/src/**/*.{vue,js,ts,jsx,tsx}'],
   theme: {
     // colors: {
     //   indigo: {600:'#a5f3fc'},
@@ -14,7 +11,5 @@ module.exports = {
       },
     },
   },
-  plugins: [
-    require('./ui/node_modules/@tailwindcss/forms'),
-  ],
+  plugins: [require('./ui/node_modules/@tailwindcss/forms')],
 }

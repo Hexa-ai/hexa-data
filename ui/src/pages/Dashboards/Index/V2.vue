@@ -17,7 +17,7 @@
 
 <script setup lang="ts">
 import { ref, PropType } from 'vue'
-import ProjectModel from './../../../Models/ProjectModel';
+import ProjectModel from './../../../Models/ProjectModel'
 import BaseLayoutVue from '../../../layouts/BaseLayout.vue'
 import { useI18n } from 'vue-i18n'
 const { t } = useI18n()

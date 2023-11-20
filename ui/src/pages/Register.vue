@@ -17,10 +17,10 @@
             src="./../assets/logo-hexa-data.svg"
             alt="AppLogo"
           />
-          <h2
-            class="mt-6 text-3xl font-extrabold text-gray-900"
-          >{{ store.publicAppSettings.appTitle }}</h2>
-          <p class="mt-2 text-sm text-gray-600">{{ $t("registerPage.registerInfos") }}</p>
+          <h2 class="mt-6 text-3xl font-extrabold text-gray-900">
+            {{ store.publicAppSettings.appTitle }}
+          </h2>
+          <p class="mt-2 text-sm text-gray-600">{{ $t('registerPage.registerInfos') }}</p>
         </div>
 
         <div class="mt-8">
@@ -52,7 +52,9 @@
                   <div class="w-full border-t border-gray-300" />
                 </div>
                 <div class="relative flex justify-center text-sm">
-                  <span class="px-2 bg-white text-gray-500">{{ $t("registerPage.signInTitle") }}</span>
+                  <span class="px-2 bg-white text-gray-500">{{
+                    $t('registerPage.signInTitle')
+                  }}</span>
                 </div>
               </div>
 
@@ -60,7 +62,8 @@
                 <router-link
                   to="/login"
                   class="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
-                >{{ $t("registerPage.singnIn") }}</router-link>
+                  >{{ $t('registerPage.singnIn') }}</router-link
+                >
               </div>
             </form>
           </div>
@@ -84,31 +87,31 @@
   </div>
 </template>
 <script setup lang="ts">
-import Btn from '../components/Btn.vue';
+import Btn from '../components/Btn.vue'
 import InputField from './../components/InputField.vue'
 import FieldType from './../Contracts/FieldType'
 import { ref, inject, computed } from 'vue'
-import axios from "axios"
+import axios from 'axios'
 import { useRouter } from 'vue-router'
 const router = useRouter()
 
 const store: any = inject('store')
 let formData = ref<{
-  name:string,
-  email:string,
-  password:string
-}>({name:'',email:'', password:''})
+  name: string
+  email: string
+  password: string
+}>({ name: '', email: '', password: '' })
 
 async function register() {
   console.log('Register')
-    axios.post(window.location.origin + import.meta.env.VITE_API_PREFIX + '/register', formData.value)
-  .then(response => {
-    console.log(response.data)
-    router.push('/login')
-  })
-  .catch(error => {
-    console.log(error)
-  })
+  axios
+    .post(window.location.origin + import.meta.env.VITE_API_PREFIX + '/register', formData.value)
+    .then((response) => {
+      console.log(response.data)
+      router.push('/login')
+    })
+    .catch((error) => {
+      console.log(error)
+    })
 }
-
 </script>

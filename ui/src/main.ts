@@ -102,20 +102,18 @@ const router = createRouter({
   routes, // short for `routes: routes`
 })
 
-router.beforeEach( async (to, from, next) => {
+router.beforeEach(async (to, from, next) => {
   // Vérifiez si l'utilisateur navigue vers une route commençant par /projects
   if (to.path.startsWith('/projects/') && !to.path.startsWith('/projects/create')) {
     console.log(to)
     await RouteService.getProjectInfos(to)
   }
   // Continuez de naviguer vers la route demandée
-  next();
-});
+  next()
+})
 
 const app = createApp(App)
 app.use(router)
 app.use(i18n)
 app.use(VueWriter)
 app.mount('#app')
-
-

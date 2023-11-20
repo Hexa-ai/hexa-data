@@ -38,9 +38,7 @@
     "@adonisjs/redis",
     "./providers/JavascriptRuntimeProvider"
   ],
-  "aceProviders": [
-    "@adonisjs/repl"
-  ],
+  "aceProviders": ["@adonisjs/repl"],
   "metaFiles": [
     {
       "pattern": "public/**",

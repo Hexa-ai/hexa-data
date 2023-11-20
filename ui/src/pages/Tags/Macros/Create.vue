@@ -14,7 +14,9 @@
           <div class="m-5 space-y-8 divide-y divide-gray-200">
             <div>
               <div>
-                <h3 class="text-lg leading-6 font-medium text-gray-900">{{ $t('tags.parameters') }}</h3>
+                <h3 class="text-lg leading-6 font-medium text-gray-900">
+                  {{ $t('tags.parameters') }}
+                </h3>
                 <p class="mt-1 text-sm text-gray-500"></p>
               </div>
               <div class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
@@ -69,7 +71,7 @@
                     :isRequired="false"
                     :isDisabled="false"
                     :choices="[$t('tags.warpScript'), $t('tags.javascript')]"
-                    :values="[3,4]"
+                    :values="[3, 4]"
                     :index-is-value="false"
                     :type="FieldType.SELECT"
                   ></InputField>
@@ -90,24 +92,22 @@
 
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
-import { inject, ref } from 'vue';
+import { inject, ref } from 'vue'
 import BaseLayoutVue from '../../../layouts/BaseLayout.vue'
 import { useRouter, useRoute } from 'vue-router'
 import Store from './../../../store/Store'
-import TagModel from './../../../Models/TagModel';
+import TagModel from './../../../Models/TagModel'
 import Btn from './../../../components/Btn.vue'
-import InputField from './../../../components/InputField.vue';
-import FieldType from './../../../Contracts/FieldType';
+import InputField from './../../../components/InputField.vue'
+import FieldType from './../../../Contracts/FieldType'
 import { BaseController, ModelCollection } from './../../../Classes/BaseController'
 import { RouteService } from '../../../Classes/RouteService'
-import DeviceModel from '../../../Models/DeviceModel';
-import { Utils } from '../../../Classes/Utils';
+import DeviceModel from '../../../Models/DeviceModel'
+import { Utils } from '../../../Classes/Utils'
 import EditorPopup from '../../../components/EditorPopup.vue'
-import { onUpdated } from "vue";
+import { onUpdated } from 'vue'
 import InputSwitch from './../../../components/InputSwitch.vue'
 import { SunIcon } from '@heroicons/vue/outline'
-
-
 
 const router = useRouter()
 const route = useRoute()
@@ -124,7 +124,7 @@ const crudController = new BaseController<TagModel>(
   '/tags',
   [],
   refTag.value,
-  store.authUser.token['token'],
+  store.authUser.token['token']
 )
 
 crudController.setRoutePrefix(routePrefix)
@@ -133,7 +133,12 @@ async function init() {
   await RouteService.getProjectInfos(route)
   refTag.value.type = 3
 
-  breadCrumb.value = [{ name: 'Projects', href: '/projects' }, { name: store.currentProject.name, href: routePrefix }, { name: t('navigation.macros'), href: routePrefix + '/macros' }, { name: t('tags.newMacro'), href: routePrefix + '/macros/create' }]
+  breadCrumb.value = [
+    { name: 'Projects', href: '/projects' },
+    { name: store.currentProject.name, href: routePrefix },
+    { name: t('navigation.macros'), href: routePrefix + '/macros' },
+    { name: t('tags.newMacro'), href: routePrefix + '/macros/create' },
+  ]
 }
 async function create() {
   await crudController.store(refTag.value)
