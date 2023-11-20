@@ -195,6 +195,11 @@ export default class ProjectsController {
     project.l1 = payload.l1
     project.l2 = payload.l2
     project.l3 = payload.l3
+
+    // TODO: Push this two lines if we want to put the new versions by default
+    // project.dashboardVersion = 2
+    // project.variablesVersion = 2
+    
     await project.save()
 
     project.uuid = crypto.randomUUID()
@@ -243,6 +248,9 @@ export default class ProjectsController {
     project!.l1 = payload.l1
     project!.l2 = payload.l2
     project!.l3 = payload.l3
+    project!.dashboardVersion = payload.dashboardVersion || 1
+    project!.dashboardV2GrafanaUrl = payload.dashboardV2GrafanaUrl || ''
+    project!.variablesVersion = payload.variablesVersion || 1
     if (photo !== null) {
       project!.photo = Attachment.fromFile(photo)
     }

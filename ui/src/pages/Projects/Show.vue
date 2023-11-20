@@ -161,6 +161,54 @@
                 </div>
               </div>
               <div class="mt-6 grid grid-cols-6 gap-y-6 gap-x-4">
+                <div class="col-span-6 md:col-span-1">
+                  <InputField
+                    class="basis-1/2"
+                    title="Version du tableau de bord"
+                    v-model="refProject!.dashboardVersion"
+                    :isRequired="false"
+                    :isDisabled="!edit"
+                    :type="FieldType.SELECT"
+                    :choices="[
+                      'version 1 - tableau de bord intégré (legacy)',
+                      'version 2 - intégration de Grafana (par défaut)',
+                    ]"
+                    :index-is-value="false"
+                    :values="[1, 2]"
+                  ></InputField>
+                </div>
+              </div>
+              <div class="mt-6 grid grid-cols-6 gap-y-6 gap-x-4" v-show="refProject!.dashboardVersion == 2">
+                <div class="col-span-6 md:col-span-2">
+                  <InputField
+                    class="basis-1/2"
+                    title="URL de l'instance Grafana"
+                    v-model="refProject!.dashboardV2GrafanaUrl"
+                    :isRequired="false"
+                    :isDisabled="!edit"
+                    :type="FieldType.TEXT"
+                  ></InputField>
+                </div>
+              </div>
+              <div class="mt-6 grid grid-cols-6 gap-y-6 gap-x-4">
+                <div class="col-span-6 md:col-span-1">
+                  <InputField
+                    class="basis-1/2"
+                    title="Version des variables"
+                    v-model="refProject!.variablesVersion"
+                    :isRequired="false"
+                    :isDisabled="!edit"
+                    :type="FieldType.SELECT"
+                    :choices="[
+                      'version 1 - déclaration manuelle (legacy)',
+                      'version 2 - déportée dans Warp10 (par défaut)',
+                    ]"
+                    :index-is-value="false"
+                    :values="[1, 2]"
+                  ></InputField>
+                </div>
+              </div>
+              <div class="mt-6 grid grid-cols-6 gap-y-6 gap-x-4">
                 <div class="col-span-6 md:col-span-2">
                   <Btn v-if="edit" :text="$t('save')" :primary="true" class=""></Btn>
                 </div>

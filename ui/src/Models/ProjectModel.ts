@@ -21,6 +21,9 @@ class ProjectModel extends BaseModel {
   public persistentWriteToken: string=''
   public persistentTokenIssuance: string=''
   public persistentTokenExpiry: string=''
+  public dashboardVersion: number =1
+  public dashboardV2GrafanaUrl: string=''
+  public variablesVersion: number =1
 
   // 0|null -> no Cmd, 1 -> Import, 2 -> Export, 3 -> Export in progress, 4 -> Archive in progress, 5 -> Export done
   // 10 -> Unarchive in progress, 11 -> Import in progress, 12 -> Import done

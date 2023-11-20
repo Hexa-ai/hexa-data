@@ -35,6 +35,10 @@ export default class UpdateUserValidator {
       rules.minLength(1),
       rules.maxLength(2)
     ]),
+
+    dashboardVersion: schema.number.optional(),
+    dashboardV2GrafanaUrl: schema.string.optional(),
+    variablesVersion: schema.number.optional(),
   })
   public messages = {}
 }
