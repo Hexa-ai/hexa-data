@@ -13,21 +13,9 @@ export default class StoreProjectValidator {
       size: '2mb',
       extnames: ['jpg', 'png'],
     }),
-    l1:schema.string({}, [
-      rules.alpha(),
-      rules.minLength(1),
-      rules.maxLength(2)
-    ]),
-    l2:schema.string({}, [
-      rules.alpha(),
-      rules.minLength(1),
-      rules.maxLength(2)
-    ]),
-    l3:schema.string({}, [
-      rules.alpha(),
-      rules.minLength(1),
-      rules.maxLength(2)
-    ]),
+    l1: schema.string({}, [rules.alpha(), rules.minLength(1), rules.maxLength(2)]),
+    l2: schema.string({}, [rules.alpha(), rules.minLength(1), rules.maxLength(2)]),
+    l3: schema.string({}, [rules.alpha(), rules.minLength(1), rules.maxLength(2)]),
   })
   public messages = {}
 }

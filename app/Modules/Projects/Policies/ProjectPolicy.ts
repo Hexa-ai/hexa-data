@@ -12,23 +12,23 @@ export default class ProjectPolicy extends BasePolicy {
     return await user.hasProjectRights(projectId)
   }
   public async store(user: User) {
-    if(await user.countProjects()<user.maxProjects){
+    if ((await user.countProjects()) < user.maxProjects) {
       return true
     } else {
       return false
     }
   }
   public async update(user: User, projectId: number) {
-    return await user.hasProjectRights(projectId,Role.EDITOR)
+    return await user.hasProjectRights(projectId, Role.EDITOR)
   }
   public async destroy() {
     return false
   }
   public async import(user: User, projectId: number) {
-    return await user.hasProjectRights(projectId,Role.EDITOR)
+    return await user.hasProjectRights(projectId, Role.EDITOR)
   }
   public async export(user: User, projectId: number) {
-    return await user.hasProjectRights(projectId,Role.EDITOR)
+    return await user.hasProjectRights(projectId, Role.EDITOR)
   }
   public async invitation() {
     return false

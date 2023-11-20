@@ -17,7 +17,7 @@ export default class AppendUsersValidator {
             where: { project_id: this.refs.projectId },
           }),
         ]),
-        role: schema.number()
+        role: schema.number(),
       })
     ),
   })

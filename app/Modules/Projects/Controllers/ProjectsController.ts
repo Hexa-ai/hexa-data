@@ -5,7 +5,7 @@ import UpdateProjectValidator from '../Validators/UpdateProjectValidator'
 import ImportArchiveValidator from '../Validators/ImportArchiveValidator'
 import Project from '../Models/Project'
 import Warp10Service from '../../../Services/Warp10Service'
-import crypto from "crypto"
+import crypto from 'crypto'
 import Drive from '@ioc:Adonis/Core/Drive'
 import { string } from '@ioc:Adonis/Core/Helpers'
 import { DateTime } from 'luxon'
@@ -199,7 +199,7 @@ export default class ProjectsController {
     // TODO: Push this two lines if we want to put the new versions by default
     // project.dashboardVersion = 2
     // project.variablesVersion = 2
-    
+
     await project.save()
 
     project.uuid = crypto.randomUUID()

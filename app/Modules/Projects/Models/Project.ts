@@ -1,5 +1,16 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column, manyToMany, ManyToMany, beforeDelete, scope, HasMany, hasMany, belongsTo, BelongsTo } from '@ioc:Adonis/Lucid/Orm'
+import {
+  BaseModel,
+  column,
+  manyToMany,
+  ManyToMany,
+  beforeDelete,
+  scope,
+  HasMany,
+  hasMany,
+  belongsTo,
+  BelongsTo,
+} from '@ioc:Adonis/Lucid/Orm'
 import { attachment, AttachmentContract } from '@ioc:Adonis/Addons/AttachmentLite'
 import User from '../../Users/Models/User'
 import Warp10Service from '../../../Services/Warp10Service'
@@ -8,7 +19,6 @@ import Device from '../../Datas/Models/Device'
 import Tag from '../../Datas/Models/Tag'
 
 export default class Project extends BaseModel {
-
   public serializeExtras = true
 
   public static visibleTo = scope((query, user: User) => {
@@ -19,9 +29,11 @@ export default class Project extends BaseModel {
     /**
      * Non-admin users can only view their affected projects
      */
-    query.join('project_user', 'project_user.project_id', '=', 'projects.id')
-    .where('project_user.user_id', user.id)
-    .select('*').from('projects')
+    query
+      .join('project_user', 'project_user.project_id', '=', 'projects.id')
+      .where('project_user.user_id', user.id)
+      .select('*')
+      .from('projects')
   })
 
   /**
@@ -31,24 +43,21 @@ export default class Project extends BaseModel {
    */
   @beforeDelete()
   public static async removeGts(project: Project) {
-
     await project.load('tags')
 
     for (const tag of project.tags) {
       new TagsService(project!).deleteGts([tag])
     }
-
   }
   public static async preComputeUrls(models: Project | Project[]) {
     if (Array.isArray(models)) {
       await Promise.all(models.map((model) => this.preComputeUrls(model)))
       return
     }
-    if (models.photo!=null){
+    if (models.photo != null) {
       await models.photo?.computeUrl()
       models.photo!.url = <string>await models.photo?.getSignedUrl()
     }
-
   }
 
   @column({ isPrimary: true })
@@ -92,7 +101,7 @@ export default class Project extends BaseModel {
 
   @column()
   public persistentWriteToken: string
-  
+
   @column.dateTime()
   public persistentTokenExpiry: DateTime
 
@@ -110,7 +119,7 @@ export default class Project extends BaseModel {
 
   @column()
   public dashboardV2GrafanaUrl: string
-  
+
   @column()
   public variablesVersion: number = 1
 
@@ -122,7 +131,7 @@ export default class Project extends BaseModel {
   @column()
   public ImportExportParameters: string
 
-  @column({columnName:'photo'})
+  @column({ columnName: 'photo' })
   public photoFileInfo: string
 
   @column()
@@ -146,13 +155,13 @@ export default class Project extends BaseModel {
   public devices: HasMany<typeof Device>
 
   @column()
-  public ownerId: number;
+  public ownerId: number
 
-  @belongsTo(()=>User,{
-    foreignKey:'ownerId',
-    localKey:'id'
+  @belongsTo(() => User, {
+    foreignKey: 'ownerId',
+    localKey: 'id',
   })
-  public owner:BelongsTo<typeof User>
+  public owner: BelongsTo<typeof User>
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
@@ -160,17 +169,27 @@ export default class Project extends BaseModel {
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
 
-
   /**
-  * Update all project token for WARP10.
-  *
-  * @returns bool true
-  */
+   * Update all project token for WARP10.
+   *
+   * @returns bool true
+   */
   public static async updateAllTokens() {
-    const projects = await Project.query().select('id','uuid','name','readToken','writeToken','tokenIssuance','tokenExpiry')
-    for( const project of projects) {
+    const projects = await Project.query().select(
+      'id',
+      'uuid',
+      'name',
+      'readToken',
+      'writeToken',
+      'tokenIssuance',
+      'tokenExpiry'
+    )
+    for (const project of projects) {
       const warp10Service = new Warp10Service()
-      const tokens = await warp10Service.generatePairOfTokens({projectUuid:project.uuid}, project.uuid)
+      const tokens = await warp10Service.generatePairOfTokens(
+        { projectUuid: project.uuid },
+        project.uuid
+      )
 
       project.readToken = tokens.readToken
       project.writeToken = tokens.writeToken
@@ -182,25 +201,25 @@ export default class Project extends BaseModel {
     return true
   }
 
-  public static async ownerHasDevicesCredits(projectId: number){
+  public static async ownerHasDevicesCredits(projectId: number) {
     const project = await Project.findOrFail(projectId)
     await project.load('owner')
-    await project.load('devices');
+    await project.load('devices')
 
-    return project.devices.length < project.owner.maxDevices;
+    return project.devices.length < project.owner.maxDevices
   }
-  public static async ownerHasVariablesCredits(projectId: number){
-    const project = await Project.findOrFail(projectId);
+  public static async ownerHasVariablesCredits(projectId: number) {
+    const project = await Project.findOrFail(projectId)
     await project.load('owner')
-    const variables = await project.related('tags').query().where('type',1);
+    const variables = await project.related('tags').query().where('type', 1)
 
-    return variables.length < project.owner.maxVariables;
+    return variables.length < project.owner.maxVariables
   }
-  public static async ownerHasMacrosCredits(projectId: number){
-    const project = await Project.findOrFail(projectId);
+  public static async ownerHasMacrosCredits(projectId: number) {
+    const project = await Project.findOrFail(projectId)
     await project.load('owner')
-    const macros = await project.related('tags').query().where('type',3);
+    const macros = await project.related('tags').query().where('type', 3)
 
-    return macros.length < project.owner.maxMacros;
+    return macros.length < project.owner.maxMacros
   }
 }

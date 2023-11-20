@@ -3,7 +3,7 @@ import BaseSchema from '@ioc:Adonis/Lucid/Schema'
 export default class extends BaseSchema {
   protected tableName = 'projects'
 
-  public async up () {
+  public async up() {
     this.schema.alterTable('projects', (table) => {
       table.timestamp('persistent_token_expiry').nullable().after('token_uuid')
       table.timestamp('persistent_token_issuance').nullable().after('token_uuid')
@@ -12,7 +12,7 @@ export default class extends BaseSchema {
     })
   }
 
-  public async down () {
+  public async down() {
     this.schema.alterTable('projects', (table) => {
       table.dropColumn('persistent_token_expiry')
       table.dropColumn('persistent_token_issuance')
