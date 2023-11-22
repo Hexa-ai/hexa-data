@@ -16,6 +16,7 @@ import Role from '../Contracts/enums/Roles'
 import User from 'App/Modules/Users/Models/User'
 import { Queue } from '@ioc:Setten/Queue'
 import Event from '@ioc:Adonis/Core/Event'
+import GrafanaService from 'App/Services/GrafanaService'
 
 export default class ProjectsController {
   /**
@@ -248,9 +249,6 @@ export default class ProjectsController {
     project!.l1 = payload.l1
     project!.l2 = payload.l2
     project!.l3 = payload.l3
-    project!.dashboardVersion = payload.dashboardVersion || 1
-    project!.dashboardV2GrafanaUrl = payload.dashboardV2GrafanaUrl || ''
-    project!.variablesVersion = payload.variablesVersion || 1
     if (photo !== null) {
       project!.photo = Attachment.fromFile(photo)
     }
@@ -387,6 +385,43 @@ export default class ProjectsController {
     project.persistentWriteToken = tokens.writeToken
     project.persistentTokenIssuance = tokens.issuance
     project.persistentTokenExpiry = tokens.expiry
+
+    await project.save()
+  }
+
+  /**
+   * Update the dashboard type of the project.
+   * GET projects/:id/updateDashboardType
+   *
+   * @param {request} RequestContract
+   * @param {params} Record<string, any>
+   * @param {response} ResponseContract
+   */
+  public async updateDashboardType({ params, bouncer, request }: HttpContextContract) {
+    // await bouncer.with('ProjectPolicy').authorize('generatePersistentTokens')
+    const project = await Project.findOrFail(params.id)
+    const dashboardType = request.input('dashboardType')
+    const dashboardGrafanaUrl = request.input('dashboardGrafanaUrl')
+    let dashboardGrafanaReadPassword = request.input('dashboardGrafanaReadPassword')
+    let dashboardGrafanaWritePassword = request.input('dashboardGrafanaWritePassword')
+
+    if (dashboardType === 'GRAFANA' && dashboardGrafanaUrl !== '') {
+      const grafanaService = new GrafanaService(dashboardGrafanaUrl)
+      dashboardGrafanaReadPassword = await grafanaService.configureReader(
+        dashboardGrafanaReadPassword
+      )
+      dashboardGrafanaWritePassword = await grafanaService.configureWriter(
+        dashboardGrafanaWritePassword
+      )
+    } else {
+      dashboardGrafanaReadPassword = ''
+      dashboardGrafanaWritePassword = ''
+    }
+
+    project.dashboardType = dashboardType
+    project.dashboardGrafanaUrl = dashboardGrafanaUrl
+    project.dashboardGrafanaReadPassword = dashboardGrafanaReadPassword
+    project.dashboardGrafanaWritePassword = dashboardGrafanaWritePassword
 
     await project.save()
   }

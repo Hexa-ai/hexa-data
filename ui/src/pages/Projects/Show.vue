@@ -167,59 +167,73 @@
                 </div>
               </div>
               <div class="mt-6 grid grid-cols-6 gap-y-6 gap-x-4">
-                <div class="col-span-6 md:col-span-1">
-                  <InputField
-                    class="basis-1/2"
-                    title="Version du tableau de bord"
-                    v-model="refProject!.dashboardVersion"
-                    :isRequired="false"
-                    :isDisabled="!edit"
-                    :type="FieldType.SELECT"
-                    :choices="[
-                      'version 1 - tableau de bord intégré (legacy)',
-                      'version 2 - intégration de Grafana (par défaut)',
-                    ]"
-                    :index-is-value="false"
-                    :values="[1, 2]"
-                  ></InputField>
-                </div>
-              </div>
-              <div
-                class="mt-6 grid grid-cols-6 gap-y-6 gap-x-4"
-                v-show="refProject!.dashboardVersion == 2"
-              >
-                <div class="col-span-6 md:col-span-2">
-                  <InputField
-                    class="basis-1/2"
-                    title="URL de l'instance Grafana"
-                    v-model="refProject!.dashboardV2GrafanaUrl"
-                    :isRequired="false"
-                    :isDisabled="!edit"
-                    :type="FieldType.TEXT"
-                  ></InputField>
-                </div>
-              </div>
-              <div class="mt-6 grid grid-cols-6 gap-y-6 gap-x-4">
-                <div class="col-span-6 md:col-span-1">
-                  <InputField
-                    class="basis-1/2"
-                    title="Version des variables"
-                    v-model="refProject!.variablesVersion"
-                    :isRequired="false"
-                    :isDisabled="!edit"
-                    :type="FieldType.SELECT"
-                    :choices="[
-                      'version 1 - déclaration manuelle (legacy)',
-                      'version 2 - déportée dans Warp10 (par défaut)',
-                    ]"
-                    :index-is-value="false"
-                    :values="[1, 2]"
-                  ></InputField>
-                </div>
-              </div>
-              <div class="mt-6 grid grid-cols-6 gap-y-6 gap-x-4">
                 <div class="col-span-6 md:col-span-2">
                   <Btn v-if="edit" :text="$t('save')" :primary="true" class=""></Btn>
+                </div>
+              </div>
+              <div class="mt-5 pt-5 sm:border-t sm:border-gray-200">
+                <h3 class="text-lg italic leading-6 font-medium text-gray-900">
+                  Type de tableau de bord
+                </h3>
+                <p class="mt-1 text-sm text-gray-500">
+                  Modifier le type du tableau de bord et gérer les paramètres.
+                </p>
+              </div>
+              <div class="mt-6 grid grid-cols-6 gap-y-6 gap-x-4">
+                <div class="col-span-6 md:col-span-1">
+                  <InputField
+                    title="Type de tableau de bord"
+                    v-model="refProject!.dashboardType"
+                    :choices="[
+                      'Dashboard intégré - Legacy',
+                      'Dashboard externe avancé - Version 2',
+                    ]"
+                    :isDisabled="!edit"
+                    :values="['LEGACY', 'GRAFANA']"
+                    :type="FieldType.SELECT"
+                  ></InputField>
+                </div>
+              </div>
+              <div v-if="refProject!.dashboardType === 'GRAFANA'">
+                <div class="mt-6 grid grid-cols-6 gap-y-6 gap-x-4">
+                  <div class="col-span-6 md:col-span-2">
+                    <InputField
+                      title="URL de l'instance externe"
+                      v-model="refProject!.dashboardGrafanaUrl"
+                      :isRequired="false"
+                      :isDisabled="!edit"
+                      :type="FieldType.TEXT"
+                    ></InputField>
+                  </div>
+                </div>
+                <div class="mt-6 grid grid-cols-6 gap-y-6 gap-x-4">
+                  <div class="col-span-6 md:col-span-2">
+                    <InputField
+                      :title="'Mot de passe du compte de lecture (' + grafanaReadUser + ')'"
+                      v-model="refProject!.dashboardGrafanaReadPassword"
+                      placeholder="Laisser vide pour générer un mot de passe aléatoire"
+                      :isRequired="false"
+                      :isDisabled="!edit"
+                      :type="FieldType.TEXT"
+                    ></InputField>
+                  </div>
+                </div>
+                <div class="mt-6 grid grid-cols-6 gap-y-6 gap-x-4">
+                  <div class="col-span-6 md:col-span-2">
+                    <InputField
+                      :title="'Mot de passe du compte d\'écriture (' + grafanaWriteUser + ')'"
+                      v-model="refProject!.dashboardGrafanaWritePassword"
+                      placeholder="Laisser vide pour générer un mot de passe aléatoire"
+                      :isRequired="false"
+                      :isDisabled="!edit"
+                      :type="FieldType.TEXT"
+                    ></InputField>
+                  </div>
+                </div>
+              </div>
+              <div class="mt-6 grid grid-cols-6 gap-y-6 gap-x-4">
+                <div class="col-span-6 md:col-span-2">
+                  <Btn v-if="edit" type="button" @click="updateDashboardType" :text="$t('save')" :primary="true" class=""></Btn>
                 </div>
               </div>
               <div class="mt-5 pt-5 sm:border-t sm:border-gray-200">
@@ -238,6 +252,7 @@
                       title="Durée de validité des tokens"
                       v-model="persistentTokensDuration"
                       :choices="[
+                        '6 mois',
                         '1 an',
                         '2 ans',
                         '3 ans',
@@ -250,8 +265,8 @@
                         '10 ans',
                       ]"
                       :values="[
-                        31536000, 63072000, 94608000, 126144000, 157680000, 189216000, 220752000,
-                        252288000, 283824000, 315360000,
+                        15768000, 31536000, 63072000, 94608000, 126144000, 157680000, 189216000,
+                        220752000, 252288000, 283824000, 315360000,
                       ]"
                       :type="FieldType.SELECT"
                     ></InputField>
@@ -260,6 +275,7 @@
                 <div class="mt-6 grid grid-cols-6 gap-y-6 gap-x-4">
                   <div class="col-span-6 md:col-span-2">
                     <Btn
+                      type="button"
                       :text="refProject!.persistentTokenIssuance ? 'Regénérer les tokens persistants' : 'Générer des tokens persistants'"
                       :primary="true"
                       @click="generatePersistentTokens"
@@ -399,7 +415,7 @@
 
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
-import { inject, ref } from 'vue'
+import { inject, ref, computed } from 'vue'
 import BaseLayoutVue from '../../layouts/BaseLayout.vue'
 import { useRouter, useRoute } from 'vue-router'
 import Store from './../../store/Store'
@@ -415,6 +431,13 @@ import ExportCurl from '../../components/ExportCurl.vue'
 import ImportCurl from '../../components/ImportCurl.vue'
 import MiniLoader from '../../components/MiniLoader.vue'
 import axios from 'axios'
+
+const grafanaWriteUser = computed(() => {
+  return import.meta.env.VITE_GRAFANA_WRITE_USER
+})
+const grafanaReadUser = computed(() => {
+  return import.meta.env.VITE_GRAFANA_READ_USER
+})
 
 const router = useRouter()
 const route = useRoute()
@@ -469,6 +492,12 @@ async function generatePersistentTokens() {
   edit.value = false
   init()
 }
+async function updateDashboardType() {
+  await crudController.post(route.params.id + '/updateDashboardType', refProject.value)
+  edit.value = false
+  init()
+}
+
 async function exportSettings() {
   crudController.get('export/' + route.params.id)
   refExportSettingsEnabled.value = true

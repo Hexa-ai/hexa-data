@@ -22,6 +22,10 @@ Route.group(() => {
         'projects/:id/generatePersistentTokens',
         'ProjectsController.generatePersistentTokens'
       ).namespace('App/Modules/Projects/Controllers')
+      Route.post(
+        'projects/:id/updateDashboardType',
+        'ProjectsController.updateDashboardType'
+      ).namespace('App/Modules/Projects/Controllers')
     }).middleware(['auth'])
   }).prefix('/v1')
 }).prefix('/api')
