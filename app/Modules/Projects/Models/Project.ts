@@ -115,13 +115,16 @@ export default class Project extends BaseModel {
   public tokenExpiry: DateTime
 
   @column()
-  public dashboardVersion: number = 1
+  public dashboardType: string
 
   @column()
-  public dashboardV2GrafanaUrl: string
+  public dashboardGrafanaUrl: string
 
   @column()
-  public variablesVersion: number = 1
+  public dashboardGrafanaWritePassword: string
+
+  @column()
+  public dashboardGrafanaReadPassword: string
 
   // 0|null -> no Cmd, 1 -> Import, 2 -> Export, 3 -> Export in progress, 4 -> Archive in progress, 5 -> Export done
   // 10 -> Unarchive in progress, 11 -> Import in progress, 12 -> Import done
