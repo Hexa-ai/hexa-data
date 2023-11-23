@@ -1,0 +1,50 @@
+<template>
+  <div>
+    <BaseLayoutVue :pages-bread-crumb="refBreadCrumb">
+      <template v-slot:default>
+        <iframe v-if="hasCookies" class="w-full h-full" :src="props.project.dashboardGrafanaUrl"></iframe>
+        <div v-else>
+          Chargement du tableau de bord ...
+        </div>
+      </template>
+    </BaseLayoutVue>
+  </div>
+</template>
+
+<style>
+/* FIX FOR FULL HEIGHT DOCUMENT IFRAME */
+#pageBody {
+  height: 100%;
+}
+</style>
+
+<script setup lang="ts">
+import axios from '@/services/axios'
+import Cookies from 'js-cookie'
+import { ref, PropType } from 'vue'
+import ProjectModel from './../../../Models/ProjectModel'
+import BaseLayoutVue from '../../../layouts/BaseLayout.vue'
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n()
+
+const props = defineProps({
+  project: {
+    type: Object as PropType<ProjectModel>,
+    required: true,
+  },
+})
+
+const hasCookies = ref(false)
+
+axios.get('/projects/' + props.project.id + '/grafana/cookies').then((response) => {
+  Cookies.set('grafana_session', response.data.grafana_session)
+  Cookies.set('grafana_session_expiry', response.data.grafana_session_expiry)
+  hasCookies.value = true
+})
+
+const refBreadCrumb = ref([
+  { name: 'Projects', href: '/projects' },
+  { name: props.project.name, href: '/projects/' + props.project.id },
+  { name: t('navigation.dashboards'), href: '/projects/' + props.project.id + '/dashboards' },
+])
+</script>

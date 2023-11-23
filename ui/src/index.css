@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-.tooltip{
+.tooltip {
   visibility: hidden;
   position: absolute;
 }
@@ -12,7 +12,7 @@
 }
 
 #headlessui-portal-root {
-  position: absolute ;
+  position: absolute;
   z-index: 1000;
 }
 
@@ -26,12 +26,11 @@ body::-webkit-scrollbar {
   display: none;
 }
 #appNavTop {
-  z-index:100;
+  z-index: 100;
 }
 #appNavTool {
   z-index: 90;
 }
 #appBody {
-  z-index:10;
+  z-index: 10;
 }
-

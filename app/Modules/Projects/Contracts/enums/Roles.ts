@@ -4,7 +4,6 @@ enum Role {
 
   // Can edit project
   EDITOR = 2,
-
 }
 
 export default Role

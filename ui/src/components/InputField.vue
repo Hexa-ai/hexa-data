@@ -48,6 +48,7 @@
         <input
           v-if="type == FieldType.TEXT"
           :required="isRequired"
+          :placeholder="placeholder"
           class="peer block w-full pr-10 disabled:opacity-75 border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
           type="text"
           :value="modelValue"
@@ -179,6 +180,7 @@
         <input
           v-if="type == FieldType.TEXT"
           :required="isRequired"
+          :placeholder="placeholder"
           class="peer block w-full pr-10 disabled:opacity-75 border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
           type="text"
           :value="modelValue"
@@ -268,6 +270,7 @@ const props = defineProps<{
   local?: string
   selectText?: string
   cancelText?: string
+  placeholder?: string
 }>()
 let errorMsg = ref('')
 

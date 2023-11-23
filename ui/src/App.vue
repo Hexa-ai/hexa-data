@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { provide, inject } from "vue";
-import store from "./store/index";
-import axios from "axios"
-import Loader from "./components/Loader.vue";
+import { provide, inject } from 'vue'
+import store from './store/index'
+import axios from 'axios'
+import Loader from './components/Loader.vue'
 import { useRouter, useRoute } from 'vue-router'
 import logo from './assets/logo-hexa-data.svg'
 const route = useRoute()
@@ -14,32 +14,32 @@ provide('store', store)
 
 const publicAppSettingsInitialized = ref(false)
 const { t } = useI18n()
-let appMenuBgBodyColor: string =''
-let appMenuBgOverBodyColor: string =''
-let appMenuBgCurrentBodyColor: string =''
-let appMenuFontBodyColor: string =''
-let appMenuFontOverBodyColor: string =''
-let appMenuBgHeaderColor: string =''
-let appMenuFontHeaderColor: string =''
-let appPrimaryColor: string =''
-let appPrimaryOverColor: string =''
-let appPrimaryFocusRingColor: string =''
+let appMenuBgBodyColor: string = ''
+let appMenuBgOverBodyColor: string = ''
+let appMenuBgCurrentBodyColor: string = ''
+let appMenuFontBodyColor: string = ''
+let appMenuFontOverBodyColor: string = ''
+let appMenuBgHeaderColor: string = ''
+let appMenuFontHeaderColor: string = ''
+let appPrimaryColor: string = ''
+let appPrimaryOverColor: string = ''
+let appPrimaryFocusRingColor: string = ''
 
 getPublicAppSettings()
 checkUserProfile()
 
 async function checkUserProfile() {
-  if (localStorage.getItem("authUser") != undefined) {
-    store.authUser = JSON.parse(localStorage.getItem("authUser")!)
+  if (localStorage.getItem('authUser') != undefined) {
+    store.authUser = JSON.parse(localStorage.getItem('authUser')!)
     i18n.locale.value = store.authUser.lang
-
   } else {
     router.push('/login')
   }
 }
 async function getPublicAppSettings() {
-  axios.get(window.location.origin + import.meta.env.VITE_API_PREFIX + '/publicAppSettings')
-    .then(response => {
+  axios
+    .get(window.location.origin + import.meta.env.VITE_API_PREFIX + '/publicAppSettings')
+    .then((response) => {
       store.publicAppSettings.appCompanyName = response.data.appCompanyName
       store.publicAppSettings.appCompanyAdress = response.data.appCompanyAdress
       store.publicAppSettings.appCompanyPhoneNumber = response.data.appCompanyPhoneNumber
@@ -82,25 +82,21 @@ async function getPublicAppSettings() {
 
       publicAppSettingsInitialized.value = true
 
-
-
       const favicons = document.getElementsByClassName('favicon')
-      if (store.publicAppSettings.appIcon!=null){
+      if (store.publicAppSettings.appIcon != null) {
         favicons[0].setAttribute('href', store.publicAppSettings.appIcon['url'])
         favicons[1].setAttribute('href', store.publicAppSettings.appIcon['url'])
       } else {
         favicons[0].setAttribute('href', logo)
         favicons[1].setAttribute('href', logo)
       }
-
     })
 }
-
 </script>
 
 <template>
   <Loader v-if="publicAppSettingsInitialized == false"></Loader>
-  <router-view v-if="publicAppSettingsInitialized == true" :key="route.path"/>
+  <router-view v-if="publicAppSettingsInitialized == true" :key="route.path" />
 </template>
 
 <style>

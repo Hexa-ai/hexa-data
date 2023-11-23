@@ -76,7 +76,8 @@
                   v-model="refUser!.number"
                   :isRequired="false"
                   :isDisabled="!refEdit"
-                  :type="FieldType.TEXT">
+                  :type="FieldType.TEXT"
+                >
                 </InputField>
               </div>
             </div>

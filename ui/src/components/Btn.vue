@@ -1,5 +1,5 @@
 <template>
-  <button type="submit" :class="[primary==true ? 'primary text-white' : 'border-gray-300 text-gray-500 ', 'flex justify-center space-x-2 py-2 px-3 border rounded-md shadow-sm text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 has-tooltip']">
+  <button :type="type ?? 'submit'" :class="[primary==true ? 'primary text-white' : 'border-gray-300 text-gray-500 ', 'flex justify-center space-x-2 py-2 px-3 border rounded-md shadow-sm text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 has-tooltip']">
     <slot></slot>
     <StopIcon v-if="action=='stop'" class="flex-shrink-0 h-5 w-5 text-gray-400"></StopIcon>
     <PlayIcon v-if="action=='play'" class="flex-shrink-0 h-5 w-5 text-gray-400"></PlayIcon>
@@ -24,6 +24,7 @@
     text:string,
     primary:boolean
     action?:any
+    type?:'button'|'submit'|'reset'
   }>()
 
 </script>

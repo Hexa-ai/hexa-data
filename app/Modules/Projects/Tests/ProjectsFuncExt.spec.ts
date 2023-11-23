@@ -16,11 +16,11 @@ test.group('---> Projects routes with external service <---', (group) => {
     await Database.rollbackGlobalTransaction()
   })
   group.timeout(6000)
-  test("Create", async (assert) => {
+  test('Create', async (assert) => {
     const token = (await createLoggedUser(BASE_URL)).token
     const response = await supertest(BASE_URL)
-      .post("/projects")
-      .set("Authorization", token)
+      .post('/projects')
+      .set('Authorization', token)
       .field('name', 'Test Project')
       .field('description', 'A project for functionnality testing purpose')
       .field('adress', '10 Rue du camion 22340 Saint-Augustin')
@@ -29,21 +29,21 @@ test.group('---> Projects routes with external service <---', (group) => {
       .field('l3', 'de')
       .field('lat', 48.515720000000044)
       .field('long', -2.7638999999999783)
-      .set("Authorization", token)
-      .expect("Content-Type", /json/)
+      .set('Authorization', token)
+      .expect('Content-Type', /json/)
       .expect(201)
 
-      assert.equal(response.body.name, 'Test Project')
-      assert.equal(response.body.description, 'A project for functionnality testing purpose')
-      assert.equal(response.body.adress, '10 Rue du camion 22340 Saint-Augustin')
-      assert.equal(response.body.lat, 48.515720000000044)
-      assert.equal(response.body.long, -2.7638999999999783)
+    assert.equal(response.body.name, 'Test Project')
+    assert.equal(response.body.description, 'A project for functionnality testing purpose')
+    assert.equal(response.body.adress, '10 Rue du camion 22340 Saint-Augustin')
+    assert.equal(response.body.lat, 48.515720000000044)
+    assert.equal(response.body.long, -2.7638999999999783)
   })
-  test("Update all token", async (assert) => {
+  test('Update all token', async (assert) => {
     const token = (await createLoggedUser(BASE_URL)).token
     await supertest(BASE_URL)
-      .post("/projects")
-      .set("Authorization", token)
+      .post('/projects')
+      .set('Authorization', token)
       .field('name', 'Test Project')
       .field('description', 'A project for functionnality testing purpose')
       .field('adress', '10 Rue du camion 22340 Saint-Augustin')
@@ -52,8 +52,8 @@ test.group('---> Projects routes with external service <---', (group) => {
       .field('l3', 'de')
       .field('lat', 48.515720000000044)
       .field('long', -2.7638999999999783)
-      .set("Authorization", token)
-      .expect("Content-Type", /json/)
+      .set('Authorization', token)
+      .expect('Content-Type', /json/)
       .expect(201)
 
     const done = await Project.updateAllTokens()
@@ -66,8 +66,9 @@ test.group('---> Projects routes with external service <---', (group) => {
     // Create 1 fake project
     await ProjectFactory.createMany(1)
 
-    await supertest(BASE_URL).post("/projects/import/1")
-      .set("Authorization", token)
+    await supertest(BASE_URL)
+      .post('/projects/import/1')
+      .set('Authorization', token)
       .attach('archive', 'app/Modules/Projects/Tests/files/projetTestDev.zip')
       .expect(200)
   })
@@ -77,9 +78,10 @@ test.group('---> Projects routes with external service <---', (group) => {
     // Create 1 fake project
     const project = await ProjectFactory.createMany(1)
 
-    const response = await supertest(BASE_URL).get("/projects/export/1")
-      .set("Authorization", token)
-      .expect("Content-Type", /json/)
+    const response = await supertest(BASE_URL)
+      .get('/projects/export/1')
+      .set('Authorization', token)
+      .expect('Content-Type', /json/)
       .expect(200)
 
     assert.equal(response.body.name, project[0].name)

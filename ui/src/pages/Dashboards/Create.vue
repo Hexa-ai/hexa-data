@@ -53,9 +53,9 @@
             <div v-if="!refEditorSwitch" class="ml-5 mr-5 space-y-8 divide-y divide-gray-200">
               <div>
                 <div>
-                  <h3
-                    class="text-lg leading-6 font-medium text-gray-900"
-                  >{{ $t('tags.parameters') }}</h3>
+                  <h3 class="text-lg leading-6 font-medium text-gray-900">
+                    {{ $t('tags.parameters') }}
+                  </h3>
                   <p class="mt-1 text-sm text-gray-500"></p>
                 </div>
                 <div class="mt-6 grid grid-cols-6 gap-y-6 gap-x-4">
@@ -109,8 +109,8 @@
                       v-model="refDashboard!.type"
                       :isRequired="false"
                       :isDisabled="false"
-                      :choices="['Discovery','Continuum']"
-                      :values="['Discovery','Continuum']"
+                      :choices="['Discovery', 'Continuum']"
+                      :values="['Discovery', 'Continuum']"
                       :index-is-value="false"
                       :type="FieldType.SELECT"
                     ></InputField>
@@ -177,24 +177,22 @@
 
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
-import { computed, inject, onBeforeUpdate, ref, watch } from 'vue';
+import { computed, inject, onBeforeUpdate, ref, watch } from 'vue'
 import BaseLayoutVue from '../../layouts/BaseLayout.vue'
 import { useRouter, useRoute } from 'vue-router'
 import Store from '../../store/Store'
 import Btn from '../../components/Btn.vue'
-import InputField from '../../components/InputField.vue';
-import InputFieldColorPicker from '../../components/InputFieldColorPicker.vue';
-import FieldType from '../../Contracts/FieldType';
+import InputField from '../../components/InputField.vue'
+import InputFieldColorPicker from '../../components/InputFieldColorPicker.vue'
+import FieldType from '../../Contracts/FieldType'
 import { BaseController, ModelCollection } from '../../Classes/BaseController'
 import { RouteService } from '../../Classes/RouteService'
-import { onUpdated } from "vue";
+import { onUpdated } from 'vue'
 import InputSwitch from '../../components/InputSwitch.vue'
 import { SunIcon, PlayIcon } from '@heroicons/vue/outline'
 import ComfirmPopup from '../../components/ComfirmPopup.vue'
-import DashboardModel from '../../Models/DashboardModel';
-import InputFieldColorPickerVue from '../../components/InputFieldColorPicker.vue';
-
-
+import DashboardModel from '../../Models/DashboardModel'
+import InputFieldColorPickerVue from '../../components/InputFieldColorPicker.vue'
 
 const router = useRouter()
 const route = useRoute()
@@ -207,32 +205,35 @@ const warp10Url = import.meta.env.VITE_BACKEND_API_URL + '/warp10/' + route.para
 const refDashboard = ref(new DashboardModel())
 
 const refEdit = ref(false)
-const refScript = ref("")
+const refScript = ref('')
 const refComfirmOpen = ref(false)
 const refEditorSwitch = ref(false)
 const refEditorLight = ref(false)
-const refConfig = ref('{"buttons" : {"class": ""},"execButton" : {"class": " m-3 border-gray-300 text-gray-500 flex justify-center py-2 px-4 border rounded-md shadow-sm text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 bg-white","label": "Executer"},"datavizButton" : {"class": "","label": "Visualize"},"hover" : false,"readOnly" : ' + String(!refEdit.value) + ',"messageClass" : "","errorClass" : "","editor": {"quickSuggestionsDelay": 10,"quickSuggestions": true,"tabSize": 2,"minLineNumber": 50,"enableDebug": false}}')
+const refConfig = ref(
+  '{"buttons" : {"class": ""},"execButton" : {"class": " m-3 border-gray-300 text-gray-500 flex justify-center py-2 px-4 border rounded-md shadow-sm text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 bg-white","label": "Executer"},"datavizButton" : {"class": "","label": "Visualize"},"hover" : false,"readOnly" : ' +
+    String(!refEdit.value) +
+    ',"messageClass" : "","errorClass" : "","editor": {"quickSuggestionsDelay": 10,"quickSuggestions": true,"tabSize": 2,"minLineNumber": 50,"enableDebug": false}}'
+)
 const refStared = ref(false)
-const options = { 'httpHeaders': { 'Authorization': 'Bearer ' + store.authUser.token.token } }
-let ws = ref("")
+const options = { httpHeaders: { Authorization: 'Bearer ' + store.authUser.token.token } }
+let ws = ref('')
 
 const refAppBodyHeight = ref(0)
 const refAppBodyWidth = ref(0)
-
 
 onUpdated(() => {
   getAppBodySize()
   window.addEventListener('resize', function (event) {
     getAppBodySize()
-  });
-  document.getElementById('wsEditor')!.addEventListener('warpViewEditorWarpscriptChanged', function (e: any) {
-    refDashboard.value.body = e.detail
-  });
-
+  })
+  document
+    .getElementById('wsEditor')!
+    .addEventListener('warpViewEditorWarpscriptChanged', function (e: any) {
+      refDashboard.value.body = e.detail
+    })
 })
 
 let AppBodyHeight = computed(() => refAppBodyHeight.value - 20)
-
 
 function getAppBodySize() {
   refAppBodyHeight.value = document.getElementById('appBody')!.clientHeight
@@ -241,28 +242,29 @@ function getAppBodySize() {
 
 const crudController = new BaseController<DashboardModel>(
   '/dashboards',
-  [{name:'imgBg'}],
+  [{ name: 'imgBg' }],
   refDashboard.value,
-  store.authUser.token['token'],
+  store.authUser.token['token']
 )
 
 let imageToUpload = crudController.getFileList('imgBg')
 
 crudController.setRoutePrefix(routePrefix)
 
-
 function createDashboard() {
   const dashDiv = document.getElementById('hexa-dashboard')
 
   console.log(dashDiv)
-
-
 }
-
 
 async function init() {
   await RouteService.getProjectInfos(route)
-  breadCrumb.value = [{ name: 'Projects', href: '/projects' }, { name: store.currentProject.name, href: routePrefix }, { name: t('navigation.dashboards'), href: routePrefix + '/dashboards' }, { name: t('dashboards.newDashboard') , href: routePrefix + '/dashboards/create' }]
+  breadCrumb.value = [
+    { name: 'Projects', href: '/projects' },
+    { name: store.currentProject.name, href: routePrefix },
+    { name: t('navigation.dashboards'), href: routePrefix + '/dashboards' },
+    { name: t('dashboards.newDashboard'), href: routePrefix + '/dashboards/create' },
+  ]
 }
 async function create() {
   refDashboard.value.stared = Number(refStared.value)
@@ -273,7 +275,7 @@ function toggleEdit() {
   if (refEditorSwitch.value == true) {
     refEditorSwitch.value = false
     refEdit.value = !refEdit.value
-    setTimeout(() => refEditorSwitch.value = true, 100)
+    setTimeout(() => (refEditorSwitch.value = true), 100)
   } else {
     refEdit.value = !refEdit.value
   }
@@ -281,8 +283,10 @@ function toggleEdit() {
   if (refEdit.value == false) {
     init()
   }
-  refConfig.value = '{"buttons" : {"class": ""},"execButton" : {"class": " m-3 border-gray-300 text-gray-500 flex justify-center py-2 px-4 border rounded-md shadow-sm text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 bg-white","label": "Executer"},"datavizButton" : {"class": "","label": "Visualize"},"hover" : true,"readOnly" : ' + String(!refEdit.value) + ',"messageClass" : "","errorClass" : "","editor": {"quickSuggestionsDelay": 10,"quickSuggestions": true,"tabSize": 2,"minLineNumber": 50,"enableDebug": false}}'
-
+  refConfig.value =
+    '{"buttons" : {"class": ""},"execButton" : {"class": " m-3 border-gray-300 text-gray-500 flex justify-center py-2 px-4 border rounded-md shadow-sm text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 bg-white","label": "Executer"},"datavizButton" : {"class": "","label": "Visualize"},"hover" : true,"readOnly" : ' +
+    String(!refEdit.value) +
+    ',"messageClass" : "","errorClass" : "","editor": {"quickSuggestionsDelay": 10,"quickSuggestions": true,"tabSize": 2,"minLineNumber": 50,"enableDebug": false}}'
 }
 function remove() {
   refEdit.value = false
