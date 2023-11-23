@@ -15,15 +15,73 @@ export default class GrafanaService {
     }
   }
 
-  public endpoint: string
-  public headers: AxiosRequestHeaders
+  protected endpoint: string
+  protected headers: AxiosRequestHeaders
 
+  /**
+   * Configure the reader user into the grafana instance with the given password. If the password is not provided, a random one will be generated
+   *
+   * @param {string} password The password, can be omitted for generating a new one
+   * @return {*}  {Promise<string>} The password used to configure the user
+   */
   public async configureReader(password) {
     return await this.configureUser(Env.get('GRAFANA_READ_USER'), password, 'Viewer')
   }
 
+  /**
+   * Configure the writer user into the grafana instance with the given password. If the password is not provided, a random one will be generated
+   *
+   * @param {string} password The password, can be omitted for generating a new one
+   * @return {*}  {Promise<string>} The password used to configure the user
+   */
   public async configureWriter(password) {
     return await this.configureUser(Env.get('GRAFANA_WRITE_USER'), password, 'Editor')
+  }
+
+  /**
+   * Get the cookies for the reader user
+   * @param {string} password The password of the reader user (stored on the project)
+   * @return {*}  {Promise<{ grafana_session: string; grafana_session_expiry: string }>}
+   */
+  public async getReaderCookies(password) {
+    return await this.getCookies(Env.get('GRAFANA_READ_USER'), password)
+  }
+
+  /**
+   * Get the cookies for the writer user
+   * @param {string} password The password of the writer user (stored on the project)
+   * @return {*}  {Promise<{ grafana_session: string; grafana_session_expiry: string }>}
+   */
+  public async getWriterCookies(password) {
+    return await this.getCookies(Env.get('GRAFANA_WRITE_USER'), password)
+  }
+
+  protected async getCookies(user, password) {
+    const response = await axios.post(
+      this.endpoint + '/login',
+      { user, password },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          'User-Agent':
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36',
+        },
+      }
+    )
+
+    const cookies = {}
+    ;(response.headers['set-cookie'] || []).forEach((cookie) => {
+      const cookieParts = cookie.split(';')
+      cookieParts.forEach((part) => {
+        const [name, value] = part.trim().split('=')
+        cookies[name] = value
+      })
+    })
+
+    return {
+      grafana_session: cookies['grafana_session'],
+      grafana_session_expiry: cookies['grafana_session_expiry'],
+    }
   }
 
   protected async configureUser(name, password, role) {
