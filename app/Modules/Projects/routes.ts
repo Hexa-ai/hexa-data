@@ -26,6 +26,10 @@ Route.group(() => {
         'projects/:id/updateDashboardType',
         'ProjectsController.updateDashboardType'
       ).namespace('App/Modules/Projects/Controllers')
+      Route.get(
+        'projects/:id/grafana/cookies',
+        'ProjectsController.getGrafanaCookies'
+      ).namespace('App/Modules/Projects/Controllers')
     }).middleware(['auth'])
   }).prefix('/v1')
 }).prefix('/api')

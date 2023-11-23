@@ -42,4 +42,10 @@ export default class ProjectPolicy extends BasePolicy {
   public async generatePersistentTokens() {
     return false
   }
+  public async updateDashboardType() {
+    return false
+  }
+  public async getGrafanaCookies(user: User, projectId: number) {
+    return await user.hasProjectRights(projectId)
+  }
 }

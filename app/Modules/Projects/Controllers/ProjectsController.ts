@@ -398,7 +398,7 @@ export default class ProjectsController {
    * @param {response} ResponseContract
    */
   public async updateDashboardType({ params, bouncer, request }: HttpContextContract) {
-    // await bouncer.with('ProjectPolicy').authorize('generatePersistentTokens')
+    await bouncer.with('ProjectPolicy').authorize('updateDashboardType')
     const project = await Project.findOrFail(params.id)
     const dashboardType = request.input('dashboardType')
     const dashboardGrafanaUrl = request.input('dashboardGrafanaUrl')
@@ -424,5 +424,31 @@ export default class ProjectsController {
     project.dashboardGrafanaWritePassword = dashboardGrafanaWritePassword
 
     await project.save()
+  }
+
+  /**
+   * Retrieve the grafana cookie session for the logged user.
+   * GET projects/:id/grafana/cookies
+   *
+   * @param {request} RequestContract
+   * @param {params} Record<string, any>
+   * @param {response} ResponseContract
+   */
+  public async getGrafanaCookies({ params, bouncer, request, response, auth }: HttpContextContract) {
+    await bouncer.with('ProjectPolicy').authorize('getGrafanaCookies', params.id);
+    const project = await Project.findOrFail(params.id);
+
+    if (auth.user && project.dashboardType === 'GRAFANA' && project.dashboardGrafanaUrl !== '') {
+      const grafanaService = new GrafanaService(project.dashboardGrafanaUrl);
+
+      if (await auth.user.hasProjectRights(project.id, Role.EDITOR)) {
+        return await grafanaService.getWriterCookies(project.dashboardGrafanaWritePassword);
+      } else {
+        return await grafanaService.getReaderCookies(project.dashboardGrafanaReadPassword);
+      }
+    }
+
+    // Return a 400 error if no user or the dashboard type is not GRAFANA
+    return response.status(400)
   }
 }
