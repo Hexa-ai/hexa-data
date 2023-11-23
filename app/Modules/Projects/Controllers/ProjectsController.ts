@@ -430,11 +430,10 @@ export default class ProjectsController {
    * Retrieve the grafana cookie session for the logged user.
    * GET projects/:id/grafana/cookies
    *
-   * @param {request} RequestContract
    * @param {params} Record<string, any>
    * @param {response} ResponseContract
    */
-  public async getGrafanaCookies({ params, bouncer, request, response, auth }: HttpContextContract) {
+  public async getGrafanaCookies({ params, bouncer, response, auth }: HttpContextContract) {
     await bouncer.with('ProjectPolicy').authorize('getGrafanaCookies', params.id);
     const project = await Project.findOrFail(params.id);
 
