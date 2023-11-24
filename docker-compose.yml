@@ -1,13 +1,13 @@
 version: '3.4'
 services:
   hd-service:
-  image: ghcr.io/hexa-ai/hexa-data:latest
-  ports:
-  - 3333:3333
-  restart: unless-stopped
-  volumes:
-  - .env:/home/node/app/.env
-  - v_hexa-data:/home/node/app/storage
+    image: ghcr.io/hexa-ai/hexa-data:latest
+    ports:
+      - 3333:3333
+    restart: unless-stopped
+    volumes:
+      - .env:/home/node/app/.env
+      - v_hexa-data:/home/node/app/storage
   queue-redis-service:
     image: redis:${QUEUE_REDIS_VERSION}
     restart: always
@@ -46,7 +46,7 @@ services:
       - 3000:18083
 
     extra_hosts:
-      - "host.docker.internal:host-gateway"
+      - 'host.docker.internal:host-gateway'
     restart: unless-stopped
   warp10-service:
     image: warp10io/warp10:${WARP10_VERSION}
@@ -75,14 +75,14 @@ services:
       - warpfleet.macros.ttl=${WARPFLEET_MACROS_TTL}
       - warpscript.extension.http=io.warp10.script.ext.http.HttpWarpScriptExtension
       - warpscript.http.authentication.required=true
-      - "warpscript.http.host.patterns=.*"
+      - 'warpscript.http.host.patterns=.*'
       - max.encoder.size=1000000
     volumes:
       - v_warp10:/data
     ports:
       - 8080:8080
     extra_hosts:
-      - "host.docker.internal:host-gateway"
+      - 'host.docker.internal:host-gateway'
     restart: unless-stopped
   warpfleetsynchronizer-service:
     build:
