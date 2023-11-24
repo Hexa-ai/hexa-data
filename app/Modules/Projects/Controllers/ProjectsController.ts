@@ -430,7 +430,6 @@ export default class ProjectsController {
    * Retrieve the grafana cookie session for the logged user.
    * GET projects/:id/grafana/cookies
    *
-   * @param {request} RequestContract
    * @param {params} Record<string, any>
    * @param {response} ResponseContract
    */
