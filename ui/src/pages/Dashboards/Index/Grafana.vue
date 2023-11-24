@@ -2,7 +2,12 @@
   <div>
     <BaseLayoutVue :pages-bread-crumb="refBreadCrumb" :show-tool-bar="false">
       <template v-slot:default>
-        <iframe v-if="hasCookies" class="w-full h-full mt-[-40px]" :src="props.project.dashboardGrafanaUrl"></iframe>
+        <iframe
+          v-if="hasCookies"
+          class="w-full mt-[-40px]"
+          style="height: calc(100% + 40px)"
+          :src="props.project.dashboardGrafanaUrl"
+        ></iframe>
         <div v-else>
           <!-- TODO: add loader instead of text -->
           Chargement du tableau de bord ...
@@ -36,10 +41,20 @@ const props = defineProps({
 })
 
 const hasCookies = ref(false)
+const grafanaCookieDomain = import.meta.env.VITE_GRAFANA_COOKIE_DOMAIN
 
 axios.get('/projects/' + props.project.id + '/grafana/cookies').then((response) => {
-  Cookies.set('grafana_session', response.data.grafana_session)
-  Cookies.set('grafana_session_expiry', response.data.grafana_session_expiry)
+  if (grafanaCookieDomain && grafanaCookieDomain !== '') {
+    Cookies.set('grafana_session', response.data.grafana_session, {
+      domain: grafanaCookieDomain.startsWith('.') ? grafanaCookieDomain : '.' + grafanaCookieDomain,
+    })
+    Cookies.set('grafana_session_expiry', response.data.grafana_session_expiry, {
+      domain: grafanaCookieDomain.startsWith('.') ? grafanaCookieDomain : '.' + grafanaCookieDomain,
+    })
+  } else {
+    Cookies.set('grafana_session', response.data.grafana_session)
+    Cookies.set('grafana_session_expiry', response.data.grafana_session_expiry)
+  }
   hasCookies.value = true
 })
 
