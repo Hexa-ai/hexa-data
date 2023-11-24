@@ -1,9 +1,10 @@
 <template>
   <div>
-    <BaseLayoutVue :pages-bread-crumb="refBreadCrumb">
+    <BaseLayoutVue :pages-bread-crumb="refBreadCrumb" :show-tool-bar="false">
       <template v-slot:default>
-        <iframe v-if="hasCookies" class="w-full h-full" :src="props.project.dashboardGrafanaUrl"></iframe>
+        <iframe v-if="hasCookies" class="w-full h-full mt-[-40px]" :src="props.project.dashboardGrafanaUrl"></iframe>
         <div v-else>
+          <!-- TODO: add loader instead of text -->
           Chargement du tableau de bord ...
         </div>
       </template>
