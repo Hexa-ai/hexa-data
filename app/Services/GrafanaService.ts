@@ -56,6 +56,14 @@ export default class GrafanaService {
     return await this.getCookies(Env.get('GRAFANA_WRITE_USER'), password)
   }
 
+  /**
+   * Get the cookies for the admin user
+   * @return {*}  {Promise<{ grafana_session: string; grafana_session_expiry: string }>}
+   */
+  public async getAdminCookies() {
+    return await this.getCookies(Env.get('GRAFANA_ADMIN_USER'), Env.get('GRAFANA_ADMIN_PASSWORD'))
+  }
+
   protected async getCookies(user, password) {
     const response = await axios.post(
       this.endpoint + '/login',
@@ -82,6 +90,21 @@ export default class GrafanaService {
       grafana_session: cookies['grafana_session'],
       grafana_session_expiry: cookies['grafana_session_expiry'],
     }
+  }
+
+  public async configureOrg() {
+    const response = await axios.put(
+      this.endpoint + '/api/org/preferences',
+      {
+        theme: 'light',
+        timezone: 'utc',
+      },
+      {
+        headers: this.headers,
+      }
+    )
+
+    return response.data
   }
 
   protected async configureUser(name, password, role) {

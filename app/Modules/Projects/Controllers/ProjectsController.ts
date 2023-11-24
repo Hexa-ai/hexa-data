@@ -434,16 +434,20 @@ export default class ProjectsController {
    * @param {response} ResponseContract
    */
   public async getGrafanaCookies({ params, bouncer, response, auth }: HttpContextContract) {
-    await bouncer.with('ProjectPolicy').authorize('getGrafanaCookies', params.id);
-    const project = await Project.findOrFail(params.id);
+    await bouncer.with('ProjectPolicy').authorize('getGrafanaCookies', params.id)
+    const project = await Project.findOrFail(params.id)
 
     if (auth.user && project.dashboardType === 'GRAFANA' && project.dashboardGrafanaUrl !== '') {
-      const grafanaService = new GrafanaService(project.dashboardGrafanaUrl);
+      const grafanaService = new GrafanaService(project.dashboardGrafanaUrl)
 
-      if (await auth.user.hasProjectRights(project.id, Role.EDITOR)) {
-        return await grafanaService.getWriterCookies(project.dashboardGrafanaWritePassword);
+      await grafanaService.configureOrg()
+
+      if (auth.user.isAdmin) {
+        return await grafanaService.getAdminCookies()
+      } else if (await auth.user.hasProjectRights(project.id, Role.EDITOR)) {
+        return await grafanaService.getWriterCookies(project.dashboardGrafanaWritePassword)
       } else {
-        return await grafanaService.getReaderCookies(project.dashboardGrafanaReadPassword);
+        return await grafanaService.getReaderCookies(project.dashboardGrafanaReadPassword)
       }
     }
 
