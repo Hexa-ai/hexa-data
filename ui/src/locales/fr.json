@@ -14,6 +14,9 @@
   "close": "Fermer",
   "initTemplate": "Initialiser le modèle",
   "other": "Autre",
+  "months": "mois",
+  "year": "an",
+  "years": "ans",
   "loader": {
     "msg": "Chargement"
   },
@@ -153,7 +156,21 @@
     "typeAndSizeTextSettingsFile": "ZIP jusqu'à 5MB",
     "comfirmImport": "Importer",
     "importSettingsInfos": "Attention l'import écrasera les paramètres actuels de ce projet",
-    "title": "Titre"
+    "title": "Titre",
+    "dashboardTypeTitle": "Type de tableau de bord",
+    "dashboardTypeDescription": "Modifier le type du tableau de bord et gérer les paramètres.",
+    "dashboardType": "Type de tableau de bord",
+    "dashboardTypeLegacy": "Dashboard intégré - Legacy",
+    "dashboardTypeGrafana": "Dashboard externe avancé - Version 2",
+    "dashboardGrafanaUrl": "URL de l'instance externe",
+    "dashboardGrafanaReaderPassword": "Mot de passe du compte de lecture : ",
+    "dashboardGrafanaWriterPassword": "Mot de passe du compte d'écriture : ",
+    "letEmptyForPasswordGeneration": "Laisser vide pour générer un mot de passe aléatoire",
+    "persistentTokenTitle": "Tokens persistants",
+    "persistentTokenDescription": "Créer et gérer des tokens peristants pour accéder directement à la base de données Warp10.",
+    "persistentTokenDuration": "Durée de validité des tokens",
+    "persistentTokenRegenerate": "Regénérer les tokens persistants",
+    "persistentTokenGenerate": "Générer des tokens persistants"
   },
   "projectIndex": {
     "open": "Ouvrir",
