@@ -43,7 +43,6 @@ const props = defineProps({
 const hasCookies = ref(false)
 const grafanaCookieDomain = import.meta.env.VITE_GRAFANA_COOKIE_DOMAIN
 
-/*
 axios.get('/projects/' + props.project.id + '/grafana/cookies').then((response) => {
   if (grafanaCookieDomain && grafanaCookieDomain !== '') {
     Cookies.set('grafana_session', response.data.grafana_session, {
@@ -58,7 +57,6 @@ axios.get('/projects/' + props.project.id + '/grafana/cookies').then((response) 
   }
   hasCookies.value = true
 })
-*/
 
 const refBreadCrumb = ref([
   { name: 'Projects', href: '/projects' },
