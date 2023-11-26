@@ -9,8 +9,7 @@
           :src="props.project.dashboardGrafanaUrl"
         ></iframe>
         <div v-else>
-          <!-- TODO: add loader instead of text -->
-          Chargement du tableau de bord ...
+          <Loader></Loader>
         </div>
       </template>
     </BaseLayoutVue>
@@ -30,6 +29,7 @@ import Cookies from 'js-cookie'
 import { ref, PropType } from 'vue'
 import ProjectModel from './../../../Models/ProjectModel'
 import BaseLayoutVue from '../../../layouts/BaseLayout.vue'
+import Loader from '@/components/Loader.vue'
 import { useI18n } from 'vue-i18n'
 const { t } = useI18n()
 
@@ -43,6 +43,7 @@ const props = defineProps({
 const hasCookies = ref(false)
 const grafanaCookieDomain = import.meta.env.VITE_GRAFANA_COOKIE_DOMAIN
 
+/*
 axios.get('/projects/' + props.project.id + '/grafana/cookies').then((response) => {
   if (grafanaCookieDomain && grafanaCookieDomain !== '') {
     Cookies.set('grafana_session', response.data.grafana_session, {
@@ -57,6 +58,7 @@ axios.get('/projects/' + props.project.id + '/grafana/cookies').then((response) 
   }
   hasCookies.value = true
 })
+*/
 
 const refBreadCrumb = ref([
   { name: 'Projects', href: '/projects' },
