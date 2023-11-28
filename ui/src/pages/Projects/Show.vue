@@ -173,20 +173,20 @@
               </div>
               <div class="mt-5 pt-5 sm:border-t sm:border-gray-200">
                 <h3 class="text-lg italic leading-6 font-medium text-gray-900">
-                  Type de tableau de bord
+                  {{ $t('projectInfos.dashboardTypeTitle') }}
                 </h3>
                 <p class="mt-1 text-sm text-gray-500">
-                  Modifier le type du tableau de bord et gérer les paramètres.
+                  {{ $t('projectInfos.dashboardTypeDescription') }}
                 </p>
               </div>
               <div class="mt-6 grid grid-cols-6 gap-y-6 gap-x-4">
                 <div class="col-span-6 md:col-span-1">
                   <InputField
-                    title="Type de tableau de bord"
+                    :title="$t('projectInfos.dashboardType')"
                     v-model="refProject!.dashboardType"
                     :choices="[
-                      'Dashboard intégré - Legacy',
-                      'Dashboard externe avancé - Version 2',
+                      $t('projectInfos.dashboardTypeLegacy'),
+                      $t('projectInfos.dashboardTypeGrafana'),
                     ]"
                     :isDisabled="!edit"
                     :values="['LEGACY', 'GRAFANA']"
@@ -198,7 +198,7 @@
                 <div class="mt-6 grid grid-cols-6 gap-y-6 gap-x-4">
                   <div class="col-span-6 md:col-span-2">
                     <InputField
-                      title="URL de l'instance externe"
+                      :title="$t('projectInfos.dashboardGrafanaUrl')"
                       v-model="refProject!.dashboardGrafanaUrl"
                       :isRequired="false"
                       :isDisabled="!edit"
@@ -209,9 +209,9 @@
                 <div class="mt-6 grid grid-cols-6 gap-y-6 gap-x-4">
                   <div class="col-span-6 md:col-span-2">
                     <InputField
-                      :title="'Mot de passe du compte de lecture (' + grafanaReadUser + ')'"
+                      :title="$t('projectInfos.dashboardGrafanaReaderPassword') + grafanaReadUser"
                       v-model="refProject!.dashboardGrafanaReadPassword"
-                      placeholder="Laisser vide pour générer un mot de passe aléatoire"
+                      :placeholder="$t('projectInfos.letEmptyForPasswordGeneration')"
                       :isRequired="false"
                       :isDisabled="!edit"
                       :type="FieldType.TEXT"
@@ -221,9 +221,9 @@
                 <div class="mt-6 grid grid-cols-6 gap-y-6 gap-x-4">
                   <div class="col-span-6 md:col-span-2">
                     <InputField
-                      :title="'Mot de passe du compte d\'écriture (' + grafanaWriteUser + ')'"
+                      :title="$t('projectInfos.dashboardGrafanaWriterPassword') + grafanaWriteUser"
                       v-model="refProject!.dashboardGrafanaWritePassword"
-                      placeholder="Laisser vide pour générer un mot de passe aléatoire"
+                      :placeholder="$t('projectInfos.letEmptyForPasswordGeneration')"
                       :isRequired="false"
                       :isDisabled="!edit"
                       :type="FieldType.TEXT"
@@ -238,31 +238,30 @@
               </div>
               <div class="mt-5 pt-5 sm:border-t sm:border-gray-200">
                 <h3 class="text-lg italic leading-6 font-medium text-gray-900">
-                  Tokens persistants
+                  {{ $t('projectInfos.persistentTokenTitle') }}
                 </h3>
                 <p class="mt-1 text-sm text-gray-500">
-                  Créer et gérer des tokens peristants pour accéder directement à la base de données
-                  Warp10.
+                  {{ $t('projectInfos.persistentTokenDescription') }}
                 </p>
               </div>
               <div v-if="edit">
                 <div class="mt-6 grid grid-cols-6 gap-y-6 gap-x-4">
                   <div class="col-span-6 md:col-span-2">
                     <InputField
-                      title="Durée de validité des tokens"
+                      :title="$t('projectInfos.persistentTokenDuration')"
                       v-model="persistentTokensDuration"
                       :choices="[
-                        '6 mois',
-                        '1 an',
-                        '2 ans',
-                        '3 ans',
-                        '4 ans',
-                        '5 ans',
-                        '6 ans',
-                        '7 ans',
-                        '8 ans',
-                        '9 ans',
-                        '10 ans',
+                        '6 ' + $t('months'),
+                        '1 ' + $t('year'),
+                        '2 ' + $t('years'),
+                        '3 ' + $t('years'),
+                        '4 ' + $t('years'),
+                        '5 ' + $t('years'),
+                        '6 ' + $t('years'),
+                        '7 ' + $t('years'),
+                        '8 ' + $t('years'),
+                        '9 ' + $t('years'),
+                        '10 ' + $t('years'),
                       ]"
                       :values="[
                         15768000, 31536000, 63072000, 94608000, 126144000, 157680000, 189216000,
@@ -276,7 +275,7 @@
                   <div class="col-span-6 md:col-span-2">
                     <Btn
                       type="button"
-                      :text="refProject!.persistentTokenIssuance ? 'Regénérer les tokens persistants' : 'Générer des tokens persistants'"
+                      :text="refProject!.persistentTokenIssuance ? $t('projectInfos.persistentTokenRegenerate') : $t('projectInfos.persistentTokenGenerate')"
                       :primary="true"
                       @click="generatePersistentTokens"
                     ></Btn>

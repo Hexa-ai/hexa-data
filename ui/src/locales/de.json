@@ -14,6 +14,9 @@
   "close": "Nah dran",
   "initTemplate": "Vorlage initialisieren",
   "other": "Andere",
+  "months": "Monate",
+  "year": "Jahr",
+  "years": "Jahre",
   "loader": {
     "msg": "Wird geladen"
   },
@@ -153,7 +156,21 @@
     "typeAndSizeTextSettingsFile": "ZIP bis zu 5 MB",
     "comfirmImport": "Importieren",
     "importSettingsInfos": "Achtung: Der Import überschreibt die aktuellen Einstellungen dieses Projekts",
-    "title": "Titel"
+    "title": "Titel",
+    "dashboardTypeTitle": "Dashboard-Typ",
+    "dashboardTypeDescription": "Ändern Sie den Typ des Dashboards und verwalten Sie die Einstellungen.",
+    "dashboardType": "Dashboard-Typ",
+    "dashboardTypeLegacy": "Integriertes Dashboard - Legacy",
+    "dashboardTypeGrafana": "Erweitertes externes Dashboard - Version 2",
+    "dashboardGrafanaUrl": "URL der externen Instanz",
+    "dashboardGrafanaReaderPassword": "Kennwort des Lesekontos: ",
+    "dashboardGrafanaWriterPassword": "Kennwort des Schreibkontos: ",
+    "letEmptyForPasswordGeneration": "Leer lassen, um ein zufälliges Kennwort zu generieren",
+    "persistentTokenTitle": "Persistente Tokens",
+    "persistentTokenDescription": "Erstellen und verwalten Sie persistente Tokens für den direkten Zugriff auf die Warp10-Datenbank.",
+    "persistentTokenDuration": "Gültigkeitsdauer des Tokens",
+    "persistentTokenRegenerate": "Persistente Tokens regenerieren",
+    "persistentTokenGenerate": "Persistente Tokens generieren"
   },
   "projectIndex": {
     "open": "Offen",
@@ -260,8 +277,8 @@
     },
     "javascript": "Javascript",
     "stop": "Stoppen",
-    "running":"Gestartet",
-    "stopped":"Gestoppt"
+    "running": "Gestartet",
+    "stopped": "Gestoppt"
   },
   "dashboards": {
     "imgBg": "Hintergrundbild",
