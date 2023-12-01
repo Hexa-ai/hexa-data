@@ -197,10 +197,6 @@ export default class ProjectsController {
     project.l2 = payload.l2
     project.l3 = payload.l3
 
-    // TODO: Push this two lines if we want to put the new versions by default
-    // project.dashboardVersion = 2
-    // project.variablesVersion = 2
-
     await project.save()
 
     project.uuid = crypto.randomUUID()
