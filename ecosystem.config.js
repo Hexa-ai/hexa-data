@@ -6,16 +6,11 @@ module.exports = {
       autorestart: true,
     },
     {
-      script: 'node ace mqtt:sub',
-      instances: 2,
+      script: 'node ace background',
       autorestart: true,
     },
     {
       script: 'node ace queue:listen',
-      autorestart: true,
-    },
-    {
-      script: 'node ace scripts:start',
       autorestart: true,
     },
     {
@@ -24,7 +19,10 @@ module.exports = {
     },
     {
       script: 'bin/erlenmeyer/run.js',
-      instances: 1,
+      autorestart: true,
+    },
+    {
+      script: 'bin/telegraf/run.js',
       autorestart: true,
     },
   ],
