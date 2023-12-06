@@ -114,6 +114,7 @@ const restartTelegraf = async () => {
   })
 
   subClient.subscribe('hd:bin:telegraf:push_projects', async (data) => {
+    clearInterval(interval)
     console.log('[REDIS]', 'Received message hd:bin:telegraf:push_projects:', data)
     const projects = JSON.parse(data)
     await removeAllProjectConfigs()
@@ -121,5 +122,8 @@ const restartTelegraf = async () => {
     await restartTelegraf()
   })
 
-  pubClient.publish('hd:bin:telegraf:pull_projects', '')
+  const interval = setInterval(() => {
+    console.log('[REDIS]', 'Sending message hd:bin:telegraf:pull_projects ...')
+    pubClient.publish('hd:bin:telegraf:pull_projects', '')
+  }, 5000)
 })()
