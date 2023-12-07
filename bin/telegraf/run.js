@@ -6,37 +6,41 @@ const { createClient } = require('redis')
 require('dotenv').config({ path: path.join(__dirname, '../../.env') })
 
 // Start Telegraf process
-const telegrafProcess = spawn(path.join(__dirname, 'telegraf'), [
-  '--config-directory',
-  path.join(__dirname, 'conf.d'),
-])
+let telegrafProcess = null
 
-telegrafProcess.on('spawn', () => console.log('[TELEGRAF] Process started successfully.'))
-
-// Process Telegraf's output
-telegrafProcess.stdout.on('data', (data) => {
-  data
-    .toString()
-    .split('\n')
-    .forEach((line) => {
-      if (line !== '') console.log('[TELEGRAF]', line)
-    })
-})
-
-// Process Telegraf's error output
-telegrafProcess.stderr.on('data', (data) => {
-  data
-    .toString()
-    .split('\n')
-    .forEach((line) => {
-      if (line !== '') console.error('[TELEGRAF]', line)
-    })
-})
-
-// Log Telegraf process closure
-telegrafProcess.on('close', (code) => {
-  console.log('[TELEGRAF]', 'Process ended with exit code', code)
-})
+const startTelegraf = () => {
+  telegrafProcess = spawn(path.join(__dirname, 'telegraf'), [
+    '--config-directory',
+    path.join(__dirname, 'conf.d'),
+  ])
+  
+  telegrafProcess.on('spawn', () => console.log('[TELEGRAF] Process started successfully.'))
+  
+  // Process Telegraf's output
+  telegrafProcess.stdout.on('data', (data) => {
+    data
+      .toString()
+      .split('\n')
+      .forEach((line) => {
+        if (line !== '') console.log('[TELEGRAF]', line)
+      })
+  })
+  
+  // Process Telegraf's error output
+  telegrafProcess.stderr.on('data', (data) => {
+    data
+      .toString()
+      .split('\n')
+      .forEach((line) => {
+        if (line !== '') console.error('[TELEGRAF]', line)
+      })
+  })
+  
+  // Log Telegraf process closure
+  telegrafProcess.on('close', (code) => {
+    console.log('[TELEGRAF]', 'Process ended with exit code', code)
+  })
+}
 
 // Update individual project configuration
 const updateProjectConfig = async (uuid, token) => {
@@ -68,6 +72,7 @@ const removeProjectConfig = async (uuid) => {
 const removeAllProjectConfigs = async () => {
   const files = await fs.readdir(path.join(__dirname, 'conf.d'))
   for (const file of files) {
+    if(file === '.gitignore') continue
     try {
       await fs.unlink(path.join(__dirname, 'conf.d', file))
     } catch (err) {
@@ -81,8 +86,11 @@ const removeAllProjectConfigs = async () => {
 let debounceTimer = null
 const restartTelegraf = async () => {
   clearTimeout(debounceTimer)
-  console.log('[RUN]', '(debounce) Scheduling SIGHUP message to telegraf process in 5 seconds.')
-  debounceTimer = setTimeout(() => telegrafProcess.kill('SIGHUP'), 5000)
+  console.log('[RUN]', '(debounce) Scheduling SIGHUP message to telegraf process in 2 seconds.')
+  debounceTimer = setTimeout(() => {
+    console.log('[RUN]', '(debounce) Sending SIGHUP message to telegraf process !')
+    telegrafProcess.kill('SIGHUP')
+  }, 2000)
 }
 
 // Initialize Redis clients and subscribe to channels
@@ -119,11 +127,14 @@ const restartTelegraf = async () => {
     const projects = JSON.parse(data)
     await removeAllProjectConfigs()
     projects.forEach(async ({ uuid, token }) => await updateProjectConfig(uuid, token))
-    await restartTelegraf()
+    if(telegrafProcess === null) startTelegraf()
+    else await restartTelegraf()
   })
 
-  const interval = setInterval(() => {
+  const sendProjectPullMessage = () => {
     console.log('[REDIS]', 'Sending message hd:bin:telegraf:pull_projects ...')
     pubClient.publish('hd:bin:telegraf:pull_projects', '')
-  }, 5000)
+  }
+  const interval = setInterval(sendProjectPullMessage, 1000)
+  sendProjectPullMessage()
 })()
