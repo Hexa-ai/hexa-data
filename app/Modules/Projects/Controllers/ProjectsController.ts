@@ -450,4 +450,19 @@ export default class ProjectsController {
     // Return a 400 error if no user or the dashboard type is not GRAFANA
     return response.status(400)
   }
+
+  /**
+   * Update the variable type of the project.
+   * GET projects/:id/updateVariableType
+   *
+   * @param {request} RequestContract
+   * @param {params} Record<string, any>
+   * @param {response} ResponseContract
+   */
+  public async updateVariableType({ params, bouncer, request }: HttpContextContract) {
+    await bouncer.with('ProjectPolicy').authorize('updateVariableType')
+    const project = await Project.findOrFail(params.id)
+    project.variableType = request.input('variableType')
+    await project.save()
+  }
 }

@@ -45,6 +45,9 @@ export default class ProjectPolicy extends BasePolicy {
   public async updateDashboardType() {
     return false
   }
+  public async updateVariableType() {
+    return false
+  }
   public async getGrafanaCookies(user: User, projectId: number) {
     return await user.hasProjectRights(projectId)
   }

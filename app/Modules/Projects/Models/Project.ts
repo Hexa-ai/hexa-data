@@ -135,6 +135,9 @@ export default class Project extends BaseModel {
   public dashboardType: string
 
   @column()
+  public variableType: string
+
+  @column()
   public dashboardGrafanaUrl: string
 
   @column()
