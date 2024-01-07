@@ -17,6 +17,7 @@ import User from 'App/Modules/Users/Models/User'
 import { Queue } from '@ioc:Setten/Queue'
 import Event from '@ioc:Adonis/Core/Event'
 import GrafanaService from 'App/Services/GrafanaService'
+import fs from 'fs/promises'
 
 export default class ProjectsController {
   /**
@@ -471,7 +472,13 @@ export default class ProjectsController {
 
     const warp10Service = new Warp10Service()
     const result = await warp10Service.searchGts(project.readToken, project.writeToken, request.qs().search ?? '*')
-    response.send(result)
+
+    const logs = (await fs.readFile('bin/telegraf/logs/' + project.uuid + '.log', 'utf-8'))
+
+    response.send({
+      ...result,
+      logs
+    })
   }
 
   public async deleteWarp10Variables({ params, request, response }: HttpContextContract) {

@@ -113,6 +113,11 @@
             </div>
           </div>
         </div>
+        
+        <div class="m-3" v-if="isEditor">
+          <h3 class="text-lg mt-6 mb-2 font-medium text-gray-600">Logs Telegraf</h3>
+          <pre class="text-gray-400">{{ logs }}</pre>
+        </div>
       </template>
     </BaseLayoutVue>
   </div>
@@ -154,6 +159,7 @@ const routePrefix = '/projects/' + route.params.id
 const { t } = useI18n()
 const loading = ref(true)
 const variables = ref([] as Array<Variable>)
+const logs = ref('')
 
 const breadCrumb = ref([
   { name: 'Projects', href: '/projects' },
@@ -270,9 +276,10 @@ setup()
  */
 const refSearch = ref('')
 const refresh = async () => {
-  variables.value = (
-    await axios.get('/projects/' + props.project.id + '/warp10/variables?search=' + refSearch.value)
-  ).data.result[0]
+  const result = await axios.get('/projects/' + props.project.id + '/warp10/variables?search=' + refSearch.value)
+
+  variables.value = result.data.result[0]
+  logs.value = result.data.logs
   loading.value = false
 }
 
