@@ -465,4 +465,24 @@ export default class ProjectsController {
     project.variableType = request.input('variableType')
     await project.save()
   }
+
+  public async getWarp10Variables({ params, request, response }: HttpContextContract) {
+    const project = await Project.findOrFail(params.id)
+
+    const warp10Service = new Warp10Service()
+    const result = await warp10Service.searchGts(project.readToken, project.writeToken, request.qs().search ?? '*')
+    response.send(result)
+  }
+
+  public async deleteWarp10Variables({ params, request, response }: HttpContextContract) {
+    const project = await Project.findOrFail(params.id)
+
+    const warp10Service = new Warp10Service()
+    await warp10Service.deleteGts([{
+      classname: params.name,
+      labels: request.qs().labels ?? {},
+    }], project.readToken, project.writeToken)
+    
+    response.send()
+  }
 }

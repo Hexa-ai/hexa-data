@@ -237,23 +237,23 @@
 </template>
 
 <script setup lang="ts">
-import VarWarpChart from './../../../components/VarWarpChart.vue'
+import VarWarpChart from '@/components/VarWarpChart.vue'
 import { useI18n } from 'vue-i18n'
 import { inject, ref, computed } from 'vue'
-import BaseLayoutVue from '../../../layouts/BaseLayout.vue'
+import BaseLayoutVue from '@/layouts/BaseLayout.vue'
 import { useRouter, useRoute } from 'vue-router'
-import Store from './../../../store/Store'
-import TagModel from './../../../Models/TagModel'
-import Btn from './../../../components/Btn.vue'
-import InputField from './../../../components/InputField.vue'
-import FieldType from './../../../Contracts/FieldType'
-import { BaseController, ModelCollection } from './../../../Classes/BaseController'
-import { RouteService } from '../../../Classes/RouteService'
-import ComfirmPopup from '../../../components/ComfirmPopup.vue'
-import DeviceModel from '../../../Models/DeviceModel'
-import RoleType from '../../../Contracts/RoleType'
-import { Utils } from '../../../Classes/Utils'
-import Combobox from '../../../components/Combobox.vue'
+import Store from '@/store/Store'
+import TagModel from '@/Models/TagModel'
+import Btn from '@/components/Btn.vue'
+import InputField from '@/components/InputField.vue'
+import FieldType from '@/Contracts/FieldType'
+import { BaseController, ModelCollection } from '@/Classes/BaseController'
+import { RouteService } from '@/Classes/RouteService'
+import ComfirmPopup from '@/components/ComfirmPopup.vue'
+import DeviceModel from '@/Models/DeviceModel'
+import RoleType from '@/Contracts/RoleType'
+import { Utils } from '@/Classes/Utils'
+import Combobox from '@/components/Combobox.vue'
 
 const router = useRouter()
 const route = useRoute()

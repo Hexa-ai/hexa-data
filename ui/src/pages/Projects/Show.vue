@@ -254,7 +254,7 @@
                       $t('projectInfos.variableTypeGrafana'),
                     ]"
                     :isDisabled="!edit"
-                    :values="['LEGACY', 'GRAFANA']"
+                    :values="['LEGACY', 'WARP10']"
                     :type="FieldType.SELECT"
                   ></InputField>
                 </div>

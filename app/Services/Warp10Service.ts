@@ -184,7 +184,25 @@ export default class Warp10Service {
       Logger.error('DeleteGts Exec error:' + error.toString())
       return errorResult
     }
+  }
+  public async searchGts(readToken: string, writeToken: string, search: string): Promise<WsExecResult | WsError> {
+    let file = Warp10Service.wsLoadTemplate('searchGts.mc2')
+    file = Warp10Service.wsAppendToken(file, readToken, 'readToken')
+    file = Warp10Service.wsAppendToken(file, writeToken, 'writeToken')
+    file = Warp10Service.wsAppendVar(file, 'search', search)
+    let result: WsExecResult
 
+    try {
+      result = <WsExecResult>await this.warp.exec(file)
+      return result
+    } catch (error) {
+      const errorResult: WsError = {
+        description: 'listGts Exec error',
+        content: error.toString()
+      }
+      Logger.error('listGts Exec error:' + error.toString())
+      return errorResult
+    }
   }
   public static wsLoadTemplate(templateName: string): string {
     return readFileSync(Env.get('WARP10_TEMPLATES_PATH') + templateName, 'utf-8')
