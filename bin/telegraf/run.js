@@ -46,6 +46,7 @@ const startTelegraf = () => {
 const updateProjectConfig = async (uuid, token) => {
   const configContent = (await fs.readFile(path.join(__dirname, './config_template.conf'), 'utf8'))
     .replace(/\$\{(\w+)\}/g, (_, name) => (name in process.env ? process.env[name] : _))
+    .replace(/\${PROJECT_LOG_FILE}/g, path.join(__dirname, './logs/' + uuid + '.log'))
     .replace(/\${PROJECT_UUID}/g, uuid)
     .replace(/\${PROJECT_TOKEN}/g, token)
     .replace(/\${_MQTT_ENDPOINT_TCP}/g, process.env.MQTT_ENDPOINT.replace('http://', 'tcp://'))
@@ -86,10 +87,15 @@ const removeAllProjectConfigs = async () => {
 let debounceTimer = null
 const restartTelegraf = async () => {
   clearTimeout(debounceTimer)
-  console.log('[RUN]', '(debounce) Scheduling SIGHUP message to telegraf process in 2 seconds.')
+  console.log('[RUN]', '(debounce) Scheduling telegraf process restart/reload in 2 seconds.')
   debounceTimer = setTimeout(() => {
-    console.log('[RUN]', '(debounce) Sending SIGHUP message to telegraf process !')
-    telegrafProcess.kill('SIGHUP')
+    if(telegrafProcess.exitCode !== null) {
+      console.log('[RUN]', '(debounce) Spawning another telegraf process !')
+      startTelegraf()
+    } else {
+      console.log('[RUN]', '(debounce) Sending SIGHUP message to telegraf process !')
+      telegrafProcess.kill('SIGHUP')
+    }
   }, 2000)
 }
 
