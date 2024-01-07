@@ -34,7 +34,7 @@
                     class="inline-block w-3/5 p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white border-2 border-gray-200 shadow-xl rounded-2xl"
                   >
                     <DialogTitle as="h3" class="text-lg font-medium leading-6 text-gray-900"
-                      >Affichage de la variable {{ showVariableTarget.c }}</DialogTitle
+                      >Historique {{ showVariableTarget.c }}</DialogTitle
                     >
                     <div class="mt-2">
                       <VarWarpChart
@@ -88,7 +88,7 @@
             <div class="flex flex-col w-1/2 md:w-1/3" style="height: 72px">
               <Bar
                 id="my-chart-id"
-                style="width: 100%; height: 100%"
+                style="width: 100%; height: 52px; margin-top: 10px; border-bottom: 1px solid #eee;"
                 :options="sparklines"
                 :data="{
                   datasets: [
@@ -242,9 +242,7 @@ const setup = () => {
     animation: false,
     scales: {
       y: {
-        grid: {
-          offset: false,
-        },
+        display: false
       },
       x: {
         type: 'time',
