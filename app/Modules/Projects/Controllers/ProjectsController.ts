@@ -485,11 +485,11 @@ export default class ProjectsController {
     const project = await Project.findOrFail(params.id)
 
     const warp10Service = new Warp10Service()
-    await warp10Service.deleteGts([{
+    const result = await warp10Service.deleteGts([{
       classname: params.name,
       labels: request.qs().labels ?? {},
     }], project.readToken, project.writeToken)
     
-    response.send()
+    response.send(result)
   }
 }
