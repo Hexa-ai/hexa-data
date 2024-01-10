@@ -21,7 +21,7 @@ Route.group(() => {
     // Utility routes
     Route.get('projects/:id/grafana/cookies', 'ProjectsController.getGrafanaCookies')
     Route.get('projects/:id/warp10/variables', 'ProjectsController.getWarp10Variables')
-    Route.delete('projects/:id/warp10/variables/:name', 'ProjectsController.deleteWarp10Variables')
+    Route.post('projects/:id/warp10/variables/delete', 'ProjectsController.deleteWarp10Variables')
   }).middleware(['auth'])
 })
   .prefix('/api/v1')

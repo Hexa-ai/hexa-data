@@ -17,7 +17,7 @@
         <TransitionRoot appear :show="showVariableVisible" as="template">
           <Dialog as="div" @close="closeShowVariable" :initialFocus="showVariableFocusRef">
             <div ref="showVariableFocusRef" class="fixed inset-0 z-10 overflow-y-auto">
-              <div class=" px-4 text-center">
+              <div class="px-4 text-center">
                 <span class="inline-block h-screen align-middle" aria-hidden="true">&#8203;</span>
 
                 <TransitionChild
@@ -86,13 +86,25 @@
             </div>
 
             <div class="flex flex-col w-1/2 md:w-1/3" style="height: 72px">
-              <Bar
+              <Line
                 id="my-chart-id"
-                style="width: 100%; height: 52px; margin-top: 10px; border-bottom: 1px solid #eee;"
+                style="
+                  width: 100%;
+                  height: 52px;
+                  margin-top: 10px;
+                  border-bottom: 1px solid #eee;
+                  border-left: 1px solid #eee;
+                  border-right: 1px solid #eee;
+                "
                 :options="sparklines"
                 :data="{
                   datasets: [
                     {
+                      borderColor: 'rgb(32, 41, 55)',
+                      borderWidth: 2,
+                      pointRadius: 0,
+                      pointHitRadius: 4,
+                      spanGaps: true,
                       data: variable.v.map((v) => {
                         return { x: dayjs(v[0] / 1000).format('YYYY-MM-DDTHH:mm:ss'), y: v[1] }
                       }),
@@ -113,7 +125,7 @@
             </div>
           </div>
         </div>
-        
+
         <div class="m-3" v-if="isEditor">
           <h3 class="text-lg mt-6 mb-2 font-medium text-gray-600">Logs Telegraf</h3>
           <pre class="text-gray-400">{{ logs }}</pre>
@@ -141,15 +153,23 @@ import axios from '@/services/axios'
 import ComfirmPopup from '@/components/ComfirmPopup.vue'
 import dayjs from 'dayjs'
 
-import { Bar } from 'vue-chartjs'
+import { Line } from 'vue-chartjs'
 import 'chartjs-adapter-dayjs-4/dist/chartjs-adapter-dayjs-4.esm'
-import { Chart as ChartJS, Tooltip, BarElement, LinearScale, TimeScale } from 'chart.js'
-ChartJS.register(Tooltip, BarElement, LinearScale, TimeScale)
+import {
+  Chart as ChartJS,
+  LinearScale,
+  TimeScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+} from 'chart.js'
+ChartJS.register(LinearScale, TimeScale, PointElement, LineElement, Title, Tooltip)
 
 // Create new type interface for variable
 interface Variable {
   c: string
-  l: {[key: string]: string | number}
+  l: { [key: string]: string | number }
   v: Array<Array<[number, number]>>
 }
 
@@ -201,14 +221,14 @@ const askRemove = (variable: Variable) => {
 }
 const doRemove = async () => {
   if (removeVariable) {
-    // Convert variable.l labels into query string
-    const labels = Object.entries(removeVariable.l)
-      .map(([key, value]) => `${key}=${value}`)
-      .join('&')
-
-    await axios.delete(
-      '/projects/' + props.project.id + '/warp10/variables/' + removeVariable.c + '?' + labels
-    )
+    await axios.post('/projects/' + props.project.id + '/warp10/variables/delete', {
+      variables: [
+        {
+          classname: removeVariable.c,
+          labels: removeVariable.l,
+        },
+      ],
+    })
     askingRemove.value = false
     await refresh()
   }
@@ -238,11 +258,10 @@ const setup = () => {
   sparklines.value = {
     backgroundColor: '#202937',
     color: '#ffffff',
-    maxBarThickness: 6,
     animation: false,
     scales: {
       y: {
-        display: false
+        display: false,
       },
       x: {
         type: 'time',
@@ -274,7 +293,9 @@ setup()
  */
 const refSearch = ref('')
 const refresh = async () => {
-  const result = await axios.get('/projects/' + props.project.id + '/warp10/variables?search=' + refSearch.value)
+  const result = await axios.get(
+    '/projects/' + props.project.id + '/warp10/variables?search=' + refSearch.value
+  )
 
   variables.value = result.data.result[0]
   logs.value = result.data.logs

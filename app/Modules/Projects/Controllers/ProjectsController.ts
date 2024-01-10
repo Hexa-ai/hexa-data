@@ -471,13 +471,17 @@ export default class ProjectsController {
     const project = await Project.findOrFail(params.id)
 
     const warp10Service = new Warp10Service()
-    const result = await warp10Service.searchGts(project.readToken, project.writeToken, request.qs().search ?? '*')
+    const result = await warp10Service.searchGts(
+      project.readToken,
+      project.writeToken,
+      request.qs().search ?? '*'
+    )
 
-    const logs = (await fs.readFile('bin/telegraf/logs/' + project.uuid + '.log', 'utf-8'))
+    const logs = await fs.readFile('bin/telegraf/logs/' + project.uuid + '.log', 'utf-8')
 
     response.send({
       ...result,
-      logs
+      logs,
     })
   }
 
@@ -485,11 +489,12 @@ export default class ProjectsController {
     const project = await Project.findOrFail(params.id)
 
     const warp10Service = new Warp10Service()
-    const result = await warp10Service.deleteGts([{
-      classname: params.name,
-      labels: request.qs().labels ?? {},
-    }], project.readToken, project.writeToken)
-    
+    const result = await warp10Service.deleteGts(
+      request.input('variables'),
+      project.readToken,
+      project.writeToken
+    )
+
     response.send(result)
   }
 }
