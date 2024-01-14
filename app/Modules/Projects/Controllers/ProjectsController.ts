@@ -17,6 +17,7 @@ import User from 'App/Modules/Users/Models/User'
 import { Queue } from '@ioc:Setten/Queue'
 import Event from '@ioc:Adonis/Core/Event'
 import GrafanaService from 'App/Services/GrafanaService'
+import fs from 'fs/promises'
 
 export default class ProjectsController {
   /**
@@ -196,10 +197,6 @@ export default class ProjectsController {
     project.l1 = payload.l1
     project.l2 = payload.l2
     project.l3 = payload.l3
-
-    // TODO: Push this two lines if we want to put the new versions by default
-    // project.dashboardVersion = 2
-    // project.variablesVersion = 2
 
     await project.save()
 
@@ -453,5 +450,51 @@ export default class ProjectsController {
 
     // Return a 400 error if no user or the dashboard type is not GRAFANA
     return response.status(400)
+  }
+
+  /**
+   * Update the variable type of the project.
+   * GET projects/:id/updateVariableType
+   *
+   * @param {request} RequestContract
+   * @param {params} Record<string, any>
+   * @param {response} ResponseContract
+   */
+  public async updateVariableType({ params, bouncer, request }: HttpContextContract) {
+    await bouncer.with('ProjectPolicy').authorize('updateVariableType')
+    const project = await Project.findOrFail(params.id)
+    project.variableType = request.input('variableType')
+    await project.save()
+  }
+
+  public async getWarp10Variables({ params, request, response }: HttpContextContract) {
+    const project = await Project.findOrFail(params.id)
+
+    const warp10Service = new Warp10Service()
+    const result = await warp10Service.searchGts(
+      project.readToken,
+      project.writeToken,
+      request.qs().search ?? '*'
+    )
+
+    const logs = await fs.readFile('bin/telegraf/logs/' + project.uuid + '.log', 'utf-8')
+
+    response.send({
+      ...result,
+      logs,
+    })
+  }
+
+  public async deleteWarp10Variables({ params, request, response }: HttpContextContract) {
+    const project = await Project.findOrFail(params.id)
+
+    const warp10Service = new Warp10Service()
+    const result = await warp10Service.deleteGts(
+      request.input('variables'),
+      project.readToken,
+      project.writeToken
+    )
+
+    response.send(result)
   }
 }

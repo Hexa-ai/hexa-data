@@ -24,26 +24,14 @@
       "aliases": [],
       "flags": []
     },
-    "mqtt:sub": {
+    "background": {
       "settings": {
         "loadApp": true,
         "stayAlive": true
       },
-      "commandPath": "./commands/MqttSub",
-      "commandName": "mqtt:sub",
-      "description": "Start mqtt subcriber in charge to ingress data from MQTT to Warp10",
-      "args": [],
-      "aliases": [],
-      "flags": []
-    },
-    "scripts:start": {
-      "settings": {
-        "loadApp": true,
-        "stayAlive": true
-      },
-      "commandPath": "./commands/ScriptsStart",
-      "commandName": "scripts:start",
-      "description": "Start the user script runner",
+      "commandPath": "./commands/Background",
+      "commandName": "background",
+      "description": "Start the background services (sould be started only once)",
       "args": [],
       "aliases": [],
       "flags": []

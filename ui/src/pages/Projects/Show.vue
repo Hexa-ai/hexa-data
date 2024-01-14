@@ -238,6 +238,34 @@
               </div>
               <div class="mt-5 pt-5 sm:border-t sm:border-gray-200">
                 <h3 class="text-lg italic leading-6 font-medium text-gray-900">
+                  {{ $t('projectInfos.variableTypeTitle') }}
+                </h3>
+                <p class="mt-1 text-sm text-gray-500">
+                  {{ $t('projectInfos.variableTypeDescription') }}
+                </p>
+              </div>
+              <div class="mt-6 grid grid-cols-6 gap-y-6 gap-x-4">
+                <div class="col-span-6 md:col-span-1">
+                  <InputField
+                    :title="$t('projectInfos.variableType')"
+                    v-model="refProject!.variableType"
+                    :choices="[
+                      $t('projectInfos.variableTypeLegacy'),
+                      $t('projectInfos.variableTypeGrafana'),
+                    ]"
+                    :isDisabled="!edit"
+                    :values="['LEGACY', 'WARP10']"
+                    :type="FieldType.SELECT"
+                  ></InputField>
+                </div>
+              </div>
+              <div class="mt-6 grid grid-cols-6 gap-y-6 gap-x-4">
+                <div class="col-span-6 md:col-span-2">
+                  <Btn v-if="edit" type="button" @click="updateVariableType" :text="$t('save')" :primary="true" class=""></Btn>
+                </div>
+              </div>
+              <div class="mt-5 pt-5 sm:border-t sm:border-gray-200">
+                <h3 class="text-lg italic leading-6 font-medium text-gray-900">
                   {{ $t('projectInfos.persistentTokenTitle') }}
                 </h3>
                 <p class="mt-1 text-sm text-gray-500">
@@ -493,6 +521,11 @@ async function generatePersistentTokens() {
 }
 async function updateDashboardType() {
   await crudController.post(route.params.id + '/updateDashboardType', refProject.value)
+  edit.value = false
+  init()
+}
+async function updateVariableType() {
+  await crudController.post(route.params.id + '/updateVariableType', refProject.value)
   edit.value = false
   init()
 }

@@ -170,7 +170,12 @@
     "persistentTokenDescription": "Erstellen und verwalten Sie persistente Tokens für den direkten Zugriff auf die Warp10-Datenbank.",
     "persistentTokenDuration": "Gültigkeitsdauer des Tokens",
     "persistentTokenRegenerate": "Persistente Tokens regenerieren",
-    "persistentTokenGenerate": "Persistente Tokens generieren"
+    "persistentTokenGenerate": "Persistente Tokens generieren",
+    "variableTypeTitle": "Variablentypen",
+    "variableTypeDescription": "Verwalten der Variablen ändern, um die Anzeige zu ändern.",
+    "variableType": "Arten von Variablen",
+    "variableTypeLegacy": "Eingebaute Variablen - Legacy",
+    "variableTypeGrafana": "Fortgeschrittene Externe Variablen - Version 2"
   },
   "projectIndex": {
     "open": "Offen",

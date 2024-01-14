@@ -10,6 +10,7 @@ import {
   hasMany,
   belongsTo,
   BelongsTo,
+  afterSave,
 } from '@ioc:Adonis/Lucid/Orm'
 import { attachment, AttachmentContract } from '@ioc:Adonis/Addons/AttachmentLite'
 import User from '../../Users/Models/User'
@@ -17,6 +18,7 @@ import Warp10Service from '../../../Services/Warp10Service'
 import TagsService from '../../Datas/Services/TagsService'
 import Device from '../../Datas/Models/Device'
 import Tag from '../../Datas/Models/Tag'
+import TelegrafService from 'App/Services/TelegrafService'
 
 export default class Project extends BaseModel {
   public serializeExtras = true
@@ -49,6 +51,21 @@ export default class Project extends BaseModel {
       new TagsService(project!).deleteGts([tag])
     }
   }
+
+  @beforeDelete()
+  public static async removeTelegrafConfig(project: Project): Promise<void> {
+    const telegrafService = new TelegrafService()
+    await telegrafService.removeProjectConfig(project)
+  }
+
+  @afterSave()
+  public static async updateTelegrafConfig(project: Project): Promise<void> {
+    if(project.uuid && project.writeToken) {
+      const telegrafService = new TelegrafService()
+      await telegrafService.updateProjectConfig(project)
+    }
+  }
+
   public static async preComputeUrls(models: Project | Project[]) {
     if (Array.isArray(models)) {
       await Promise.all(models.map((model) => this.preComputeUrls(model)))
@@ -116,6 +133,9 @@ export default class Project extends BaseModel {
 
   @column()
   public dashboardType: string
+
+  @column()
+  public variableType: string
 
   @column()
   public dashboardGrafanaUrl: string

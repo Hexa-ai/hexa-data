@@ -25,6 +25,7 @@ class ProjectModel extends BaseModel {
   public dashboardGrafanaUrl: string =''
   public dashboardGrafanaWritePassword: string =''
   public dashboardGrafanaReadPassword: string =''
+  public variableType: string ='LEGACY'
 
   // 0|null -> no Cmd, 1 -> Import, 2 -> Export, 3 -> Export in progress, 4 -> Archive in progress, 5 -> Export done
   // 10 -> Unarchive in progress, 11 -> Import in progress, 12 -> Import done
