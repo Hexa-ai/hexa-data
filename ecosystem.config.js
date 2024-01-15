@@ -19,10 +19,12 @@ module.exports = {
     },
     {
       script: 'bin/erlenmeyer/run.js',
+      name: "erlenmeyer",
       autorestart: true,
     },
     {
       script: 'bin/telegraf/run.js',
+      name: "telegraf",
       autorestart: true,
     },
   ],
