@@ -477,7 +477,12 @@ export default class ProjectsController {
       request.qs().search ?? '*'
     )
 
-    const logs = await fs.readFile('bin/telegraf/logs/' + project.uuid + '.log', 'utf-8')
+    let logs = ''
+    try {
+      logs = await fs.readFile('bin/telegraf/logs/' + project.uuid + '.log', 'utf-8')
+    } catch (e) {
+      
+    }
 
     response.send({
       ...result,
