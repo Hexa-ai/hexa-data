@@ -85,7 +85,7 @@
               </div>
             </div>
 
-            <div class="flex flex-col w-1/2 md:w-1/3" style="height: 72px">
+            <div class="flex flex-col w-1/2 md:w-1/3 hidden sm:block" style="height: 72px">
               <Line
                 id="my-chart-id"
                 style="
@@ -273,7 +273,6 @@ const setup = () => {
         tiks: {
           source: 'data',
         },
-        min: dayjs().subtract(60, 'minute').format('YYYY-MM-DDTHH:mm:ss'),
         max: dayjs().format('YYYY-MM-DDTHH:mm:ss'),
       },
     },
