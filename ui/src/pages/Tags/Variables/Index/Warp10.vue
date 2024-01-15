@@ -312,6 +312,7 @@ watch(refSearch, async () => {
   await debouncedRefresh()
 })
 
+/*
 const refreshInterval = setInterval(async () => {
   await debouncedRefresh()
   setup()
@@ -321,4 +322,5 @@ const refreshInterval = setInterval(async () => {
 onUnmounted(() => {
   clearInterval(refreshInterval)
 })
+*/
 </script>
