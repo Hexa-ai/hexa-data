@@ -1,6 +1,8 @@
 import { createApp } from 'vue'
 import { createI18n } from 'vue-i18n'
 import { createRouter, createWebHistory, useRoute } from 'vue-router'
+import PrimeVue from 'primevue/config'
+import Lara from '@/presets/lara'
 import VueWriter from 'vue-writer'
 import './index.css'
 import App from './App.vue'
@@ -105,7 +107,6 @@ const router = createRouter({
 router.beforeEach(async (to, from, next) => {
   // Vérifiez si l'utilisateur navigue vers une route commençant par /projects
   if (to.path.startsWith('/projects/') && !to.path.startsWith('/projects/create')) {
-    console.log(to)
     await RouteService.getProjectInfos(to)
   }
   // Continuez de naviguer vers la route demandée
@@ -116,4 +117,8 @@ const app = createApp(App)
 app.use(router)
 app.use(i18n)
 app.use(VueWriter)
+app.use(PrimeVue, {
+  unstyled: true,
+  pt: Lara
+})
 app.mount('#app')
