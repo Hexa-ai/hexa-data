@@ -3,6 +3,7 @@ const defaultTheme = require('./ui/node_modules/tailwindcss/defaultTheme')
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: ['./ui/index.html', './ui/src/**/*.{vue,js,ts,jsx,tsx}'],
+  darkMode: 'class',
   theme: {
     // colors: {
     //   indigo: {600:'#a5f3fc'},

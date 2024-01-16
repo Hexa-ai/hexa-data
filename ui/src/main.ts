@@ -1,11 +1,10 @@
 import { createApp } from 'vue'
 import { createI18n } from 'vue-i18n'
 import { createRouter, createWebHistory, useRoute } from 'vue-router'
-import PrimeVue from 'primevue/config'
-import Lara from '@/presets/lara'
 import VueWriter from 'vue-writer'
 import './index.css'
 import App from './App.vue'
+import Prime from './prime'
 import { RouteService } from '../src/Classes/RouteService'
 
 const Login = () => import('./pages/Login.vue')
@@ -117,8 +116,5 @@ const app = createApp(App)
 app.use(router)
 app.use(i18n)
 app.use(VueWriter)
-app.use(PrimeVue, {
-  unstyled: true,
-  pt: Lara
-})
 app.mount('#app')
+Prime(app)

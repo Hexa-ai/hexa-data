@@ -62,7 +62,7 @@ export default {
                 'rounded-md',
 
                 // Color
-                'text-primary-500 dark:text-primary-400',
+                // 'text-primary-500 dark:text-primary-400',
 
                 // States
                 'hover:bg-primary-300/20',

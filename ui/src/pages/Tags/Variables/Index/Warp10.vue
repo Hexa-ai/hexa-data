@@ -4,107 +4,125 @@
       <template v-slot:menuLeft>
         <SearchNav v-model="refSearch"></SearchNav>
       </template>
+      <template v-slot:menuRight class="p-3">
+        <Btn
+          v-if="store.authUser.isAdmin == 1 || store.currentProject.owner.id == store.authUser.id"
+          :text="edit == true ? $t('cancel') : 'Afficher les logs'"
+          :primary="false"
+          :action="logs == true ? 'cancel' : 'search'"
+          class="m-3"
+          @click="logs = !logs"
+        ></Btn>
+        <Btn
+          v-if="store.authUser.isAdmin == 1 || store.currentProject.owner.id == store.authUser.id"
+          :text="edit == true ? $t('cancel') : $t('edit')"
+          :primary="false"
+          :action="edit == true ? 'cancel' : 'update'"
+          class="m-3"
+          @click="edit = !edit"
+        ></Btn>
+      </template>
       <template v-slot:default>
-        <ComfirmPopup
-          title="Suppresion de variable"
-          :cancel-text="$t('cancel')"
-          :confirm-text="$t('remove')"
-          msg="Etes-vous sûr de vouloir supprimer cette variable ? Toutes les données seront supprimées."
-          @comfirm="doRemove"
-          v-model="askingRemove"
-        ></ComfirmPopup>
-
-        <TransitionRoot appear :show="showVariableVisible" as="template">
-          <Dialog as="div" @close="closeShowVariable" :initialFocus="showVariableFocusRef">
-            <div ref="showVariableFocusRef" class="fixed inset-0 z-10 overflow-y-auto">
-              <div class="px-4 text-center">
-                <span class="inline-block h-screen align-middle" aria-hidden="true">&#8203;</span>
-
-                <TransitionChild
-                  as="template"
-                  enter="duration-300 ease-out"
-                  enter-from="opacity-0 scale-95"
-                  enter-to="opacity-100 scale-100"
-                  leave="duration-200 ease-in"
-                  leave-from="opacity-100 scale-100"
-                  leave-to="opacity-0 scale-95"
-                >
-                  <div
-                    v-if="showVariableTarget"
-                    class="inline-block w-3/5 p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white border-2 border-gray-200 shadow-xl rounded-2xl"
-                  >
-                    <DialogTitle as="h3" class="text-lg font-medium leading-6 text-gray-900"
-                      >Historique {{ showVariableTarget.c }}</DialogTitle
-                    >
-                    <div class="mt-2">
-                      <VarWarpChart
-                        v-if="showVariableTarget"
-                        class="m-3"
-                        :url="warp10Url"
-                        :class-name="showVariableTarget.c"
-                        :labels="showVariableTarget.l"
-                        :value-type="1"
-                      ></VarWarpChart>
-                    </div>
-
-                    <div class="mt-4 flex">
-                      <div class="flex-grow"></div>
-                      <Btn
-                        class="ml-5"
-                        :primary="false"
-                        text="Fermer"
-                        @click="closeShowVariable"
-                      ></Btn>
-                    </div>
-                  </div>
-                </TransitionChild>
-              </div>
-            </div>
-          </Dialog>
-        </TransitionRoot>
-
-        <Loader v-if="loading"></Loader>
-        <div
-          v-else
-          class="bg-white shadow overflow-hidden sm:rounded-md m-3 divide-y divide-gray-200"
+        <Dialog
+          v-model:visible="showVariableVisible"
+          modal
+          :header="'Historique ' + showVariableTarget?.c"
+          :style="{ width: '50rem' }"
+          :breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
         >
-          <div
-            class="flex cursor-pointer hover:bg-gray-100 transition duration-300 ease-in-out"
-            v-for="variable in variables"
-            @click="showVariable(variable)"
-          >
-            <div class="flex flex-col flex-grow p-4">
-              <div class="flex-grow flex">
-                <VariableIcon class="flex-shrink-0 h-5 w-5 mr-1 text-gray-400" aria-hidden="true" />
-                <p class="text-sm font-medium text-gray-900 truncate">
-                  {{ variable.c }}
-                </p>
-              </div>
-              <div class="flex-grow text-sm text-gray-500">
-                {{ formatGtsLabels(variable.l) }}
-              </div>
-            </div>
+          <VarWarpChart
+            v-if="showVariableTarget"
+            :url="warp10Url"
+            :class-name="showVariableTarget.c"
+            :labels="showVariableTarget.l"
+            :value-type="1"
+            :unstyled="true"
+          ></VarWarpChart>
 
-            <div class="flex flex-col w-1/2 md:w-1/3 hidden sm:block" style="height: 72px">
-              
-            </div>
-
-            <div class="flex flex-col justify-center items-center p-4">
-              <Btn
-                v-if="isEditor"
-                :text="$t('remove')"
-                :action="'delete'"
-                :primary="false"
-                @click.stop="askRemove(variable)"
-              ></Btn>
-            </div>
+          <div class="flex">
+            <div class="flex-grow"></div>
+            <Btn class="ml-5" :primary="false" text="Fermer" @click="closeShowVariable"></Btn>
           </div>
-        </div>
+        </Dialog>
 
-        <div class="m-3" v-if="isEditor">
-          <h3 class="text-lg mt-6 mb-2 font-medium text-gray-600">Logs Telegraf</h3>
-          <pre class="text-gray-400">{{ logs }}</pre>
-        </div>
+        <Sidebar v-model:visible="logs" header="Logs Telegraf" position="bottom">
+          <pre v-if="logsContent !== ''">{{ logsContent }}</pre>
+          <div class="text-gray-500" v-else>
+            Il n'y a aucun log d'enregistré pour ce projet.
+          </div>
+        </Sidebar>
+
+        <ContentWrapper>
+          <Loader v-if="loading"></Loader>
+          <ItemListingCard
+            v-else-if="variables.length"
+            :items="variables"
+            @itemClick="showVariable"
+          >
+            <template v-slot:default="{ item }">
+              <div class="flex flex-col flex-grow">
+                <div class="flex">
+                  <VariableIcon class="h-5 w-5 mr-1 text-gray-400" aria-hidden="true" />
+                  <p class="text-sm font-medium text-gray-900 truncate">
+                    {{ item.c }}
+                    <div class="inline has-tooltip">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="1.5"
+                        stroke="currentColor"
+                        class="inline w-4 h-4 text-gray-400"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
+                        />
+                      </svg>
+                      <span class="tooltip bg-black p-2 mt-9 rounded-md text-white">Topic: {{ item.l?.topic }}</span>
+                    </div>
+                  </p>
+                </div>
+                <div class="text-sm text-gray-500">
+                  {{ formatGtsLabels(item.l) }}
+                </div>
+              </div>
+
+              <div class="flex flex-col text-sm w-40">
+                <template v-if="item.v && item.v[0]">
+                  <div>
+                    Dernière valeur : <strong>{{ item.v[0][1] }}</strong>
+                  </div>
+                  <div class="text-gray-400">
+                    le {{ dayjs(item.v[0][0] / 1000).format('YYYY-MM-DD HH:mm:ss') }}
+                  </div>
+                </template>
+                <template v-else> Aucune valeur enregistrée </template>
+              </div>
+              
+              <div class="flex flex-col justify-center px-5">
+                <div v-if="item.l['#unit']">
+                  <Tag :value="item.l['#unit']" rounded></Tag>
+                </div>
+              </div>
+
+              <div class="flex flex-col justify-center items-center">
+                <Btn
+                  v-if="isEditor && edit"
+                  :text="$t('remove')"
+                  :action="'delete'"
+                  :primary="false"
+                  @click.stop="removeVariable(item)"
+                ></Btn>
+              </div>
+            </template>
+          </ItemListingCard>
+          <div class="mt-5 text-gray-500" v-else>
+            Il n'y a aucune variable dans ce projet. Commencez par envoyer des variables afin de
+            pouvoir les consulter sur cette page.
+          </div>
+        </ContentWrapper>
       </template>
     </BaseLayoutVue>
   </div>
@@ -113,7 +131,6 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
 import { inject, ref, computed, PropType, watch, onUnmounted } from 'vue'
-import { TransitionRoot, TransitionChild, Dialog, DialogTitle } from '@headlessui/vue'
 import VarWarpChart from '@/components/VarWarpChart.vue'
 import ProjectModel from '@/Models/ProjectModel'
 import BaseLayoutVue from '@/layouts/BaseLayout.vue'
@@ -125,8 +142,14 @@ import Loader from '@/components/Loader.vue'
 import { VariableIcon } from '@heroicons/vue/outline'
 import RoleType from '@/Contracts/RoleType'
 import axios from '@/services/axios'
-import ComfirmPopup from '@/components/ComfirmPopup.vue'
+import ContentWrapper from '@/components/Prime/ContentWrapper.vue'
+import ItemListingCard from '@/components/Prime/ItemListingCard.vue'
 import dayjs from 'dayjs'
+
+import { useConfirm } from 'primevue/useconfirm'
+import { useToast } from 'primevue/usetoast'
+const confirm = useConfirm()
+const toast = useToast()
 
 // Create new type interface for variable
 interface Variable {
@@ -141,7 +164,9 @@ const routePrefix = '/projects/' + route.params.id
 const { t } = useI18n()
 const loading = ref(true)
 const variables = ref([] as Array<Variable>)
-const logs = ref('')
+const edit = ref(false)
+const logs = ref(false)
+const logsContent = ref('')
 
 const breadCrumb = ref([
   { name: 'Projects', href: '/projects' },
@@ -172,28 +197,29 @@ const closeShowVariable = () => {
 const warp10Url =
   window.location.origin + import.meta.env.VITE_API_PREFIX + '/warp10/' + route.params.id
 
-/*
- * REMOVE VARIABLE CONFIRMATION
- */
-const askingRemove = ref(false)
-let removeVariable: Variable | null = null
-const askRemove = (variable: Variable) => {
-  askingRemove.value = true
-  removeVariable = variable
-}
-const doRemove = async () => {
-  if (removeVariable) {
-    await axios.post('/projects/' + props.project.id + '/warp10/variables/delete', {
-      variables: [
-        {
-          classname: removeVariable.c,
-          labels: removeVariable.l,
-        },
-      ],
-    })
-    askingRemove.value = false
-    await refresh()
-  }
+const removeVariable = (variable: Variable) => {
+  confirm.require({
+    message:
+      'Souhaitez-vous vraiment supprimer cette variable ? Toutes les données seront supprimées',
+    header: 'Suppression de la variable',
+    rejectLabel: 'Annuler',
+    acceptLabel: 'Supprimer',
+    accept: async () => {
+      await axios.post('/projects/' + props.project.id + '/warp10/variables/delete', {
+        variables: [
+          {
+            classname: variable.c,
+            labels: variable.l,
+          },
+        ],
+      })
+      await refresh()
+      toast.add({
+        detail: 'La suppression de la variable a été effectuée avec succès !',
+        life: 3000,
+      })
+    },
+  })
 }
 const isEditor = computed(() => {
   return (
@@ -204,10 +230,9 @@ const isEditor = computed(() => {
 })
 
 const formatGtsLabels = (labels: Array<any>) => {
+  const excluded = ['.app', 'source', 'projectUuid', 'topic', '#unit']
   return Object.entries(labels)
-    .filter(
-      ([key]) => key !== '.app' && key !== 'source' && key !== 'host' && key !== 'projectUuid'
-    )
+    .filter(([key]) => !excluded.includes(key))
     .map(([key, value]) => `${key} = ${value}`)
     .join(', ')
 }
@@ -222,7 +247,7 @@ const refresh = async () => {
   )
 
   variables.value = result.data.result[0]
-  logs.value = result.data.logs
+  logsContent.value = result.data.logs
   loading.value = false
 }
 
