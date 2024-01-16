@@ -5,9 +5,7 @@ server/node_modules
 server/build
 server/tmp
 server/.env
-ui/src/*.js
 ui/src/*.js.map
-ui/src/**/*.js
 ui/src/**/*.js.map
 build/*
 build/**/*
