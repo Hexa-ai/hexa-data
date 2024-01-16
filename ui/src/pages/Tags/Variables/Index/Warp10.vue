@@ -86,32 +86,7 @@
             </div>
 
             <div class="flex flex-col w-1/2 md:w-1/3 hidden sm:block" style="height: 72px">
-              <Line
-                id="my-chart-id"
-                style="
-                  width: 100%;
-                  height: 52px;
-                  margin-top: 10px;
-                  border-bottom: 1px solid #eee;
-                  border-left: 1px solid #eee;
-                  border-right: 1px solid #eee;
-                "
-                :options="sparklines"
-                :data="{
-                  datasets: [
-                    {
-                      borderColor: 'rgb(32, 41, 55)',
-                      borderWidth: 2,
-                      pointRadius: 0,
-                      pointHitRadius: 4,
-                      spanGaps: true,
-                      data: variable.v.map((v) => {
-                        return { x: dayjs(v[0] / 1000).format('YYYY-MM-DDTHH:mm:ss'), y: v[1] }
-                      }),
-                    },
-                  ],
-                }"
-              />
+              
             </div>
 
             <div class="flex flex-col justify-center items-center p-4">
@@ -152,19 +127,6 @@ import RoleType from '@/Contracts/RoleType'
 import axios from '@/services/axios'
 import ComfirmPopup from '@/components/ComfirmPopup.vue'
 import dayjs from 'dayjs'
-
-import { Line } from 'vue-chartjs'
-import 'chartjs-adapter-dayjs-4/dist/chartjs-adapter-dayjs-4.esm'
-import {
-  Chart as ChartJS,
-  LinearScale,
-  TimeScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-} from 'chart.js'
-ChartJS.register(LinearScale, TimeScale, PointElement, LineElement, Title, Tooltip)
 
 // Create new type interface for variable
 interface Variable {
@@ -251,43 +213,6 @@ const formatGtsLabels = (labels: Array<any>) => {
 }
 
 /*
- * SPARKLINE SETUP
- */
-const sparklines = ref({})
-const setup = () => {
-  sparklines.value = {
-    backgroundColor: '#202937',
-    color: '#ffffff',
-    animation: false,
-    scales: {
-      y: {
-        display: false,
-      },
-      x: {
-        type: 'time',
-        display: false,
-        time: {
-          unit: 'minutes',
-          round: 'minutes',
-        },
-        tiks: {
-          source: 'data',
-        },
-        max: dayjs().format('YYYY-MM-DDTHH:mm:ss'),
-      },
-    },
-    options: {
-      plugins: {
-        tooltip: {
-          enabled: true,
-        },
-      },
-    },
-  }
-}
-setup()
-
-/*
  * DATA FETCHING / SEARCH / REFRESH
  */
 const refSearch = ref('')
@@ -312,15 +237,12 @@ watch(refSearch, async () => {
   await debouncedRefresh()
 })
 
-/*
 const refreshInterval = setInterval(async () => {
   await debouncedRefresh()
-  setup()
 }, 5000)
 
 // Clear interval on unmount
 onUnmounted(() => {
   clearInterval(refreshInterval)
 })
-*/
 </script>
