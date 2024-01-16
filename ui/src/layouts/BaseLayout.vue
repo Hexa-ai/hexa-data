@@ -1,4 +1,7 @@
 <template>
+  <Toast position="bottom-right" :pt="{ summary: { class: 'hidden' }, icon: { class: 'hidden' }, detail: { class: 'mt-0' } }" />
+  <ConfirmDialog></ConfirmDialog>
+
   <div id="layout" class="h-screen overflow-y-scroll" :style="[imgBgUrl!=null && enableImgBg==1 ?'background-image: url('+ imgBgUrl +');':'','background-color:'+ bgColor +';']">
     <TransitionRoot as="template" :show="sidebarOpen">
       <Dialog as="div" class="fixed inset-0 flex z-40 md:hidden" @close="sidebarOpen = false">

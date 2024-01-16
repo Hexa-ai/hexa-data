@@ -8,12 +8,14 @@
       :date-picker="true"
       :warpScript="warpScript"
       :autoRefresh="autoRefresh"
+      :unstyled="unstyled"
     ></WarpChart>
     <TabularTile
       v-if="chartType == 'tabular'"
       :url="url"
       :date-picker="true"
       :script="warpScript"
+      :unstyled="unstyled"
     ></TabularTile>
   </div>
 </template>
@@ -37,6 +39,7 @@ const props = defineProps<{
   isAlarm?: boolean
   minTreshold?: number
   maxTreshold?: number
+  unstyled?: boolean
 }>()
 
 let warpScript = ref('')

@@ -3,5 +3,5 @@
   'class'  '~.*' $search + '.*' +
   'labels' {}
   'end' NOW
-  'count' 60
+  'count' 1
 } FETCH
