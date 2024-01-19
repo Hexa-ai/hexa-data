@@ -11,6 +11,8 @@ import Chip from 'primevue/chip'
 import Tag from 'primevue/tag'
 import Tooltip from 'primevue/tooltip'
 import Sidebar from 'primevue/sidebar'
+import InputText from 'primevue/inputtext';
+import Textarea from 'primevue/textarea';
 
 export default (app: any) => {
   app.use(PrimeVue, {
@@ -28,4 +30,6 @@ export default (app: any) => {
   app.component('Tag', Tag)
   app.directive('tooltip', Tooltip)
   app.component('Sidebar', Sidebar)
+  app.component('InputText', InputText)
+  app.component('Textarea', Textarea)
 }

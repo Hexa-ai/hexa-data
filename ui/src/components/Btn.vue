@@ -6,6 +6,8 @@
     <UserAddIcon v-if="action=='addUser'" class="flex-shrink-0 h-5 w-5 text-gray-400"></UserAddIcon>
     <DocumentAddIcon v-if="action=='create'" class="flex-shrink-0 h-5 w-5 text-gray-400"></DocumentAddIcon>
     <DocumentSearchIcon v-if="action=='search'" class="flex-shrink-0 h-5 w-5 text-gray-400"></DocumentSearchIcon>
+    <CodeIcon v-if="action=='code'" class="flex-shrink-0 h-5 w-5 text-gray-400"></CodeIcon >
+    <ChartBarIcon v-if="action=='chart'" class="flex-shrink-0 h-5 w-5 text-gray-400"></ChartBarIcon>
     <PencilAltIcon v-if="action=='update'" class="flex-shrink-0 h-5 w-5 text-gray-400"></PencilAltIcon>
     <TrashIcon v-if="action=='delete'" class="flex-shrink-0 h-5 w-5 text-gray-400"></TrashIcon>
     <UploadIcon v-if="action=='upload'" class="flex-shrink-0 h-5 w-5 text-gray-400"></UploadIcon>
@@ -19,7 +21,7 @@
   </button>
 </template>
 <script setup lang="ts">
-  import { UserAddIcon, DocumentAddIcon, DocumentSearchIcon, PencilAltIcon, TrashIcon, UploadIcon, DownloadIcon, XIcon, PlayIcon, StopIcon } from '@heroicons/vue/outline'
+  import { UserAddIcon, DocumentAddIcon, DocumentSearchIcon, PencilAltIcon, TrashIcon, UploadIcon, DownloadIcon, XIcon, PlayIcon, StopIcon, ChartBarIcon, CodeIcon } from '@heroicons/vue/outline'
 
   const props = defineProps<{
     text:string,
