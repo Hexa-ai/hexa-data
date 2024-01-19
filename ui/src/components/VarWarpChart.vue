@@ -44,13 +44,13 @@ const props = defineProps<{
 
 let warpScript = ref('')
 
-if (props.className.split('.')[1][0] == '_') {
+if (props.className.includes('.@')) {
   chartType.value = 'tabular'
   warpScript.value = `
     {
       'token' $readToken
       'class' '${props.className}'
-      'labels' ''${JSON.stringify(props.labels || {})}' JSON->
+      'labels' '${JSON.stringify(props.labels || {})}' JSON->
       'end' $end TOTIMESTAMP
       'start' $start TOTIMESTAMP
     } FETCH SORT 'gts' STORE [ $gts [] <% 'values' STORE $values 0 GET 'ts' STORE $values 7 GET 'value' STORE [ $ts $value 0 GET ] [ $ts NaN NaN NaN $value 0 GET ] %> MACROREDUCER ] REDUCE 'gtsResult' STORE"`

@@ -7,7 +7,7 @@
       <template v-slot:menuRight class="p-3">
         <Btn
           v-if="store.authUser.isAdmin == 1 || store.currentProject.owner.id == store.authUser.id"
-          :text="edit == true ? $t('cancel') : 'Afficher les logs'"
+          :text="edit == true ? $t('cancel') : $t('tags.showLogs')"
           :primary="false"
           :action="logs == true ? 'cancel' : 'search'"
           class="m-3"
@@ -24,64 +24,93 @@
       </template>
       <template v-slot:default>
         <Dialog
-          v-model:visible="showVariableVisible"
+          v-model:visible="showVariableHistoryVisible"
           modal
-          :header="'Historique ' + showVariableTarget?.c"
-          :style="{ width: '50rem' }"
-          :breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
+          :header="'Historique ' + showVariableHistoryTarget?.c"
+          :pt="{
+            root: 'rounded-lg shadow-lg border-0 max-h-[90vh] w-full max-w-screen-lg m-0 dark:border dark:border-surface-700 transform scale-100',
+          }"
+          :draggable="false"
         >
           <VarWarpChart
-            v-if="showVariableTarget"
+            v-if="showVariableHistoryTarget"
             :url="warp10Url"
-            :class-name="showVariableTarget.c"
-            :labels="showVariableTarget.l"
+            :class-name="showVariableHistoryTarget.c"
+            :labels="showVariableHistoryTarget.l"
             :value-type="1"
             :unstyled="true"
           ></VarWarpChart>
 
           <div class="flex">
             <div class="flex-grow"></div>
-            <Btn class="ml-5" :primary="false" text="Fermer" @click="closeShowVariable"></Btn>
+            <Btn
+              class="ml-5"
+              :primary="false"
+              text="Fermer"
+              @click="closeShowVariableHistory"
+            ></Btn>
           </div>
         </Dialog>
 
-        <Sidebar v-model:visible="logs" header="Logs Telegraf" position="bottom">
-          <pre v-if="logsContent !== ''">{{ logsContent }}</pre>
-          <div class="text-gray-500" v-else>
-            Il n'y a aucun log d'enregistré pour ce projet.
+        <Dialog
+          v-model:visible="showVariableInfosVisible"
+          modal
+          :header="$t('tags.detailsOf') + ' ' + showVariableInfosTarget?.c"
+          :draggable="false"
+        >
+          <div v-if="showVariableInfosTarget">
+            <div class="mb-4">
+              <label class="font-bold block mb-2">{{ $t('tags.mqttTopic') }}</label>
+              <InputText
+                class="w-full mb-1"
+                v-model="showVariableInfosTarget.l.topic"
+                showIcon
+                inputId="buttondisplay"
+              />
+              <p class="text-gray-400">{{ $t('tags.mqttTopicDescription') }}</p>
+            </div>
+            <div class="mb-4">
+              <label class="font-bold block mb-2">{{ $t('tags.warpScriptCode') }}</label>
+              <Textarea
+                class="w-full mb-1"
+                v-model="showVariableInfosWarpScript"
+                rows="5"
+                cols="30"
+              />
+              <p class="text-gray-400">{{ $t('tags.warpScriptCodeDescription') }}</p>
+            </div>
+            <div>
+              <label class="font-bold block mb-2">{{ $t('tags.labels') }}</label>
+              <pre class="w-full mb-1">{{ showVariableInfosTarget.l }}</pre>
+              <p class="text-gray-400">{{ $t('tags.labelsDescription') }}</p>
+            </div>
           </div>
+
+          <div class="flex">
+            <div class="flex-grow"></div>
+            <Btn
+              class="ml-5"
+              :primary="false"
+              :text="$t('close')"
+              @click="closeShowVariableInfos"
+            ></Btn>
+          </div>
+        </Dialog>
+
+        <Sidebar v-model:visible="logs" :header="$t('tags.telegrafLogs')" position="bottom">
+          <div v-if="logsContent !== ''" style="max-height: 50vh;" class="overflow-auto font-mono whitespace-pre-wrap">{{ logsContent }}</div>
+          <div class="text-gray-500" v-else>{{ $t('tags.telegrafNoLogs') }}</div>
         </Sidebar>
 
         <ContentWrapper>
           <Loader v-if="loading"></Loader>
-          <ItemListingCard
-            v-else-if="variables.length"
-            :items="variables"
-            @itemClick="showVariable"
-          >
+          <ItemListingCard v-else-if="variables.length" :items="variables">
             <template v-slot:default="{ item }">
-              <div class="flex flex-col flex-grow">
+              <div class="flex flex-col flex-grow max-w-4/5 whitespace-normal">
                 <div class="flex">
                   <VariableIcon class="h-5 w-5 mr-1 text-gray-400" aria-hidden="true" />
-                  <p class="text-sm font-medium text-gray-900 truncate">
+                  <p class="text-sm font-medium text-gray-900">
                     {{ item.c }}
-                    <div class="inline has-tooltip">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke-width="1.5"
-                        stroke="currentColor"
-                        class="inline w-4 h-4 text-gray-400"
-                      >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
-                        />
-                      </svg>
-                      <span class="tooltip bg-black p-2 mt-9 rounded-md text-white">Topic: {{ item.l?.topic }}</span>
-                    </div>
                   </p>
                 </div>
                 <div class="text-sm text-gray-500">
@@ -89,38 +118,64 @@
                 </div>
               </div>
 
-              <div class="flex flex-col text-sm w-40">
+              <div class="flex flex-col text-sm hidden lg:block">
                 <template v-if="item.v && item.v[0]">
-                  <div>
-                    Dernière valeur : <strong>{{ item.v[0][1] }}</strong>
+                  <div
+                    style="
+                      display: -webkit-box;
+                      -webkit-line-clamp: 4;
+                      -webkit-box-orient: vertical;
+                      overflow: hidden;
+                      text-overflow: ellipsis;
+                    "
+                  >
+                    {{  $t('tags.lastValue') }}
+                    <strong>{{ item.v[0][1] }}</strong>
                   </div>
                   <div class="text-gray-400">
-                    le {{ dayjs(item.v[0][0] / 1000).format('YYYY-MM-DD HH:mm:ss') }}
+                    {{ dayjs(item.v[0][0] / 1000).format('YYYY-MM-DD HH:mm:ss') }}
                   </div>
                 </template>
-                <template v-else> Aucune valeur enregistrée </template>
+                <template v-else> {{  $t('tags.noLastValue') }} </template>
               </div>
-              
-              <div class="flex flex-col justify-center px-5">
-                <div v-if="item.l['#unit']">
-                  <Tag :value="item.l['#unit']" rounded></Tag>
+
+              <div class="flex flex-col justify-center px-5 hidden md:block">
+                <div>
+                  <Tag v-if="item.c.includes('.@')" severity="info">string / bool</Tag>
+                  <Tag v-else severity="info">numeric</Tag>
+                </div>
+                <div v-if="item.l['#unit']" class="mt-1">
+                  <Tag :value="item.l['#unit']"></Tag>
                 </div>
               </div>
 
-              <div class="flex flex-col justify-center items-center">
+              <div class="flex items-center">
+                <Btn
+                  :text="$t('tags.showDetails')"
+                  :action="'code'"
+                  :primary="false"
+                  @click="showVariableInfos(item)"
+                ></Btn>
+                <Btn
+                  :text="$t('tags.showHistory')"
+                  :action="'chart'"
+                  :primary="false"
+                  class="ml-2"
+                  @click="showVariableHistory(item)"
+                ></Btn>
                 <Btn
                   v-if="isEditor && edit"
                   :text="$t('remove')"
                   :action="'delete'"
                   :primary="false"
-                  @click.stop="removeVariable(item)"
+                  class="ml-2"
+                  @click="removeVariable(item)"
                 ></Btn>
               </div>
             </template>
           </ItemListingCard>
           <div class="mt-5 text-gray-500" v-else>
-            Il n'y a aucune variable dans ce projet. Commencez par envoyer des variables afin de
-            pouvoir les consulter sur cette page.
+            {{ $t('tags.noVariableOnProject') }}
           </div>
         </ContentWrapper>
       </template>
@@ -148,6 +203,7 @@ import dayjs from 'dayjs'
 
 import { useConfirm } from 'primevue/useconfirm'
 import { useToast } from 'primevue/usetoast'
+import { autoCloseTags } from '@codemirror/lang-javascript'
 const confirm = useConfirm()
 const toast = useToast()
 
@@ -182,28 +238,44 @@ const props = defineProps({
 })
 
 /*
- * SHOW VARIABLE INTO POPUP
+ * SHOW VARIABLE HISTORY
  */
-const showVariableVisible = ref(false)
-const showVariableFocusRef = ref(null)
-const showVariableTarget = ref(null as Variable | null)
-const showVariable = (variable: Variable) => {
-  showVariableVisible.value = true
-  showVariableTarget.value = variable
+const showVariableHistoryVisible = ref(false)
+const showVariableHistoryTarget = ref(null as Variable | null)
+const showVariableHistory = (variable: Variable) => {
+  showVariableHistoryVisible.value = true
+  showVariableHistoryTarget.value = variable
 }
-const closeShowVariable = () => {
-  showVariableVisible.value = false
+const closeShowVariableHistory = () => {
+  showVariableHistoryVisible.value = false
 }
+
+/*
+ * SHOW VARIABLE INFOS
+ */
+const showVariableInfosVisible = ref(false)
+const showVariableInfosTarget = ref(null as Variable | null)
+const showVariableInfosWarpScript = ref('')
+const showVariableInfos = (variable: Variable) => {
+  showVariableInfosVisible.value = true
+  showVariableInfosTarget.value = variable
+  showVariableInfosWarpScript.value = `
+THIS IS A CODE
+`
+}
+const closeShowVariableInfos = () => {
+  showVariableInfosVisible.value = false
+}
+
 const warp10Url =
   window.location.origin + import.meta.env.VITE_API_PREFIX + '/warp10/' + route.params.id
 
 const removeVariable = (variable: Variable) => {
   confirm.require({
-    message:
-      'Souhaitez-vous vraiment supprimer cette variable ? Toutes les données seront supprimées',
-    header: 'Suppression de la variable',
-    rejectLabel: 'Annuler',
-    acceptLabel: 'Supprimer',
+    message: t('tags.deleteMessage'),
+    header: t('tags.deleteTitle'),
+    rejectLabel: t('cancel'),
+    acceptLabel: t('tags.deleteConfirmButton'),
     accept: async () => {
       await axios.post('/projects/' + props.project.id + '/warp10/variables/delete', {
         variables: [
@@ -215,7 +287,7 @@ const removeVariable = (variable: Variable) => {
       })
       await refresh()
       toast.add({
-        detail: 'La suppression de la variable a été effectuée avec succès !',
+        detail: t('tags.deleteConfirmation'),
         life: 3000,
       })
     },
@@ -235,6 +307,10 @@ const formatGtsLabels = (labels: Array<any>) => {
     .filter(([key]) => !excluded.includes(key))
     .map(([key, value]) => `${key} = ${value}`)
     .join(', ')
+}
+
+const formatJson = (labels: Array<any>) => {
+  return JSON.stringify(labels)
 }
 
 /*

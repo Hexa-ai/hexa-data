@@ -283,8 +283,26 @@
     "javascript": "Javascript",
     "stop": "Arrêter",
     "running":"Démarré",
-    "stopped":"Arrêté"
-
+    "stopped":"Arrêté",
+    "showLogs": "Afficher les logs",
+    "detailsOf": "Détails de",
+    "mqttTopic": "Topic MQTT",
+    "mqttTopicDescription": "Le topic MQTT a utiliser pour envoyer des valeurs dans la variable.",
+    "warpScriptCode": "Code WARPSCRIPT",
+    "warpScriptCodeDescription": "Le code WarpScript que vous pouvez insérer dans le tableau de bord.",
+    "labels": "Labels",
+    "labelsDescription": "La liste de tous les labels (y compris cachés) de la gts.",
+    "telegrafLogs": "Logs Telegraf",
+    "telegrafNoLogs": "Il n'y a aucun log d'enregistré pour ce projet.",
+    "lastValue": "Dernière valeur :",
+    "noLastValue": "Aucune valeur enregistrée",
+    "showDetails": "Afficher le détail",
+    "showHistory": "Afficher l'historique",
+    "noVariableOnProject": "Il n'y a aucune variable dans ce projet. Commencez par envoyer des variables afin de pouvoir les consulter sur cette page.",
+    "deleteMessage": "Souhaitez-vous vraiment supprimer cette variable ? Toutes les données seront supprimées",
+    "deleteTitle": "Suppression de la variable",
+    "deleteConfirmButton": "Supprimer",
+    "deleteConfirmation": "La suppression de la variable a été effectuée avec succès !"
   },
   "dashboards": {
     "imgBg": "Image de fond",
