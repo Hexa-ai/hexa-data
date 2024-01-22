@@ -288,7 +288,7 @@
     "detailsOf": "Details von",
     "mqttTopic": "MQTT Thema",
     "mqttTopicDescription": "Das MQTT Thema, das zur Übermittlung von Werten an die Variable verwendet wird.",
-    "warpScriptCode": "WARPSCRIPT Code",
+    "warpScriptCode": "WARPSCRIPT-Code für das Dashboard",
     "warpScriptCodeDescription": "Der WarpScript-Code, den Sie in das Dashboard einfügen können.",
     "labels": "Etiketten",
     "labelsDescription": "Die Liste aller Etiketten (einschließlich versteckter) des GTS.",

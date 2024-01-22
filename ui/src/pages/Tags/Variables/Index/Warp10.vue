@@ -259,9 +259,13 @@ const showVariableInfosWarpScript = ref('')
 const showVariableInfos = (variable: Variable) => {
   showVariableInfosVisible.value = true
   showVariableInfosTarget.value = variable
-  showVariableInfosWarpScript.value = `
-THIS IS A CODE
-`
+  showVariableInfosWarpScript.value = `{
+  'token'  $readToken
+  'class'  '` + variable.c + `'
+  'labels' '` + JSON.stringify(variable.l) + `' JSON->
+  'end' $end // timestamp or ISO8601 string
+  'start' $interval  // timestamp or ISO8601 string
+} FETCH`
 }
 const closeShowVariableInfos = () => {
   showVariableInfosVisible.value = false
