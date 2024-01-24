@@ -36,9 +36,10 @@ const startTelegraf = () => {
       })
   })
   
-  // Log Telegraf process closure
+  // Log Telegraf process closure and restart it
   telegrafProcess.on('close', (code) => {
     console.log('[TELEGRAF]', 'Process ended with exit code', code)
+    startTelegraf()
   })
 }
 
@@ -94,7 +95,7 @@ const restartTelegraf = async () => {
       startTelegraf()
     } else {
       console.log('[RUN]', '(debounce) Sending SIGHUP message to telegraf process !')
-      telegrafProcess.kill('SIGHUP')
+      telegrafProcess.kill()
     }
   }, 2000)
 }

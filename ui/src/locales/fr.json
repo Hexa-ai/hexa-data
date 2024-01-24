@@ -288,7 +288,7 @@
     "detailsOf": "Détails de",
     "mqttTopic": "Topic MQTT",
     "mqttTopicDescription": "Le topic MQTT a utiliser pour envoyer des valeurs dans la variable.",
-    "warpScriptCode": "Code WARPSCRIPT",
+    "warpScriptCode": "Code WARPSCRIPT pour le tableau de bord",
     "warpScriptCodeDescription": "Le code WarpScript que vous pouvez insérer dans le tableau de bord.",
     "labels": "Labels",
     "labelsDescription": "La liste de tous les labels (y compris cachés) de la gts.",
