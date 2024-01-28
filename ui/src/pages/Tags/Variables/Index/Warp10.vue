@@ -7,14 +7,6 @@
       <template v-slot:menuRight class="p-3">
         <Btn
           v-if="store.authUser.isAdmin == 1 || store.currentProject.owner.id == store.authUser.id"
-          :text="edit == true ? $t('cancel') : $t('tags.showLogs')"
-          :primary="false"
-          :action="logs == true ? 'cancel' : 'search'"
-          class="m-3"
-          @click="logs = !logs"
-        ></Btn>
-        <Btn
-          v-if="store.authUser.isAdmin == 1 || store.currentProject.owner.id == store.authUser.id"
           :text="edit == true ? $t('cancel') : $t('edit')"
           :primary="false"
           :action="edit == true ? 'cancel' : 'update'"
@@ -96,11 +88,6 @@
             ></Btn>
           </div>
         </Dialog>
-
-        <Sidebar v-model:visible="logs" :header="$t('tags.telegrafLogs')" position="bottom">
-          <div v-if="logsContent !== ''" style="max-height: 50vh;" class="overflow-auto font-mono whitespace-pre-wrap">{{ logsContent }}</div>
-          <div class="text-gray-500" v-else>{{ $t('tags.telegrafNoLogs') }}</div>
-        </Sidebar>
 
         <ContentWrapper>
           <Loader v-if="loading"></Loader>
@@ -221,8 +208,6 @@ const { t } = useI18n()
 const loading = ref(true)
 const variables = ref([] as Array<Variable>)
 const edit = ref(false)
-const logs = ref(false)
-const logsContent = ref('')
 
 const breadCrumb = ref([
   { name: 'Projects', href: '/projects' },
@@ -327,7 +312,6 @@ const refresh = async () => {
   )
 
   variables.value = result.data.result[0]
-  logsContent.value = result.data.logs
   loading.value = false
 }
 

@@ -477,16 +477,8 @@ export default class ProjectsController {
       request.qs().search ?? '*'
     )
 
-    let logs = ''
-    try {
-      logs = await fs.readFile('bin/telegraf/logs/' + project.uuid + '.log', 'utf-8')
-    } catch (e) {
-      
-    }
-
     response.send({
-      ...result,
-      logs,
+      ...result
     })
   }
 
