@@ -4,6 +4,7 @@ import { createRouter, createWebHistory, useRoute } from 'vue-router'
 import VueWriter from 'vue-writer'
 import './index.css'
 import App from './App.vue'
+import Prime from './prime'
 import { RouteService } from '../src/Classes/RouteService'
 
 const Login = () => import('./pages/Login.vue')
@@ -31,8 +32,8 @@ const Devices = () => import('./pages/Devices/Index.vue')
 const Device = () => import('./pages/Devices/Show.vue')
 const NotFound = () => import('./layouts/NotFound.vue')
 const DeviceCreate = () => import('./pages/Devices/Create.vue')
-const Variables = () => import('./pages/Tags/Variables/index.vue')
-const Variable = () => import('./pages/Tags/Variables/show.vue')
+const Variables = () => import('./pages/Tags/Variables/Index.vue')
+const Variable = () => import('./pages/Tags/Variables/Show.vue')
 const VariableCreate = () => import('./pages/Tags/Variables/Create.vue')
 const Macros = () => import('./pages/Tags/Macros/index.vue')
 const Macro = () => import('./pages/Tags/Macros/Show.vue')
@@ -102,20 +103,18 @@ const router = createRouter({
   routes, // short for `routes: routes`
 })
 
-router.beforeEach( async (to, from, next) => {
+router.beforeEach(async (to, from, next) => {
   // Vérifiez si l'utilisateur navigue vers une route commençant par /projects
   if (to.path.startsWith('/projects/') && !to.path.startsWith('/projects/create')) {
-    console.log(to)
     await RouteService.getProjectInfos(to)
   }
   // Continuez de naviguer vers la route demandée
-  next();
-});
+  next()
+})
 
 const app = createApp(App)
 app.use(router)
 app.use(i18n)
 app.use(VueWriter)
 app.mount('#app')
-
-
+Prime(app)

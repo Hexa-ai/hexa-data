@@ -1,0 +1,7 @@
+{
+  'token'  $readToken
+  'class'  '~.*' $search + '.*' +
+  'labels' {}
+  'end' NOW
+  'count' 1
+} FETCH

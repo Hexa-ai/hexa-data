@@ -77,11 +77,16 @@ export default class Warp10Service {
   /**
    * Generate read en write token for a project.
    *
-   * @param name string Project namee
+   * @param labels object Object containing labels for the token
+   * @param actualUuid string the uuid of the project
+   * @param duration duration the duration of the token in seconds (default is WARP10_TOKEN_DURATION)
    * @return TokenInfo Warp10 Tokens for this project
    */
-  public async generatePairOfTokens(labels: {}, actualUuid?: string) {
-    const duration = Env.get('WARP10_TOKEN_DURATION')
+  public async generatePairOfTokens(labels: {}, actualUuid?: string, duration?: number) {
+    if(!duration) {
+      duration = Env.get('WARP10_TOKEN_DURATION')
+    }
+
     const issuance = this.now()
     const issuanceSec = parseInt((issuance / 1000000).toFixed())
     const expiry = issuance + (1000000 * duration)
@@ -127,8 +132,8 @@ export default class Warp10Service {
       expiry: DateTime.fromSeconds(expirySec),
       uuid: uuid,
     }
-    return generatedTokens
 
+    return generatedTokens
   }
   public async storeGtsCollection(gtsCollections: WarpGts[][], tokenCollection: string[]): Promise<void> {
     for (const index in gtsCollections) {
@@ -179,7 +184,25 @@ export default class Warp10Service {
       Logger.error('DeleteGts Exec error:' + error.toString())
       return errorResult
     }
+  }
+  public async searchGts(readToken: string, writeToken: string, search: string): Promise<WsExecResult | WsError> {
+    let file = Warp10Service.wsLoadTemplate('searchGts.mc2')
+    file = Warp10Service.wsAppendToken(file, readToken, 'readToken')
+    file = Warp10Service.wsAppendToken(file, writeToken, 'writeToken')
+    file = Warp10Service.wsAppendVar(file, 'search', search)
+    let result: WsExecResult
 
+    try {
+      result = <WsExecResult>await this.warp.exec(file)
+      return result
+    } catch (error) {
+      const errorResult: WsError = {
+        description: 'listGts Exec error',
+        content: error.toString()
+      }
+      Logger.error('listGts Exec error:' + error.toString())
+      return errorResult
+    }
   }
   public static wsLoadTemplate(templateName: string): string {
     return readFileSync(Env.get('WARP10_TEMPLATES_PATH') + templateName, 'utf-8')

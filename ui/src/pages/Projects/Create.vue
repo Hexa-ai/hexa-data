@@ -1,10 +1,8 @@
 <template>
   <div>
     <BaseLayoutVue :pages-bread-crumb="refBreadCrumb" :show-tool-bar="true">
-      <template v-slot:menuLeft>
-      </template>
-      <template v-slot:menuRight class="p-3">
-      </template>
+      <template v-slot:menuLeft> </template>
+      <template v-slot:menuRight class="p-3"> </template>
       <template v-slot:default>
         <form
           class="space-y-8 divide-y divide-gray-200 m-3"
@@ -15,12 +13,12 @@
           <div class="space-y-8 divide-y divide-gray-200">
             <div>
               <div>
-                <h3
-                  class="text-lg leading-6 font-medium text-gray-900"
-                >{{ $t('projectIndex.newProject') }}</h3>
-                <p
-                  class="mt-1 text-sm text-gray-500"
-                >{{ $t('projectInfos.newProjectDescription') }}</p>
+                <h3 class="text-lg leading-6 font-medium text-gray-900">
+                  {{ $t('projectIndex.newProject') }}
+                </h3>
+                <p class="mt-1 text-sm text-gray-500">
+                  {{ $t('projectInfos.newProjectDescription') }}
+                </p>
               </div>
               <div class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
                 <div class="sm:col-span-2">
@@ -99,8 +97,8 @@
                     v-model="refProject!.l1"
                     :isRequired="false"
                     :isDisabled="false"
-                    :values="['fr','en','de','en']"
-                    :choices="['fr','en','de','en']"
+                    :values="['fr', 'en', 'de', 'en']"
+                    :choices="['fr', 'en', 'de', 'en']"
                     :type="FieldType.SELECT"
                   ></InputField>
                 </div>
@@ -112,8 +110,8 @@
                     v-model="refProject!.l2"
                     :isRequired="false"
                     :isDisabled="false"
-                    :values="['fr','en','de','en']"
-                    :choices="['fr','en','de','en']"
+                    :values="['fr', 'en', 'de', 'en']"
+                    :choices="['fr', 'en', 'de', 'en']"
                     :type="FieldType.SELECT"
                   ></InputField>
                 </div>
@@ -125,8 +123,8 @@
                     v-model="refProject!.l3"
                     :isRequired="false"
                     :isDisabled="false"
-                    :values="['fr','en','de','en']"
-                    :choices="['fr','en','de','en']"
+                    :values="['fr', 'en', 'de', 'en']"
+                    :choices="['fr', 'en', 'de', 'en']"
                     :type="FieldType.SELECT"
                   ></InputField>
                 </div>
@@ -146,14 +144,14 @@
 
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
-import { inject, ref } from 'vue';
-import BaseLayoutVue from '../../layouts/BaseLayout.vue';
+import { inject, ref } from 'vue'
+import BaseLayoutVue from '../../layouts/BaseLayout.vue'
 import { useRouter, useRoute } from 'vue-router'
 import Store from '../../store/Store'
 import Btn from '../../components/Btn.vue'
-import FieldType from '../../Contracts/FieldType';
-import InputField from '../../components/InputField.vue';
-import ProjectModel from '../../Models/ProjectModel';
+import FieldType from '../../Contracts/FieldType'
+import InputField from '../../components/InputField.vue'
+import ProjectModel from '../../Models/ProjectModel'
 import { BaseController } from './../../Classes/BaseController'
 import { RouteService } from '../../Classes/RouteService'
 import { Utils } from '../../Classes/Utils'
@@ -169,16 +167,19 @@ const refProject = ref(new ProjectModel())
 
 const crudController = new BaseController<ProjectModel>(
   '/projects',
-  [{name:'photo'}],
+  [{ name: 'photo' }],
   refProject.value,
-  store.authUser.token['token'],
+  store.authUser.token['token']
 )
 
 let imageToUpload = crudController.getFileList('photo')
 
 async function init() {
   await RouteService.getProjectInfos(route)
-  refBreadCrumb.value = [{ name: t('navigation.projects'), href: '/projects' }, { name: t('projectIndex.newProject'), href: '/projects/create' }]
+  refBreadCrumb.value = [
+    { name: t('navigation.projects'), href: '/projects' },
+    { name: t('projectIndex.newProject'), href: '/projects/create' },
+  ]
 }
 
 async function create() {

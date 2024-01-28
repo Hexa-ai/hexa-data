@@ -32,13 +32,12 @@ test.group('---> Projects routes <---', (group) => {
     assert.lengthOf(response.body.data, 1)
   })
   test('Index (by non admin)', async (assert) => {
-
     // Create 1 fake project
     await ProjectFactory.createMany(1)
     // Create 2 fake users
     const users = await UserFactory.createMany(2)
 
-    const token = (await createLoggedUser(BASE_URL,users[0].email,'12345678')).token
+    const token = (await createLoggedUser(BASE_URL, users[0].email, '12345678')).token
 
     const response = await supertest(BASE_URL)
       .get('/projects')
@@ -50,7 +49,6 @@ test.group('---> Projects routes <---', (group) => {
     assert.lengthOf(response.body.data, 0)
   })
   test('Index (by non admin but affected on project)', async (assert) => {
-
     // Create 1 fake project
     await ProjectFactory.createMany(1)
     // Create 2 fake users
@@ -62,11 +60,11 @@ test.group('---> Projects routes <---', (group) => {
       .post('/projects/1/invitation')
       .set('Authorization', AdminToken)
       .send({
-        email:users[0].email
+        email: users[0].email,
       })
       .expect(201)
 
-    const userToken = (await createLoggedUser(BASE_URL,users[0].email,'12345678')).token
+    const userToken = (await createLoggedUser(BASE_URL, users[0].email, '12345678')).token
 
     const response = await supertest(BASE_URL)
       .get('/projects')
@@ -105,7 +103,7 @@ test.group('---> Projects routes <---', (group) => {
       .post('/projects/1/invitation')
       .set('Authorization', token)
       .send({
-        email:users[0].email
+        email: users[0].email,
       })
       .expect(201)
 
@@ -113,7 +111,7 @@ test.group('---> Projects routes <---', (group) => {
       .post('/projects/1/invitation')
       .set('Authorization', token)
       .send({
-        email:users[1].email
+        email: users[1].email,
       })
       .expect(201)
     // const appendUserResponse = await supertest(BASE_URL)
@@ -129,8 +127,8 @@ test.group('---> Projects routes <---', (group) => {
     // assert.equal(appendUserResponse.body.users[1].role, Role.USER)
 
     const updateResponse = await supertest(BASE_URL)
-      .patch("/projects/1")
-      .set("Authorization", token)
+      .patch('/projects/1')
+      .set('Authorization', token)
       .field('name', 'Update Test Project')
       .field('description', 'A project for functionnality testing purpose')
       .field('adress', '10 Rue du camion 22340 Saint-Augustin')
@@ -139,20 +137,19 @@ test.group('---> Projects routes <---', (group) => {
       .field('l3', 'de')
       .field('lat', 48.515720000000044)
       .field('long', -2.7638999999999783)
-      .set("Authorization", token)
-      .expect("Content-Type", /json/)
+      .set('Authorization', token)
+      .expect('Content-Type', /json/)
       .expect(200)
-      assert.equal(updateResponse.body.name, 'Update Test Project')
-      assert.equal(updateResponse.body.description, 'A project for functionnality testing purpose')
-      assert.equal(updateResponse.body.adress, '10 Rue du camion 22340 Saint-Augustin')
-      assert.equal(updateResponse.body.lat, 48.515720000000044)
-      assert.equal(updateResponse.body.long, -2.7638999999999783)
+    assert.equal(updateResponse.body.name, 'Update Test Project')
+    assert.equal(updateResponse.body.description, 'A project for functionnality testing purpose')
+    assert.equal(updateResponse.body.adress, '10 Rue du camion 22340 Saint-Augustin')
+    assert.equal(updateResponse.body.lat, 48.515720000000044)
+    assert.equal(updateResponse.body.long, -2.7638999999999783)
 
     await supertest(BASE_URL)
       .delete('/projects/1/users/' + users[1].id)
       .set('Authorization', token)
       .expect(200)
-
   })
   test('Remove', async () => {
     const token = (await createLoggedUser(BASE_URL)).token
@@ -160,12 +157,11 @@ test.group('---> Projects routes <---', (group) => {
     // Create 1 fake project
     await ProjectFactory.createMany(1)
 
-    await supertest(BASE_URL).delete("/projects/1")
-      .set("Authorization", token)
-      .expect("Content-Type", /json/)
+    await supertest(BASE_URL)
+      .delete('/projects/1')
+      .set('Authorization', token)
+      .expect('Content-Type', /json/)
       .expect(200)
-    await supertest(BASE_URL).get("/projects/1")
-      .set("Authorization", token)
-      .expect(404)
+    await supertest(BASE_URL).get('/projects/1').set('Authorization', token).expect(404)
   })
 })

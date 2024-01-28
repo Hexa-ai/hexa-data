@@ -11,9 +11,11 @@
     "esModuleInterop": true,
     "noEmit": true,
     "lib": ["esnext", "dom"],
-    "typeRoots": [
-      "./src/global.d.ts"
-    ]
+    "typeRoots": ["./src/global.d.ts"],
+    "baseUrl": "./",
+    "paths": {
+      "@/*": ["src/*"]
+    }
   },
   "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"]
 }

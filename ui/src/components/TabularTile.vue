@@ -1,5 +1,5 @@
 <template>
-  <div style="height: 30rem;" class="disabled:opacity-75 pb-20 pt-5 pl-5 pr-5 bg-white shadow rounded-lg mb-5 mt-5">
+  <div style="height: 30rem;" :class="'disabled:opacity-75 ' + (unstyled ? '' : 'pt-5 pl-5 pr-5 bg-white shadow rounded-lg mb-5 mt-5')">
     <InputFideldDate
       title="Interval"
       :range="true"
@@ -50,7 +50,8 @@ const store: Store = inject('store')!
 const props = defineProps<{
   url:string,
   datePicker:boolean
-  script:string
+  script:string,
+  unstyled?:boolean
 }>()
 
 let conf:AxiosRequestConfig<any>= {headers:{ Authorization: `Bearer ${store.authUser.token.token}` }}

@@ -1,5 +1,5 @@
 <template>
-  <div style="height: 30rem;" class="disabled:opacity-75 pb-20 pt-5 pl-5 pr-5 bg-white shadow rounded-lg mb-5 mt-5">
+  <div style="height: 30rem;" :class="'disabled:opacity-75 pb-20 ' + (unstyled ? '' : 'pt-5 pl-5 pr-5 bg-white shadow rounded-lg mb-5 mt-5')">
     <InputFieldDate
       title="Interval"
       :range="true"
@@ -29,8 +29,9 @@ const props = defineProps<{
   title?:string,
   type:String,
   url:string,
-  datePicker:boolea,
+  datePicker:boolean,
   warpScript:string,
+  unstyled?:boolean
 }>()
 
 

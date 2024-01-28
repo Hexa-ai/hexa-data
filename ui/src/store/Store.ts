@@ -1,7 +1,7 @@
-import { reactive } from "vue"
-import ProjectInfoModel from "../Models/ProjectInfoModel"
-import UserModel from "../Models/UserModel"
-import PublicAppSettings from "./../Models/PublicAppSettings"
+import { reactive } from 'vue'
+import ProjectInfoModel from '../Models/ProjectInfoModel'
+import UserModel from '../Models/UserModel'
+import PublicAppSettings from './../Models/PublicAppSettings'
 
 class Store {
   constructor() {
@@ -10,10 +10,10 @@ class Store {
     this.currentProject = <ProjectInfoModel>reactive(new ProjectInfoModel())
   }
 
-  public publicAppSettings:PublicAppSettings
-  public authUser:UserModel
-  public currentProject:ProjectInfoModel
-  public showSideBarDesktop:boolean = true
-  public memoDateRange:[string,string]=['','']
+  public publicAppSettings: PublicAppSettings
+  public authUser: UserModel
+  public currentProject: ProjectInfoModel
+  public showSideBarDesktop: boolean = true
+  public memoDateRange: [string, string] = ['', '']
 }
 export default Store

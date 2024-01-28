@@ -1,0 +1,20 @@
+warp_endpoint: ${WARP10_ENDPOINT}
+listen: ${ERLENMEYER_ENDPOINT}
+
+# Enable filter on remote read enpoint
+prometheus.remote_read.meta.replace.enabled: true
+# Replace all series meta "." by "_"
+prometheus.remote_read.meta.replace.map: 
+  ".": "_"
+
+# Enable filter on query enpoint only on series classnames
+prometheus.query.classname.replace.enabled: true
+# Replace all series classname "." by "_"
+prometheus.query.classname.replace.map: 
+  ".": "_"
+
+# Enable filter on query enpoint only on series labels
+prometheus.query.labels.replace.enabled: true
+# Replace all series classname "." by "_"
+prometheus.query.labels.replace.map: 
+  ".": "_"

@@ -5,7 +5,7 @@ import UpdateProjectValidator from '../Validators/UpdateProjectValidator'
 import ImportArchiveValidator from '../Validators/ImportArchiveValidator'
 import Project from '../Models/Project'
 import Warp10Service from '../../../Services/Warp10Service'
-import crypto from "crypto"
+import crypto from 'crypto'
 import Drive from '@ioc:Adonis/Core/Drive'
 import { string } from '@ioc:Adonis/Core/Helpers'
 import { DateTime } from 'luxon'
@@ -16,6 +16,8 @@ import Role from '../Contracts/enums/Roles'
 import User from 'App/Modules/Users/Models/User'
 import { Queue } from '@ioc:Setten/Queue'
 import Event from '@ioc:Adonis/Core/Event'
+import GrafanaService from 'App/Services/GrafanaService'
+import fs from 'fs/promises'
 
 export default class ProjectsController {
   /**
@@ -52,6 +54,10 @@ export default class ProjectsController {
           'writeToken',
           'tokenIssuance',
           'tokenExpiry',
+          'persistentReadToken',
+          'persistentWriteToken',
+          'persistentTokenIssuance',
+          'persistentTokenExpiry',
           'ImportExportCmd',
           'ImportExportParameters',
           'exportLink',
@@ -148,6 +154,10 @@ export default class ProjectsController {
             'writeToken',
             'tokenIssuance',
             'tokenExpiry',
+            'persistentReadToken',
+            'persistentWriteToken',
+            'persistentTokenIssuance',
+            'persistentTokenExpiry',
             'ImportExportCmd',
             'ImportExportParameters',
             'exportLink',
@@ -187,6 +197,7 @@ export default class ProjectsController {
     project.l1 = payload.l1
     project.l2 = payload.l2
     project.l3 = payload.l3
+
     await project.save()
 
     project.uuid = crypto.randomUUID()
@@ -345,5 +356,150 @@ export default class ProjectsController {
     } else {
       response.status(409)
     }
+  }
+
+  /**
+   * Generate new persistent tokens to the project.
+   * GET projects/:id/generatePersistentTokens
+   *
+   * @param {request} RequestContract
+   * @param {params} Record<string, any>
+   * @param {response} ResponseContract
+   */
+  public async generatePersistentTokens({ params, bouncer, request }: HttpContextContract) {
+    await bouncer.with('ProjectPolicy').authorize('generatePersistentTokens')
+    const project = await Project.findOrFail(params.id)
+    const duration = request.input('duration')
+
+    const warp10Service = new Warp10Service()
+    const tokens = await warp10Service.generatePairOfTokens(
+      { projectUuid: project.uuid },
+      project.uuid,
+      duration
+    )
+
+    project.persistentReadToken = tokens.readToken
+    project.persistentWriteToken = tokens.writeToken
+    project.persistentTokenIssuance = tokens.issuance
+    project.persistentTokenExpiry = tokens.expiry
+
+    await project.save()
+  }
+
+  /**
+   * Update the dashboard type of the project.
+   * GET projects/:id/updateDashboardType
+   *
+   * @param {request} RequestContract
+   * @param {params} Record<string, any>
+   * @param {response} ResponseContract
+   */
+  public async updateDashboardType({ params, bouncer, request }: HttpContextContract) {
+    await bouncer.with('ProjectPolicy').authorize('updateDashboardType')
+    const project = await Project.findOrFail(params.id)
+    const dashboardType = request.input('dashboardType')
+    const dashboardGrafanaUrl = request.input('dashboardGrafanaUrl')
+    let dashboardGrafanaReadPassword = request.input('dashboardGrafanaReadPassword')
+    let dashboardGrafanaWritePassword = request.input('dashboardGrafanaWritePassword')
+
+    if (dashboardType === 'GRAFANA' && dashboardGrafanaUrl !== '') {
+      const grafanaService = new GrafanaService(dashboardGrafanaUrl)
+      dashboardGrafanaReadPassword = await grafanaService.configureReader(
+        dashboardGrafanaReadPassword
+      )
+      dashboardGrafanaWritePassword = await grafanaService.configureWriter(
+        dashboardGrafanaWritePassword
+      )
+    } else {
+      dashboardGrafanaReadPassword = ''
+      dashboardGrafanaWritePassword = ''
+    }
+
+    project.dashboardType = dashboardType
+    project.dashboardGrafanaUrl = dashboardGrafanaUrl
+    project.dashboardGrafanaReadPassword = dashboardGrafanaReadPassword
+    project.dashboardGrafanaWritePassword = dashboardGrafanaWritePassword
+
+    await project.save()
+  }
+
+  /**
+   * Retrieve the grafana cookie session for the logged user.
+   * GET projects/:id/grafana/cookies
+   *
+   * @param {params} Record<string, any>
+   * @param {response} ResponseContract
+   */
+  public async getGrafanaCookies({ params, bouncer, response, auth }: HttpContextContract) {
+    await bouncer.with('ProjectPolicy').authorize('getGrafanaCookies', params.id)
+    const project = await Project.findOrFail(params.id)
+
+    if (auth.user && project.dashboardType === 'GRAFANA' && project.dashboardGrafanaUrl !== '') {
+      const grafanaService = new GrafanaService(project.dashboardGrafanaUrl)
+
+      await grafanaService.configureOrg()
+
+      if (auth.user.isAdmin) {
+        return await grafanaService.getAdminCookies()
+      } else if (await auth.user.hasProjectRights(project.id, Role.EDITOR)) {
+        return await grafanaService.getWriterCookies(project.dashboardGrafanaWritePassword)
+      } else {
+        return await grafanaService.getReaderCookies(project.dashboardGrafanaReadPassword)
+      }
+    }
+
+    // Return a 400 error if no user or the dashboard type is not GRAFANA
+    return response.status(400)
+  }
+
+  /**
+   * Update the variable type of the project.
+   * GET projects/:id/updateVariableType
+   *
+   * @param {request} RequestContract
+   * @param {params} Record<string, any>
+   * @param {response} ResponseContract
+   */
+  public async updateVariableType({ params, bouncer, request }: HttpContextContract) {
+    await bouncer.with('ProjectPolicy').authorize('updateVariableType')
+    const project = await Project.findOrFail(params.id)
+    project.variableType = request.input('variableType')
+    await project.save()
+  }
+
+  public async getWarp10Variables({ params, request, response }: HttpContextContract) {
+    const project = await Project.findOrFail(params.id)
+
+    const warp10Service = new Warp10Service()
+    const result = await warp10Service.searchGts(
+      project.readToken,
+      project.writeToken,
+      request.qs().search ?? '*'
+    )
+
+    let logs = ''
+    try {
+      logs = await fs.readFile('bin/telegraf/logs/' + project.uuid + '.log', 'utf-8')
+    } catch (e) {
+      
+    }
+
+    response.send({
+      ...result,
+      logs,
+    })
+  }
+
+  public async deleteWarp10Variables({ params, request, response }: HttpContextContract) {
+    const project = await Project.findOrFail(params.id)
+
+    const warp10Service = new Warp10Service()
+    const result = await warp10Service.deleteGts(
+      request.input('variables'),
+      project.readToken,
+      project.writeToken
+    )
+
+    response.send(result)
   }
 }

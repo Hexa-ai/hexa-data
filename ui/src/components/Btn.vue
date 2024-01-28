@@ -1,10 +1,13 @@
 <template>
-  <button type="submit" :class="[primary==true ? 'primary text-white' : 'border-gray-300 text-gray-500 ', 'flex justify-center space-x-2 py-2 px-3 border rounded-md shadow-sm text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 has-tooltip']">
+  <button :type="type ?? 'submit'" :class="[primary==true ? 'primary text-white' : 'border-gray-300 text-gray-500 ', 'flex justify-center space-x-2 py-2 px-3 border rounded-md shadow-sm text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 has-tooltip']">
     <slot></slot>
     <StopIcon v-if="action=='stop'" class="flex-shrink-0 h-5 w-5 text-gray-400"></StopIcon>
     <PlayIcon v-if="action=='play'" class="flex-shrink-0 h-5 w-5 text-gray-400"></PlayIcon>
     <UserAddIcon v-if="action=='addUser'" class="flex-shrink-0 h-5 w-5 text-gray-400"></UserAddIcon>
     <DocumentAddIcon v-if="action=='create'" class="flex-shrink-0 h-5 w-5 text-gray-400"></DocumentAddIcon>
+    <DocumentSearchIcon v-if="action=='search'" class="flex-shrink-0 h-5 w-5 text-gray-400"></DocumentSearchIcon>
+    <CodeIcon v-if="action=='code'" class="flex-shrink-0 h-5 w-5 text-gray-400"></CodeIcon >
+    <ChartBarIcon v-if="action=='chart'" class="flex-shrink-0 h-5 w-5 text-gray-400"></ChartBarIcon>
     <PencilAltIcon v-if="action=='update'" class="flex-shrink-0 h-5 w-5 text-gray-400"></PencilAltIcon>
     <TrashIcon v-if="action=='delete'" class="flex-shrink-0 h-5 w-5 text-gray-400"></TrashIcon>
     <UploadIcon v-if="action=='upload'" class="flex-shrink-0 h-5 w-5 text-gray-400"></UploadIcon>
@@ -18,12 +21,13 @@
   </button>
 </template>
 <script setup lang="ts">
-  import { UserAddIcon, DocumentAddIcon, PencilAltIcon, TrashIcon, UploadIcon, DownloadIcon, XIcon, PlayIcon, StopIcon } from '@heroicons/vue/outline'
+  import { UserAddIcon, DocumentAddIcon, DocumentSearchIcon, PencilAltIcon, TrashIcon, UploadIcon, DownloadIcon, XIcon, PlayIcon, StopIcon, ChartBarIcon, CodeIcon } from '@heroicons/vue/outline'
 
   const props = defineProps<{
     text:string,
     primary:boolean
     action?:any
+    type?:'button'|'submit'|'reset'
   }>()
 
 </script>

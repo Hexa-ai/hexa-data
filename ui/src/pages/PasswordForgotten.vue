@@ -21,7 +21,7 @@
             {{ store.publicAppSettings.appTitle }}
           </h2>
           <p class="mt-2 text-sm text-gray-600">
-            {{ $t("forgotPasswordPage.infos") }}
+            {{ $t('forgotPasswordPage.infos') }}
           </p>
         </div>
 
@@ -34,7 +34,11 @@
                 :isRequired="true"
                 :type="FieldType.EMAIL"
               ></InputField>
-              <Btn :text="$t('forgotPasswordPage.resetPassword')" :primary="true" class="w-full"></Btn>
+              <Btn
+                :text="$t('forgotPasswordPage.resetPassword')"
+                :primary="true"
+                class="w-full"
+              ></Btn>
               <div class="mt-6 relative">
                 <div class="absolute inset-0 flex items-center" aria-hidden="true">
                   <div class="w-full border-t border-gray-300" />
@@ -57,14 +61,15 @@
                   <div class="w-full border-t border-gray-300" />
                 </div>
                 <div class="relative flex justify-center text-sm">
-                  <span class="px-2 bg-white text-gray-500">{{ $t("loginPage.signUpTitle") }}</span>
+                  <span class="px-2 bg-white text-gray-500">{{ $t('loginPage.signUpTitle') }}</span>
                 </div>
               </div>
               <div>
                 <router-link
                   to="/register"
                   class="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
-                >{{ $t("loginPage.signUp") }}</router-link>
+                  >{{ $t('loginPage.signUp') }}</router-link
+                >
               </div>
             </form>
           </div>
@@ -99,15 +104,14 @@ const router = useRouter()
 const store: any = inject('store')
 let formData = ref<{
   email: string
-}>({ email: ''})
+}>({ email: '' })
 
 async function newPassword() {
   console.log('Password forgotten')
   axios
     .post(
-      window.location.origin +
-        import.meta.env.VITE_API_PREFIX +
-        '/forgot-password', formData.value
+      window.location.origin + import.meta.env.VITE_API_PREFIX + '/forgot-password',
+      formData.value
     )
     .then((response) => {
       console.log(response.data)
