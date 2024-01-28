@@ -5,7 +5,7 @@ export default class AuthDeviceValidator {
   constructor(protected ctx: HttpContextContract) {}
   public schema = schema.create({
 
-    clientId: schema.string(),
+    clientId: schema.string.optional(),
     username: schema.string(),
     password: schema.string(),
 

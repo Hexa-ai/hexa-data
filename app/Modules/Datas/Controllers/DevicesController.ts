@@ -151,7 +151,20 @@ export default class DevicesController {
    */
   public async mqttAuth({ request, response, logger }: HttpContextContract) {
     const payload = await request.validate(AuthDeviceValidator)
-    const device = await Device.query().where('clientId', payload.clientId).andWhere('username', payload.username).first()
+    let device:Device|null = null
+    // For device connection (username + password + client )
+    if (payload.clientId!=undefined) {
+      device = await Device.query().where('clientId', payload.clientId!).andWhere('username', payload.username).first()
+    }
+    // For Hexa-data Grafana connection (username + password) only if username == project.uuid
+    if (device == null) {
+      device = await Device.query().where('username', payload.username).preload('project').first()
+      if (device?.username != device?.project.uuid) {
+        device = null
+      }
+    }
+
+    // If device exist in hexa-data database
     if (device !== null) {
       if (!(await Hash.verify(device!.password, payload.password))) {
         logger.info('MQTT Connection forbidden ->' + payload.clientId)
@@ -161,7 +174,8 @@ export default class DevicesController {
         response.status(200)
       }
     } else {
-      if (payload.clientId.indexOf(Env.get('MQTT_SUBSCRIBER_CLIENTID')) == 0 && payload.username == Env.get('MQTT_SUBSCRIBER_USERNAME') && payload.password == Env.get('MQTT_SBSCRIBER_PASSWORD')) {
+      // For Ingress connextion only if clientId start with the MQTT_SUBSCRIBER_CLIENTID env variable value
+      if (payload.clientId!.indexOf(Env.get('MQTT_SUBSCRIBER_CLIENTID')) == 0 && payload.username == Env.get('MQTT_SUBSCRIBER_USERNAME') && payload.password == Env.get('MQTT_SBSCRIBER_PASSWORD')) {
         logger.info('MQTT Connection authorized ->' + payload.clientId)
         response.status(200)
       }
