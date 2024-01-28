@@ -195,8 +195,20 @@ export default class DevicesController {
    */
   public async mqttAcl({ request, response, logger }: HttpContextContract) {
     const payload = await request.validate(AclDeviceValidator)
-    const device = await Device.getByClientId(payload.clientId)
+    // const device = await Device.getByClientId(payload.clientId)
 
+    let device:Device|null = null
+    // For device pub/sub ( clientId )
+    if (payload.clientId!=undefined) {
+      device = await Device.getByClientId(payload.clientId)
+    }
+    // For Hexa-data Grafana connection (username + password) only if username == project.uuid
+    if (device == null) {
+      device = await Device.query().where('username', payload.username).preload('project').first()
+      if (device?.username != device?.project.uuid) {
+        device = null
+      }
+    }
 
     if (device !== null) {
       const deviceProjectId: string = device?.projectId.toString() || ''
