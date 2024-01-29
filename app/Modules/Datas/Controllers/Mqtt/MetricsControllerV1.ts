@@ -21,31 +21,26 @@ export default class MetricsController {
       ? mqttMessage.payload
       : [mqttMessage.payload]
 
-    // Extract the item name prefix
-    const itemNamePrefix = mqttMessage.params[1] || null
+    // Extract the item name prefix (if any, can be multiple nested levels into topic)
+    let itemNamePrefix = mqttMessage.params.length > 1 ? '' : null
+    for (let i = 1; i < mqttMessage.params.length; i++) {
+      itemNamePrefix += mqttMessage.params[i] + '.'
+    }
 
     // Handle each payload individually
     for (const payload of payloads) {
-      // Extract special attributes
-      const timestamp = payload.ts || Date.now()
-      const tags = payload.tags || {}
-
-      // Items will contain all the payload attributs except "ts" and "tags"
-      const items = {
-        ...payload,
-        ts: undefined,
-        tags: undefined,
-      }.filter((item) => item !== undefined)
+      // Extract special attributs and push the other into items
+      const { ts = Date.now(), tags = {}, unit = null, ...items } = payload
 
       // Now push all the items to the ingress
-      for (const key of items) {
-        const value = items[key]
+      for (const [key, value] of Object.entries(items)) {
         await this.ingress.push({
           token: this.projectTokens[mqttMessage.projectId],
-          classname: itemNamePrefix ? itemNamePrefix + '.' + key : key,
+          classname: itemNamePrefix ? itemNamePrefix + key : key,
           value,
           labels: tags,
-          timestamp,
+          attributes: unit !== null ? { unit } : {},
+          timestamp: ts,
         })
       }
     }
