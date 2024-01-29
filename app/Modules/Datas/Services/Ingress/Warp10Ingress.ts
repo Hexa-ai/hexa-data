@@ -1,4 +1,5 @@
 import axios from 'axios'
+import Logger from '@ioc:Adonis/Core/Logger'
 
 const FLUSH_BUFFER_INTERVAL = 1 // In seconds
 
@@ -49,8 +50,6 @@ export default class Warp10Ingress {
           '\n'
       }
 
-      console.log(payload)
-
       // Push the request to the promise pool
       promises.push(
         axios.post(process.env.WARP10_ENDPOINT + '/api/v0/update', payload, {
@@ -59,6 +58,8 @@ export default class Warp10Ingress {
           },
         })
       )
+
+      Logger.info('Pushing ' + currentBuffer[token].length + ' entrie(s) to Warp10 (token ' + token + ')')
     }
 
     // Wait for all the requests to be done
@@ -67,7 +68,7 @@ export default class Warp10Ingress {
     // Call the flushBuffer method again after the buffer flush interval
     setTimeout(() => {
       this.flushBuffer()
-    }, FLUSH_BUFFER_INTERVAL)
+    }, FLUSH_BUFFER_INTERVAL * 1000)
   }
 
   protected formatJson(labels: Record<string, string>) {
