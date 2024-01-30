@@ -30,7 +30,7 @@ export default class MetricsController {
     // Handle each payload individually
     for (const payload of payloads) {
       // Extract special attributs and push the other into items
-      const { ts = Date.now(), tags = {}, unit = null, ...items } = payload
+      const { ts = Date.now(), tags = {}, ...items } = payload
 
       // Now push all the items to the ingress
       for (const [key, value] of Object.entries(items)) {
@@ -38,8 +38,7 @@ export default class MetricsController {
           token: this.projectTokens[mqttMessage.projectId],
           classname: itemNamePrefix ? itemNamePrefix + key : key,
           value,
-          labels: tags,
-          attributes: unit !== null ? { unit } : {},
+          labels: { ...tags, topic: mqttMessage.topic },
           timestamp: ts,
         })
       }

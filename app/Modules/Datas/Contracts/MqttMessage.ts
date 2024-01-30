@@ -1,4 +1,5 @@
 export interface MqttMessage {
+  topic: string, // The message topic
   prefix: string, // The prefix (HD)
   projectUuid: string, // The project UUID
   projectId: number, // The project ID

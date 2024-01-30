@@ -11,7 +11,7 @@ export default class Warp10Ingress {
     this.flushBuffer()
   }
 
-  public async push({ token, classname, value, labels = {}, attributes = {}, timestamp = null }) {
+  public async push({ token, classname, value, labels = {}, timestamp = null }) {
     // Create buffer entry for the token if not exists
     if (!(token in this.buffer)) {
       this.buffer[token] = []
@@ -22,7 +22,6 @@ export default class Warp10Ingress {
       classname,
       value,
       labels,
-      attributes,
       timestamp: timestamp || Date.now(),
     })
   }
@@ -38,13 +37,12 @@ export default class Warp10Ingress {
     for (const token of Object.keys(currentBuffer)) {
       // Populate the payload to send to the warp10 ingress
       let payload = ''
-      for (const { classname, value, labels, attributes, timestamp } of currentBuffer[token]) {
+      for (const { classname, value, labels, timestamp } of currentBuffer[token]) {
         payload +=
           this.formatTimestamp(timestamp) +
           '// ' +
           classname +
-          this.formatJson(labels) +
-          this.formatJson({ ...attributes, type: this.getValueType(value) }) +
+          this.formatJson({ ... labels, type: this.getValueType(value) }) +
           ' ' +
           this.formatValue(value) +
           '\n'

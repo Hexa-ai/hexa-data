@@ -131,8 +131,8 @@
                   <Tag v-if="item.c.includes('.@')" severity="info">string / bool</Tag>
                   <Tag v-else severity="info">numeric</Tag>
                 </div>
-                <div v-if="item.l['#unit']" class="mt-1">
-                  <Tag :value="item.l['#unit']"></Tag>
+                <div v-if="item.l['unit']" class="mt-1">
+                  <Tag :value="item.l['unit']"></Tag>
                 </div>
               </div>
 
@@ -291,7 +291,7 @@ const isEditor = computed(() => {
 })
 
 const formatGtsLabels = (labels: Array<any>) => {
-  const excluded = ['.app', 'source', 'projectUuid', 'topic', '#unit']
+  const excluded = ['.app', 'type', 'projectUuid', 'topic', 'unit']
   return Object.entries(labels)
     .filter(([key]) => !excluded.includes(key))
     .map(([key, value]) => `${key} = ${value}`)

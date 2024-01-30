@@ -219,7 +219,7 @@ export default class MqttSbuscriberService {
       const payload: any = JSON.parse(message.toString())
 
       // Build up the MqttMessage, and dispatch it to the routes
-      const mqttMessage: MqttMessage = { prefix, projectUuid, projectId, action, params, payload }
+      const mqttMessage: MqttMessage = { topic, prefix, projectUuid, projectId, action, params, payload }
       await dispatchRouting({ mqttMessage })
     } catch (e) {
       Logger.warn('Could not route mqtt message ' + topic + ':' + e.message)
