@@ -31,8 +31,6 @@ export default class Background extends BaseCommand {
 
     await this.startMqttSub()
     await this.startUserScript()
-
-    await this.handleTelegrafRedisMessages()
   }
 
   protected async startMqttSub() {
@@ -46,10 +44,5 @@ export default class Background extends BaseCommand {
     const UserScriptService = (await import('App/Modules/Datas/Services/UserScriptService')).default
     new UserScriptService()
     this.logger.info('---- UserScript Runner Starting -----')
-  }
-
-  protected async handleTelegrafRedisMessages() {
-    const TelegrafService = (await import('App/Services/TelegrafService')).default
-    TelegrafService.handleRedisMessages()
   }
 }

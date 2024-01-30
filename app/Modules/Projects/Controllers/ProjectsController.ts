@@ -17,7 +17,6 @@ import User from 'App/Modules/Users/Models/User'
 import { Queue } from '@ioc:Setten/Queue'
 import Event from '@ioc:Adonis/Core/Event'
 import GrafanaService from 'App/Services/GrafanaService'
-import fs from 'fs/promises'
 
 export default class ProjectsController {
   /**
@@ -477,16 +476,8 @@ export default class ProjectsController {
       request.qs().search ?? '*'
     )
 
-    let logs = ''
-    try {
-      logs = await fs.readFile('bin/telegraf/logs/' + project.uuid + '.log', 'utf-8')
-    } catch (e) {
-      
-    }
-
     response.send({
-      ...result,
-      logs,
+      ...result
     })
   }
 

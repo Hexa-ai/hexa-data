@@ -44,7 +44,7 @@ const props = defineProps<{
 
 let warpScript = ref('')
 
-if (props.className.includes('.@')) {
+if (props.labels?.type === 'string' || props.labels?.type === 'boolean') {
   chartType.value = 'tabular'
   warpScript.value = `
     {
