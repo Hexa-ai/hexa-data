@@ -17,7 +17,6 @@ import User from 'App/Modules/Users/Models/User'
 import { Queue } from '@ioc:Setten/Queue'
 import Event from '@ioc:Adonis/Core/Event'
 import GrafanaService from 'App/Services/GrafanaService'
-import fs from 'fs/promises'
 
 export default class ProjectsController {
   /**
