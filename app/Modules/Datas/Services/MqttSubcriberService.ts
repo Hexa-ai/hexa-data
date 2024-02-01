@@ -200,7 +200,6 @@ export default class MqttSbuscriberService {
       const [prefix = 'HD', projectUuid = null, action = null, ...params] = topic.split('/')
 
       // Verify if the project Uuid exists
-      let projectId: number
       if (projectUuid === null) {
         throw new Error('the projectUuid parameter is missing in the topic')
       }
