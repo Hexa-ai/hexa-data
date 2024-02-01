@@ -29,7 +29,7 @@
             :url="warp10Url"
             :class-name="showVariableHistoryTarget.c"
             :labels="showVariableHistoryTarget.l"
-            :value-type="1"
+            :value-type="(showVariableHistoryTarget.l?.type === 'string' || showVariableHistoryTarget.l?.type === 'boolean' ? 4 : 1)"
             :unstyled="true"
           ></VarWarpChart>
 
