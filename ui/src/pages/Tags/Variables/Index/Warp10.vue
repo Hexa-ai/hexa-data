@@ -29,7 +29,7 @@
             :url="warp10Url"
             :class-name="showVariableHistoryTarget.c"
             :labels="showVariableHistoryTarget.l"
-            :value-type="1"
+            :value-type="(showVariableHistoryTarget.l?.type === 'string' || showVariableHistoryTarget.l?.type === 'boolean' ? 4 : 1)"
             :unstyled="true"
           ></VarWarpChart>
 
@@ -126,10 +126,9 @@
                 <template v-else> {{  $t('tags.noLastValue') }} </template>
               </div>
 
-              <div class="flex flex-col justify-center px-5 hidden md:block">
+              <div class="flex flex-col justify-center px-5 hidden md:block" style="min-width: 110px;">
                 <div>
-                  <Tag v-if="item.c.includes('.@')" severity="info">string / bool</Tag>
-                  <Tag v-else severity="info">numeric</Tag>
+                  <Tag v-if="item.l.type" severity="info">{{ item.l.type }}</Tag>
                 </div>
                 <div v-if="item.l['unit']" class="mt-1">
                   <Tag :value="item.l['unit']"></Tag>

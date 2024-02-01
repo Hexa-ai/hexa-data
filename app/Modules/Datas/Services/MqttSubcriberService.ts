@@ -200,10 +200,7 @@ export default class MqttSbuscriberService {
       const [prefix = 'HD', projectUuid = null, action = null, ...params] = topic.split('/')
 
       // Verify if the project Uuid exists
-      let projectId: number
-      if (projectUuid !== null && projectUuid in this.gtsProjectUuidMapping) {
-        projectId = this.gtsProjectUuidMapping[projectUuid]
-      } else {
+      if (projectUuid === null) {
         throw new Error('the projectUuid parameter is missing in the topic')
       }
 
@@ -219,7 +216,7 @@ export default class MqttSbuscriberService {
       const payload: any = JSON.parse(message.toString())
 
       // Build up the MqttMessage, and dispatch it to the routes
-      const mqttMessage: MqttMessage = { topic, prefix, projectUuid, projectId, action, params, payload }
+      const mqttMessage: MqttMessage = { topic, prefix, projectUuid, action, params, payload }
       await dispatchRouting({ mqttMessage })
     } catch (e) {
       Logger.warn('Could not route mqtt message ' + topic + ':' + e.message)
