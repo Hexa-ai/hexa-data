@@ -1,6 +1,7 @@
 import Project from 'App/Modules/Projects/Models/Project'
 import { MqttMessage } from '../../Contracts/MqttMessage'
 import Warp10Ingress from '../../Services/Ingress/Warp10Ingress'
+import Logger from '@ioc:Adonis/Core/Logger'
 
 const REFRESH_TOKENS_INTERVAL = 10 // In seconds
 
@@ -11,11 +12,19 @@ export default class MetricsController {
   public constructor() {
     this.ingress = new Warp10Ingress()
 
-    setInterval(this.refreshTokens, REFRESH_TOKENS_INTERVAL * 1000)
+    setInterval(() => {
+      this.refreshTokens()
+    }, REFRESH_TOKENS_INTERVAL * 1000)
     this.refreshTokens()
   }
 
   public async handle(mqttMessage: MqttMessage) {
+    const token = this.projectTokens[mqttMessage.projectUuid]
+    if (!token) {
+      Logger.error('Received a message for an unknown project: ' + mqttMessage.projectUuid)
+      return
+    }
+
     // Force the payload to be an array of payloads
     const payloads = Array.isArray(mqttMessage.payload)
       ? mqttMessage.payload
@@ -35,7 +44,7 @@ export default class MetricsController {
       // Now push all the items to the ingress
       for (const [key, value] of Object.entries(items)) {
         await this.ingress.push({
-          token: this.projectTokens[mqttMessage.projectId],
+          token: this.projectTokens[mqttMessage.projectUuid],
           classname: itemNamePrefix ? itemNamePrefix + key : key,
           value,
           labels: { ...tags, topic: mqttMessage.topic },
@@ -49,7 +58,9 @@ export default class MetricsController {
   protected async refreshTokens() {
     this.projectTokens = {}
     for (const project of await Project.all()) {
-      this.projectTokens[project.id] = project.writeToken
+      this.projectTokens[project.uuid] = project.writeToken
     }
+
+    Logger.info('Refreshed ' + Object.keys(this.projectTokens).length + ' project tokens')
   }
 }
