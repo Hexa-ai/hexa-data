@@ -17,7 +17,7 @@ export default class DashboardsController {
    * @param {response} ResponseContract
    * @param {Bouncer} ActionsAuthorizerContract<User>
    */
-  public async exec({ request, params, response, bouncer, auth }: HttpContextContract) {
+  public async exec({ request, params, response, bouncer }: HttpContextContract) {
     await bouncer.with('DashboardPolicy').authorize('exec', params.projectId)
     const requestParams = request.qs()
 

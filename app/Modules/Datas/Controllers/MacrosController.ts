@@ -34,7 +34,7 @@ export default class MacrosController {
    * @param {response} ResponseContract
    * @param {Bouncer} ActionsAuthorizerContract<User>
    */
-  public async jsPlay({ params, response, bouncer, auth }: HttpContextContract) {
+  public async jsPlay({ params, response, bouncer }: HttpContextContract) {
     await bouncer.with('TagPolicy').authorize('store', params.projectId, 4)
     const project = await Project.findOrFail(params.projectId)
     const macro = await Tag.query().where('projectId', project.id).andWhere('id', params.macroId).firstOrFail()

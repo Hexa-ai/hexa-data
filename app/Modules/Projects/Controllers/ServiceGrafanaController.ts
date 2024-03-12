@@ -82,7 +82,7 @@ export default class ServiceGrafanaController {
     }
   }
 
-  public async getDefaultConfig({ bouncer, response }: HttpContextContract) {
+  public async getDefaultConfig({ bouncer }: HttpContextContract) {
     await bouncer.with('ProjectPolicy').authorize('manageGrafanaService')
     return {
       config: await fs.readFile('./resources/project_services/config/grafana.ini', 'utf-8'),

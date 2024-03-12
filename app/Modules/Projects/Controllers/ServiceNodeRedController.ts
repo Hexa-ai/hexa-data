@@ -79,7 +79,7 @@ export default class ServiceNodeRedController {
     }
   }
 
-  public async getDefaultConfig({ bouncer, response }: HttpContextContract) {
+  public async getDefaultConfig({ bouncer }: HttpContextContract) {
     await bouncer.with('ProjectPolicy').authorize('manageNodeRedService')
     return {
       config: await fs.readFile('./resources/project_services/config/settings.js', 'utf-8'),
