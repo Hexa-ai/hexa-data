@@ -4,95 +4,69 @@
       <template v-slot:menuLeft>
         <SearchNav v-model="refSearch"></SearchNav>
       </template>
+
       <template v-slot:menuRight class="p-3">
-        <Btn
-          v-if="store.authUser.isAdmin == 1 || store.currentProject.owner.id == store.authUser.id"
-          :text="edit == true ? $t('cancel') : $t('edit')"
-          :primary="false"
-          :action="edit == true ? 'cancel' : 'update'"
-          class="m-3"
-          @click="edit = !edit"
-        ></Btn>
+        <Btn v-if="store.authUser.isAdmin == 1 || store.currentProject.owner.id == store.authUser.id"
+          :text="edit == true ? $t('cancel') : $t('edit')" :primary="false" :action="edit == true ? 'cancel' : 'update'"
+          class="m-3" @click="edit = !edit"></Btn>
       </template>
+
       <template v-slot:default>
-        <Dialog
-          v-model:visible="showVariableHistoryVisible"
-          modal
-          :header="'Historique ' + showVariableHistoryTarget?.c"
-          :pt="{
-            root: 'rounded-lg shadow-lg border-0 max-h-[90vh] w-full max-w-screen-lg m-0 dark:border dark:border-surface-700 transform scale-100',
-          }"
-          :draggable="false"
-        >
-          <VarWarpChart
-            v-if="showVariableHistoryTarget"
-            :url="warp10Url"
-            :class-name="showVariableHistoryTarget.c"
-            :labels="showVariableHistoryTarget.l"
-            :value-type="(showVariableHistoryTarget.l?.type === 'string' || showVariableHistoryTarget.l?.type === 'boolean' ? 4 : 1)"
-            :unstyled="true"
-          ></VarWarpChart>
-
-          <div class="flex">
-            <div class="flex-grow"></div>
-            <Btn
-              class="ml-5"
-              :primary="false"
-              text="Fermer"
-              @click="closeShowVariableHistory"
-            ></Btn>
-          </div>
-        </Dialog>
-
-        <Dialog
-          v-model:visible="showVariableInfosVisible"
-          modal
-          :header="$t('tags.detailsOf') + ' ' + showVariableInfosTarget?.c"
-          :draggable="false"
-        >
-          <div v-if="showVariableInfosTarget">
-            <div class="mb-4">
-              <label class="font-bold block mb-2">{{ $t('tags.mqttTopic') }}</label>
-              <InputText
-                class="w-full mb-1"
-                v-model="showVariableInfosTarget.l.topic"
-                showIcon
-                inputId="buttondisplay"
-              />
-              <p class="text-gray-400">{{ $t('tags.mqttTopicDescription') }}</p>
+        <dialog ref="refShowVariableHistory" class="modal">
+          <div class="modal-box w-11/12 max-w-5xl">
+            <h3 class="font-bold text-lg">Historique {{ showVariableHistoryTarget?.c }}</h3>
+            <div class="mt-4">
+              <VarWarpChart v-if="showVariableHistoryTarget" :url="warp10Url" :class-name="showVariableHistoryTarget.c"
+                :labels="showVariableHistoryTarget.l"
+                :value-type="(showVariableHistoryTarget.l?.type === 'string' || showVariableHistoryTarget.l?.type === 'boolean' ? 4 : 1)"
+                :unstyled="true"></VarWarpChart>
             </div>
-            <div class="mb-4">
-              <label class="font-bold block mb-2">{{ $t('tags.warpScriptCode') }}</label>
-              <Textarea
-                class="w-full mb-1"
-                v-model="showVariableInfosWarpScript"
-                rows="5"
-                cols="30"
-              />
-              <p class="text-gray-400">{{ $t('tags.warpScriptCodeDescription') }}</p>
-            </div>
-            <div>
-              <label class="font-bold block mb-2">{{ $t('tags.labels') }}</label>
-              <pre class="w-full mb-1">{{ showVariableInfosTarget.l }}</pre>
-              <p class="text-gray-400">{{ $t('tags.labelsDescription') }}</p>
+            <div class="modal-action">
+              <form method="dialog">
+                <button class="btn">Close</button>
+              </form>
             </div>
           </div>
+          <form method="dialog" class="modal-backdrop">
+            <button>close</button>
+          </form>
+        </dialog>
 
-          <div class="flex">
-            <div class="flex-grow"></div>
-            <Btn
-              class="ml-5"
-              :primary="false"
-              :text="$t('close')"
-              @click="closeShowVariableInfos"
-            ></Btn>
+        <dialog ref="refShowVariableInfos" class="modal">
+          <div class="modal-box w-11/12 max-w-5xl">
+            <h3 class="font-bold text-lg">{{ $t('tags.detailsOf') + ' ' + showVariableInfosTarget?.c }}</h3>
+            <div class="mt-4" v-if="showVariableInfosTarget">
+              <div class="mb-4">
+                <label class="font-bold block mb-2">{{ $t('tags.mqttTopic') }}</label>
+                <input type="text" class="input input-bordered w-full mb-1" v-model="showVariableInfosTarget.l.topic"/>
+                <p class="text-gray-400">{{ $t('tags.mqttTopicDescription') }}</p>
+              </div>
+              <div class="mb-4">
+                <label class="font-bold block mb-2">{{ $t('tags.warpScriptCode') }}</label>
+                <textarea class="textarea textarea-bordered w-full mb-1" rows="5" v-model="showVariableInfosWarpScript"></textarea>
+                <p class="text-gray-400">{{ $t('tags.warpScriptCodeDescription') }}</p>
+              </div>
+              <div>
+                <label class="font-bold block mb-2">{{ $t('tags.labels') }}</label>
+                <pre class="w-full mb-1">{{ showVariableInfosTarget.l }}</pre>
+                <p class="text-gray-400">{{ $t('tags.labelsDescription') }}</p>
+              </div>
+            </div>
+            <div class="modal-action">
+              <form method="dialog">
+                <button class="btn">Close</button>
+              </form>
+            </div>
           </div>
-        </Dialog>
+          <form method="dialog" class="modal-backdrop">
+            <button>close</button>
+          </form>
+        </dialog>
 
-        <ContentWrapper>
+        <div class="m-3">
           <Loader v-if="loading"></Loader>
           <ItemListingCard v-else-if="variables.length" :items="variables">
-            <template v-slot:default="{ item }">
+            <template v-slot:default="{ item } : any">
               <div class="flex flex-col flex-grow max-w-4/5 whitespace-normal">
                 <div class="flex">
                   <VariableIcon class="h-5 w-5 mr-1 text-gray-400" aria-hidden="true" />
@@ -107,63 +81,47 @@
 
               <div class="flex flex-col text-sm hidden lg:block">
                 <template v-if="item.v && item.v[0]">
-                  <div
-                    style="
+                  <div style="
                       display: -webkit-box;
                       -webkit-line-clamp: 4;
                       -webkit-box-orient: vertical;
                       overflow: hidden;
                       text-overflow: ellipsis;
-                    "
-                  >
-                    {{  $t('tags.lastValue') }}
+                    ">
+                    {{ $t('tags.lastValue') }}
                     <strong>{{ item.v[0][1] }}</strong>
                   </div>
                   <div class="text-gray-400">
                     {{ dayjs(item.v[0][0] / 1000).format('YYYY-MM-DD HH:mm:ss') }}
                   </div>
                 </template>
-                <template v-else> {{  $t('tags.noLastValue') }} </template>
+
+                <template v-else> {{ $t('tags.noLastValue') }} </template>
               </div>
 
               <div class="flex flex-col justify-center px-5 hidden md:block" style="min-width: 110px;">
                 <div>
-                  <Tag v-if="item.l.type" severity="info">{{ item.l.type }}</Tag>
+                  <div v-if="item.l.type" class="badge badge-primary">{{ item.l.type }}</div>
                 </div>
                 <div v-if="item.l['unit']" class="mt-1">
-                  <Tag :value="item.l['unit']"></Tag>
+                  <div class="badge badge-secondary">{{ item.l['unit'] }}</div>
                 </div>
               </div>
 
               <div class="flex items-center">
-                <Btn
-                  :text="$t('tags.showDetails')"
-                  :action="'code'"
-                  :primary="false"
-                  @click="showVariableInfos(item)"
-                ></Btn>
-                <Btn
-                  :text="$t('tags.showHistory')"
-                  :action="'chart'"
-                  :primary="false"
-                  class="ml-2"
-                  @click="showVariableHistory(item)"
-                ></Btn>
-                <Btn
-                  v-if="isEditor && edit"
-                  :text="$t('remove')"
-                  :action="'delete'"
-                  :primary="false"
-                  class="ml-2"
-                  @click="removeVariable(item)"
-                ></Btn>
+                <Btn :text="$t('tags.showDetails')" :action="'code'" :primary="false" @click="showVariableInfos(item)">
+                </Btn>
+                <Btn :text="$t('tags.showHistory')" :action="'chart'" :primary="false" class="ml-2"
+                  @click="showVariableHistory(item)"></Btn>
+                <Btn v-if="isEditor && edit" :text="$t('remove')" :action="'delete'" :primary="false" class="ml-2"
+                  @click="removeVariable(item)"></Btn>
               </div>
             </template>
           </ItemListingCard>
           <div class="mt-5 text-gray-500" v-else>
             {{ $t('tags.noVariableOnProject') }}
           </div>
-        </ContentWrapper>
+        </div>
       </template>
     </BaseLayoutVue>
   </div>
@@ -183,15 +141,10 @@ import Loader from '@/components/Loader.vue'
 import { VariableIcon } from '@heroicons/vue/outline'
 import RoleType from '@/Contracts/RoleType'
 import axios from '@/services/axios'
-import ContentWrapper from '@/components/Prime/ContentWrapper.vue'
-import ItemListingCard from '@/components/Prime/ItemListingCard.vue'
+import ItemListingCard from '@/components/ItemListingCard.vue'
 import dayjs from 'dayjs'
-
-import { useConfirm } from 'primevue/useconfirm'
-import { useToast } from 'primevue/usetoast'
+import bus from '@/services/bus'
 import { autoCloseTags } from '@codemirror/lang-javascript'
-const confirm = useConfirm()
-const toast = useToast()
 
 // Create new type interface for variable
 interface Variable {
@@ -224,24 +177,21 @@ const props = defineProps({
 /*
  * SHOW VARIABLE HISTORY
  */
-const showVariableHistoryVisible = ref(false)
+const refShowVariableHistory: any = ref(null)
 const showVariableHistoryTarget = ref(null as Variable | null)
 const showVariableHistory = (variable: Variable) => {
-  showVariableHistoryVisible.value = true
+  refShowVariableHistory.value.showModal()
   showVariableHistoryTarget.value = variable
-}
-const closeShowVariableHistory = () => {
-  showVariableHistoryVisible.value = false
 }
 
 /*
  * SHOW VARIABLE INFOS
  */
-const showVariableInfosVisible = ref(false)
+const refShowVariableInfos: any = ref(null)
 const showVariableInfosTarget = ref(null as Variable | null)
 const showVariableInfosWarpScript = ref('')
 const showVariableInfos = (variable: Variable) => {
-  showVariableInfosVisible.value = true
+  refShowVariableInfos.value.showModal()
   showVariableInfosTarget.value = variable
   showVariableInfosWarpScript.value = `{
   'token'  $readToken
@@ -251,20 +201,16 @@ const showVariableInfos = (variable: Variable) => {
   'start' $interval  // timestamp or ISO8601 string
 } FETCH`
 }
-const closeShowVariableInfos = () => {
-  showVariableInfosVisible.value = false
-}
 
 const warp10Url =
   window.location.origin + import.meta.env.VITE_API_PREFIX + '/warp10/' + route.params.id
 
 const removeVariable = (variable: Variable) => {
-  confirm.require({
+  bus.emit('dialog.confirm', {
     message: t('tags.deleteMessage'),
-    header: t('tags.deleteTitle'),
-    rejectLabel: t('cancel'),
-    acceptLabel: t('tags.deleteConfirmButton'),
-    accept: async () => {
+    confirmText: t('tags.deleteConfirmButton'),
+    confirmClass: 'btn-error',
+    onConfirm: async () => {
       await axios.post('/projects/' + props.project.id + '/warp10/variables/delete', {
         variables: [
           {
@@ -274,11 +220,8 @@ const removeVariable = (variable: Variable) => {
         ],
       })
       await refresh()
-      toast.add({
-        detail: t('tags.deleteConfirmation'),
-        life: 3000,
-      })
-    },
+      bus.emit('toast', { message: t('tags.deleteConfirmation') })
+    }
   })
 }
 const isEditor = computed(() => {

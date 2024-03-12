@@ -1,6 +1,6 @@
 <template>
-  <IndexLegacy v-if="project?.dashboardType === 'LEGACY'"></IndexLegacy>
-  <IndexGrafana v-else-if="project?.dashboardType === 'GRAFANA'" :project="project"></IndexGrafana>
+  <IndexGrafana v-if="project?.grafanaEnabled" :project="project"></IndexGrafana>
+  <IndexLegacy v-else></IndexLegacy>
 </template>
 
 <script setup lang="ts">

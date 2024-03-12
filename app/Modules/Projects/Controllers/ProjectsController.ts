@@ -16,7 +16,6 @@ import Role from '../Contracts/enums/Roles'
 import User from 'App/Modules/Users/Models/User'
 import { Queue } from '@ioc:Setten/Queue'
 import Event from '@ioc:Adonis/Core/Event'
-import GrafanaService from 'App/Services/GrafanaService'
 
 export default class ProjectsController {
   /**
@@ -61,6 +60,13 @@ export default class ProjectsController {
           'ImportExportParameters',
           'exportLink',
           'exportLinkExpiry',
+          'grafanaVersion',
+          'grafanaConfiguration',
+          'grafanaReaderPassword',
+          'grafanaWriterPassword',
+          'nodeRedVersion',
+          'nodeRedConfiguration',
+          'nodeRedWriterPassword',
         ],
       },
     })
@@ -161,6 +167,13 @@ export default class ProjectsController {
             'ImportExportParameters',
             'exportLink',
             'exportLinkExpiry',
+            'grafanaVersion',
+            'grafanaConfiguration',
+            'grafanaReaderPassword',
+            'grafanaWriterPassword',
+            'nodeRedVersion',
+            'nodeRedConfiguration',
+            'nodeRedWriterPassword',
           ],
         },
       })
@@ -190,12 +203,6 @@ export default class ProjectsController {
     project.ownerId = auth.user!.id
     project.name = payload.name
     project.description = payload.description
-    project.lat = payload.lat
-    project.long = payload.long
-    project.adress = payload.adress
-    project.l1 = payload.l1
-    project.l2 = payload.l2
-    project.l3 = payload.l3
 
     await project.save()
 
@@ -239,12 +246,6 @@ export default class ProjectsController {
 
     project!.name = payload.name
     project!.description = payload.description
-    project!.lat = payload.lat
-    project!.long = payload.long
-    project!.adress = payload.adress
-    project!.l1 = payload.l1
-    project!.l2 = payload.l2
-    project!.l3 = payload.l3
     if (photo !== null) {
       project!.photo = Attachment.fromFile(photo)
     }
@@ -382,87 +383,6 @@ export default class ProjectsController {
     project.persistentTokenIssuance = tokens.issuance
     project.persistentTokenExpiry = tokens.expiry
 
-    await project.save()
-  }
-
-  /**
-   * Update the dashboard type of the project.
-   * GET projects/:id/updateDashboardType
-   *
-   * @param {request} RequestContract
-   * @param {params} Record<string, any>
-   * @param {response} ResponseContract
-   */
-  public async updateDashboardType({ params, bouncer, request }: HttpContextContract) {
-    await bouncer.with('ProjectPolicy').authorize('updateDashboardType')
-    const project = await Project.findOrFail(params.id)
-    const dashboardType = request.input('dashboardType')
-    const dashboardGrafanaUrl = request.input('dashboardGrafanaUrl')
-    let dashboardGrafanaReadPassword = request.input('dashboardGrafanaReadPassword')
-    let dashboardGrafanaWritePassword = request.input('dashboardGrafanaWritePassword')
-
-    if (dashboardType === 'GRAFANA' && dashboardGrafanaUrl !== '') {
-      const grafanaService = new GrafanaService(dashboardGrafanaUrl)
-      dashboardGrafanaReadPassword = await grafanaService.configureReader(
-        dashboardGrafanaReadPassword
-      )
-      dashboardGrafanaWritePassword = await grafanaService.configureWriter(
-        dashboardGrafanaWritePassword
-      )
-    } else {
-      dashboardGrafanaReadPassword = ''
-      dashboardGrafanaWritePassword = ''
-    }
-
-    project.dashboardType = dashboardType
-    project.dashboardGrafanaUrl = dashboardGrafanaUrl
-    project.dashboardGrafanaReadPassword = dashboardGrafanaReadPassword
-    project.dashboardGrafanaWritePassword = dashboardGrafanaWritePassword
-
-    await project.save()
-  }
-
-  /**
-   * Retrieve the grafana cookie session for the logged user.
-   * GET projects/:id/grafana/cookies
-   *
-   * @param {params} Record<string, any>
-   * @param {response} ResponseContract
-   */
-  public async getGrafanaCookies({ params, bouncer, response, auth }: HttpContextContract) {
-    await bouncer.with('ProjectPolicy').authorize('getGrafanaCookies', params.id)
-    const project = await Project.findOrFail(params.id)
-
-    if (auth.user && project.dashboardType === 'GRAFANA' && project.dashboardGrafanaUrl !== '') {
-      const grafanaService = new GrafanaService(project.dashboardGrafanaUrl)
-
-      await grafanaService.configureOrg()
-
-      if (auth.user.isAdmin) {
-        return await grafanaService.getAdminCookies()
-      } else if (await auth.user.hasProjectRights(project.id, Role.EDITOR)) {
-        return await grafanaService.getWriterCookies(project.dashboardGrafanaWritePassword)
-      } else {
-        return await grafanaService.getReaderCookies(project.dashboardGrafanaReadPassword)
-      }
-    }
-
-    // Return a 400 error if no user or the dashboard type is not GRAFANA
-    return response.status(400)
-  }
-
-  /**
-   * Update the variable type of the project.
-   * GET projects/:id/updateVariableType
-   *
-   * @param {request} RequestContract
-   * @param {params} Record<string, any>
-   * @param {response} ResponseContract
-   */
-  public async updateVariableType({ params, bouncer, request }: HttpContextContract) {
-    await bouncer.with('ProjectPolicy').authorize('updateVariableType')
-    const project = await Project.findOrFail(params.id)
-    project.variableType = request.input('variableType')
     await project.save()
   }
 

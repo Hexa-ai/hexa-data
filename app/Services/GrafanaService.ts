@@ -2,15 +2,11 @@ import Env from '@ioc:Adonis/Core/Env'
 import axios, { AxiosRequestHeaders } from 'axios'
 
 export default class GrafanaService {
-  constructor(endpoint) {
+  constructor(endpoint, adminUser, adminPassword) {
     this.endpoint = endpoint.replace(/\/$/, '')
     this.headers = {
       'Authorization':
-        'Basic ' +
-        Buffer.from(
-          Env.get('GRAFANA_ADMIN_USER') + ':' + Env.get('GRAFANA_ADMIN_PASSWORD'),
-          'utf-8'
-        ).toString('base64'),
+        'Basic ' + Buffer.from(adminUser + ':' + adminPassword, 'utf-8').toString('base64'),
       'Content-Type': 'application/json',
     }
   }
@@ -25,7 +21,7 @@ export default class GrafanaService {
    * @return {*}  {Promise<string>} The password used to configure the user
    */
   public async configureReader(password) {
-    return await this.configureUser(Env.get('GRAFANA_READ_USER'), password, 'Viewer')
+    return await this.configureUser(Env.get('VITE_DOCKER_GRAFANA_READ_USER'), password, 'Viewer')
   }
 
   /**
@@ -35,7 +31,7 @@ export default class GrafanaService {
    * @return {*}  {Promise<string>} The password used to configure the user
    */
   public async configureWriter(password) {
-    return await this.configureUser(Env.get('GRAFANA_WRITE_USER'), password, 'Editor')
+    return await this.configureUser(Env.get('VITE_DOCKER_GRAFANA_WRITE_USER'), password, 'Editor')
   }
 
   /**
@@ -44,7 +40,7 @@ export default class GrafanaService {
    * @return {*}  {Promise<{ grafana_session: string; grafana_session_expiry: string }>}
    */
   public async getReaderCookies(password) {
-    return await this.getCookies(Env.get('GRAFANA_READ_USER'), password)
+    return await this.getCookies(Env.get('VITE_DOCKER_GRAFANA_READ_USER'), password)
   }
 
   /**
@@ -53,7 +49,7 @@ export default class GrafanaService {
    * @return {*}  {Promise<{ grafana_session: string; grafana_session_expiry: string }>}
    */
   public async getWriterCookies(password) {
-    return await this.getCookies(Env.get('GRAFANA_WRITE_USER'), password)
+    return await this.getCookies(Env.get('VITE_DOCKER_GRAFANA_WRITE_USER'), password)
   }
 
   /**
@@ -61,7 +57,41 @@ export default class GrafanaService {
    * @return {*}  {Promise<{ grafana_session: string; grafana_session_expiry: string }>}
    */
   public async getAdminCookies() {
-    return await this.getCookies(Env.get('GRAFANA_ADMIN_USER'), Env.get('GRAFANA_ADMIN_PASSWORD'))
+    return await this.getCookies(
+      Env.get('DOCKER_GRAFANA_ADMIN_USER'),
+      Env.get('DOCKER_GRAFANA_ADMIN_PASSWORD')
+    )
+  }
+
+  /**
+   * Wait for the grafana instance to become available
+   * @param {number} seconds The maximum time to wait for the instance to become available
+   */
+  public async waitForAvailability(seconds) {
+    const startTime = Date.now()
+    let lastError = null
+
+    const checkAvailability = async () => {
+      if ((Date.now() - startTime) / 1000 > seconds) {
+        throw (
+          lastError || new Error(`Grafana n'est pas devenu disponible après ${seconds} secondes.`)
+        )
+      }
+
+      try {
+        await axios.get(this.endpoint + '/api/admin/settings', {
+          headers: this.headers,
+        })
+        return true // Grafana est disponible
+      } catch (error) {
+        lastError = error
+        // Attendre une seconde avant de réessayer
+        await new Promise((resolve) => setTimeout(resolve, 1000))
+        return checkAvailability()
+      }
+    }
+
+    return checkAvailability()
   }
 
   protected async getCookies(user, password) {

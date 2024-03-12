@@ -5,6 +5,7 @@ module.exports = {
   content: ['./ui/index.html', './ui/src/**/*.{vue,js,ts,jsx,tsx}'],
   darkMode: 'class',
   theme: {
+    "--rounded-box": "5rem",
     // colors: {
     //   indigo: {600:'#a5f3fc'},
     // },
@@ -13,7 +14,6 @@ module.exports = {
         sans: ['Inter var', ...defaultTheme.fontFamily.sans],
       },
       colors: {
-        'tahiti': '#3ab7bf',
         'primary-50': 'rgb(var(--primary-50))',
         'primary-100': 'rgb(var(--primary-100))',
         'primary-200': 'rgb(var(--primary-200))',
@@ -37,8 +37,54 @@ module.exports = {
         'surface-800': 'rgb(var(--surface-800))',
         'surface-900': 'rgb(var(--surface-900))',
         'surface-950': 'rgb(var(--surface-950))'
-      }
+      },
     },
   },
-  plugins: [require('./ui/node_modules/@tailwindcss/forms')],
+  plugins: [
+    require('./ui/node_modules/@tailwindcss/forms'),
+    require("./ui/node_modules/daisyui")
+  ],
+
+  daisyui: {
+    themes: [
+      {
+        hexadata: {
+          ...require("./ui/node_modules/daisyui/src/theming/themes")["light"],
+          "--rounded-box": "0.3rem",
+
+          primary: "#635faf",
+          "primary-content": "#ffffff",
+          secondary: "#3579bd",
+          "secondary-content": "#ffffff",
+          accent: "#e664c3",
+          "accent-content": "#ffffff",
+          neutral: "#d8dde4",
+          "neutral-content": "#00110e",
+          info: "#3579bd",
+          "info-content": "#ffffff",
+          success: "#62aa81",
+          "success-content": "#ffffff",
+          warning: "#e7af59",
+          "warning-content": "#ffffff",
+          error: "#d2491b",
+          "error-content": "#ffffff",
+
+          ".btn-smd": {
+            "height": "2.5rem",
+            "min-height": "2.5rem"
+          },
+
+          ".textarea": {
+            "font-size": "1em",
+            "line-height": "24px",
+          },
+
+          ".label-text": {
+            "font-weight": 600,
+            "padding-left": 0
+          }
+        },
+      },
+    ]
+  },
 }

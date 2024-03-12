@@ -1,8 +1,27 @@
 <template>
-  <Toast position="bottom-right" :pt="{ summary: { class: 'hidden' }, icon: { class: 'hidden' }, detail: { class: 'mt-0' } }" />
-  <ConfirmDialog></ConfirmDialog>
+  <dialog ref="refConfirmDialog" class="modal">
+    <div class="modal-box">
+      <h3 class="font-bold text-lg">{{ confirmDialog.title }}</h3>
+      <p class="py-4">{{ confirmDialog.message }}</p>
+      <div class="modal-action">
+        <form method="dialog">
+          <button :class="'btn mr-2 ' + confirmDialog.confirmClass" @click="confirmDialog.onConfirm()">{{
+        confirmDialog.confirmText }}</button>
+          <button :class="'btn ' + confirmDialog.cancelClass" @click="confirmDialog.onCancel()">{{
+        confirmDialog.cancelText }}</button>
+        </form>
+      </div>
+    </div>
+  </dialog>
 
-  <div id="layout" class="h-screen overflow-y-scroll" :style="[imgBgUrl!=null && enableImgBg==1 ?'background-image: url('+ imgBgUrl +');':'','background-color:'+ bgColor +';']">
+  <div v-show="toastVisible" class="toast z-50">
+    <div :class="'alert text-white ' + toastClass">
+      <span>{{ toast.message }}</span>
+    </div>
+  </div>
+
+  <div id="layout" class="h-screen overflow-y-scroll"
+    :style="[imgBgUrl != null && enableImgBg == 1 ? 'background-image: url(' + imgBgUrl + ');' : '', 'background-color:' + bgColor + ';']">
     <TransitionRoot as="template" :show="sidebarOpen">
       <Dialog as="div" class="fixed inset-0 flex z-40 md:hidden" @close="sidebarOpen = false">
         <TransitionChild as="template" enter="transition-opacity ease-linear duration-300" enter-from="opacity-0"
@@ -38,7 +57,7 @@
               <nav class="px-2 space-y-1">
                 <ul>
                   <template v-for="item in navigation" :key="item.name">
-                    <li v-if="item.visible==true">
+                    <li v-if="item.visible == true">
                       <router-link
                         :style="[item.current ? { backgroundColor: store.publicAppSettings.appMenuBgCurrentBodyColor } : { backgroundColor: store.publicAppSettings.appMenuBgBodyColor }, { color: store.publicAppSettings.appMenuFontBodyColor }]"
                         :class="['group flex items-center px-2 py-2 text-base font-medium rounded-md']" :to="item.href">
@@ -50,7 +69,7 @@
                       </router-link>
                       <ul>
                         <template v-for="subItem in item.subItems" :key="subItem.name">
-                          <li v-if="subItem.visible==true">
+                          <li v-if="subItem.visible == true">
                             <router-link
                               :style="[item.current ? { backgroundColor: store.publicAppSettings.appMenuBgCurrentBodyColor } : { backgroundColor: store.publicAppSettings.appMenuBgBodyColor }, { color: store.publicAppSettings.appMenuFontBodyColor }]"
                               :class="['group flex items-center px-5 py-2 text-base font-normal rounded-md']"
@@ -78,7 +97,7 @@
     </TransitionRoot>
     <!-- Static sidebar for desktop -->
     <div
-      :class="['hidden md:flex md:flex-col md:fixed md:inset-y-0 shadow', refShowSideBarDesktop==true ? 'md:w-64' : 'md:w-20' ]">
+      :class="['hidden md:flex md:flex-col md:fixed md:inset-y-0 shadow', refShowSideBarDesktop == true ? 'md:w-64' : 'md:w-20']">
       <!-- Sidebar component, swap this element with another sidebar if you like -->
       <div class="menu-body flex-1 flex flex-col min-h-0">
         <div class="flex items-center h-16 flex-shrink-0 px-4 menu-header">
@@ -95,18 +114,32 @@
         <div class="flex-1 flex flex-col overflow-y-auto">
           <nav class="flex-1 px-2 py-4 space-y-1">
             <ul>
+
               <template v-for="item in navigation" :key="item.name">
-                <li v-if="item.visible==true">
-                  <router-link :to="item.href"
-                    :class="[item.current ? 'menu-body-current-element menu-body-font' : 'menu-body-font menu-body-element', 'group flex items-center px-2 py-2 text-sm font-medium rounded-md', refShowSideBarDesktop ? 'mt-2' : 'justify-center mt-4']">
-                    <component :is="item.icon"
-                      :class="[item.current ? 'menu-body-font' : 'menu-body-font ', 'flex-shrink-0 h-6 w-6']"
-                      aria-hidden="true" />
-                    <div v-if="refShowSideBarDesktop" class="ml-3">{{ item.name }}</div>
-                  </router-link>
+                <li v-if="item.visible == true">
+                  <div class="flex w-full justify-between">
+                    <router-link :to="item.href"
+                      :class="[item.current ? 'w-full menu-body-current-element menu-body-font' : 'w-full menu-body-font menu-body-element', 'group flex items-center px-2 py-2 text-sm font-medium rounded-md', refShowSideBarDesktop ? 'mt-2' : 'justify-center mt-4']">
+                      <component :is="item.icon"
+                        :class="[item.current ? 'menu-body-font' : 'menu-body-font ', 'flex-shrink-0 h-6 w-6']"
+                        aria-hidden="true" />
+                      <div v-if="refShowSideBarDesktop" class="ml-3 w-full">
+                        {{ item.name }}
+                      </div>
+                    </router-link>
+
+                    <a v-if="item.external" :href="item.external" target="_blank" class="mt-4 ml-2 text-white">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                        stroke="currentColor" class="w-5 h-5">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                          d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+                      </svg>
+                    </a>
+                  </div>
+
                   <ul>
                     <template v-if="refShowSideBarDesktop" v-for="subItem in item.subItems" :key="subItem.name">
-                      <li v-if="subItem.visible==true">
+                      <li v-if="subItem.visible == true">
                         <router-link :to="subItem.href"
                           :class="[subItem.current ? 'menu-body-current-element menu-body-font' : 'menu-body-font menu-body-element', 'group flex items-center px-5 py-2 text-sm font-normal rounded-md']">
                           <component :is="subItem.icon"
@@ -130,7 +163,7 @@
         </div>
       </div>
     </div>
-    <div id="pageBody" :class="['flex flex-col', refShowSideBarDesktop ? 'md:pl-64' : 'md:pl-20','' ]">
+    <div id="pageBody" :class="['flex flex-col', refShowSideBarDesktop ? 'md:pl-64' : 'md:pl-20', '']">
       <div id="appNavTop" style="margin-left:0px" class="sticky top-0 flex-shrink-0 flex h-16 bg-white shadow">
         <button type="button"
           class="px-4 border-r border-gray-200 text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 md:hidden"
@@ -140,11 +173,10 @@
         </button>
         <div class="flex-1 flex justify-between">
           <div class="flex-1 flex">
-            <BreadCrumbVue
-              style="margin-left:1px"
+            <BreadCrumbVue style="margin-left:1px"
               class="hidden sticky top-16 z-100 md:flex-shrink-0 h-16 md:flex bg-white shadow-sm"
-              :pages="pagesBreadCrumb"
-            ></BreadCrumbVue>
+              :pages="pagesBreadCrumb">
+            </BreadCrumbVue>
             <slot name="menuTopRight"></slot>
           </div>
           <div class="ml-4 flex items-center md:ml-6">
@@ -183,8 +215,7 @@
           </div>
         </div>
       </div>
-      <nav id="appNavTool" v-if="showToolBar"
-        class="sticky top-16 flex-shrink-0 h-16 flex bg-white shadow-sm">
+      <nav id="appNavTool" v-if="showToolBar" class="sticky top-16 flex-shrink-0 h-16 flex bg-white shadow-sm">
         <slot name="menuLeft" class="flex-none"></slot>
         <div class="flex-grow"></div>
         <slot name="menuRight" class="flex-none"></slot>
@@ -210,6 +241,7 @@ import { BaseController, ModelCollection } from '../Classes/BaseController'
 import RoleType from '../Contracts/RoleType'
 import { RouteService } from '../Classes/RouteService'
 import Tooltip from '../components/Tooltip.vue'
+
 const { t } = useI18n()
 const router = useRouter()
 const route = useRoute()
@@ -217,9 +249,9 @@ const store: Store = inject('store')!
 const props = defineProps<{
   pagesBreadCrumb: { name: string, href: string, current?: boolean }[],
   showToolBar: boolean,
-  bgColor?:string,
-  enableImgBg?:any,
-  imgBgUrl?:string,
+  bgColor?: string,
+  enableImgBg?: any,
+  imgBgUrl?: string,
 }>()
 const routePrefix = '/projects/' + route.params.id
 let refShowSideBarDesktop = ref(store.showSideBarDesktop)
@@ -235,14 +267,15 @@ let mainNav = [
   { name: t('navigation.settings'), visible: store.authUser.isAdmin == 1, href: '/settings', icon: CogIcon, current: route.path == '/settings', subItems: [{ name: "Version", visible: true, href: '/settings/version', icon: CubeIcon, current: route.path == '/settings/version' }] }
 ]
 
-let nodeRedActivated:boolean=false;
-import.meta.env.VITE_NR_ACTIVATED.toLowerCase()=='true'?nodeRedActivated=true:nodeRedActivated=false;
+let nodeRedActivated: boolean = false;
+import.meta.env.VITE_NR_ACTIVATED.toLowerCase() == 'true' ? nodeRedActivated = true : nodeRedActivated = false;
 
 type NavItem = {
   name: string,
   tooltip?: string,
   visible: boolean,
   href: string,
+  external?: string,
   icon?: FunctionalComponent<HTMLAttributes & VNodeProps, {}>
   current: boolean,
   subItems?: NavItem[]
@@ -250,18 +283,17 @@ type NavItem = {
 
 let projectNav: NavItem[] = [
   { name: t('navigation.informations'), visible: true, href: routePrefix, icon: InformationCircleIcon, current: route.path == routePrefix, subItems: [] },
-  { name: t('navigation.dashboards'), visible: true, href: routePrefix + '/dashboards', icon: CollectionIcon, current: route.path == routePrefix + '/dashboards', subItems: [] },
+  { name: t('navigation.dashboards'), visible: true, href: routePrefix + '/dashboards', icon: CollectionIcon, current: route.path == routePrefix + '/dashboards', subItems: [], external: store.currentProject.grafanaUrl },
   { name: t('navigation.reports'), visible: true, href: routePrefix + '/reports', icon: DocumentReportIcon, current: route.path == routePrefix + '/reports', subItems: [] },
   { name: t('navigation.documents'), visible: true, href: routePrefix + '/documents', icon: FolderIcon, current: route.path == routePrefix + '/documents', subItems: [] },
   { name: t('navigation.devices'), visible: true, href: routePrefix + '/devices', icon: ChipIcon, current: route.path == routePrefix + '/devices', subItems: [] },
   { name: t('navigation.variables'), visible: true, href: routePrefix + '/variables', icon: VariableIcon, current: route.path == routePrefix + '/variables' },
-  { name: t('navigation.macros'), visible: (store.authUser.projectRole == RoleType.EDITOR || store.authUser.isAdmin == 1 || store.currentProject.owner.id == store.authUser.id), href: routePrefix + '/macros', icon: CodeIcon, current: route.path == routePrefix + '/macros' },
+  { name: t('navigation.programming'), visible: (!!store.currentProject.nodeRedUrl && (store.authUser.projectRole == RoleType.EDITOR || store.authUser.isAdmin == 1 || store.currentProject.owner.id == store.authUser.id)), href: routePrefix + '/programming', icon: CodeIcon, current: route.path == routePrefix + '/programming', external: store.currentProject.nodeRedUrl },
   { name: 'Node-Red', visible: ((store.authUser.projectRole == RoleType.EDITOR || store.authUser.isAdmin == 1 || store.currentProject.owner.id == store.authUser.id) && nodeRedActivated), href: routePrefix + '/nodered', icon: PuzzleIcon, current: route.path == routePrefix + '/nodered', subItems: [] },
   { name: t('navigation.users'), visible: (store.authUser.projectRole == RoleType.EDITOR || store.authUser.isAdmin == 1 || store.currentProject.owner.id == store.authUser.id), href: routePrefix + '/users', icon: UsersIcon, current: route.path == routePrefix + '/users', subItems: [] },
   { name: t('navigation.settings'), visible: (store.authUser.projectRole == RoleType.EDITOR || store.authUser.isAdmin == 1 || store.currentProject.owner.id == store.authUser.id), href: routePrefix + '/settings', icon: CogIcon, current: route.path == routePrefix + '/settings', subItems: [] }
 ]
 
-console.log(import.meta.env.VITE_NR_ACTIVATED)
 const refdashboard = ref(new DashboardModel())
 const refdashboardCollection = ref(new ModelCollection<DashboardModel>())
 
@@ -299,6 +331,57 @@ async function updateDashboardsList() {
     })
   }
 }
+
+/*
+ * Confirm Dialog
+ */
+import bus from '@/services/bus'
+const refConfirmDialog: any = ref(null)
+const confirmDialog = ref({
+  title: t('dialog.confirm.title'),
+  message: t('dialog.confirm.message'),
+  confirmText: t('dialog.confirm.confirm'),
+  confirmClass: 'btn-primary',
+  cancelText: t('dialog.confirm.cancel'),
+  cancelClass: '',
+  onConfirm: () => { },
+  onCancel: () => { }
+})
+const defaultConfirmDialog = { ...confirmDialog.value }
+bus.on('dialog.confirm', (payload: any) => {
+  confirmDialog.value = { ...defaultConfirmDialog, ...payload }
+  refConfirmDialog.value?.showModal()
+})
+
+/*
+ * Toast
+ */
+const toastVisible = ref(false)
+const toastClass = ref('alert-success')
+const toast = ref({
+  message: t('toast.success'),
+  severity: 'success'
+})
+const defaultToast = { ...toast.value }
+bus.on('toast', (payload: any) => {
+  toast.value = { ...defaultToast, ...payload }
+
+  if (toast.value.severity == 'success') {
+    toastClass.value = 'alert-success'
+  } else if (toast.value.severity == 'error') {
+    toastClass.value = 'alert-error'
+  } else if (toast.value.severity == 'warning') {
+    toastClass.value = 'alert-warning'
+  } else {
+    toastClass.value = 'alert-info'
+  }
+
+  toastVisible.value = true
+  setTimeout(() => {
+    toastVisible.value = false
+  }, 3000)
+})
+
 /**
  * Layout style
  *
@@ -342,6 +425,7 @@ initNav()
 #layout {
   background-size: cover;
 }
+
 /* Hide scrollbar for Chrome, Safari and Opera */
 #layout::-webkit-scrollbar {
   display: none;
@@ -349,7 +433,9 @@ initNav()
 
 /* Hide scrollbar for IE, Edge and Firefox */
 #layout {
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
 }
 </style>

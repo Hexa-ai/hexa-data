@@ -51,7 +51,6 @@
 <script setup lang="ts">
 import { ref, inject } from 'vue'
 import { TransitionRoot, TransitionChild, Dialog, DialogOverlay, DialogTitle } from '@headlessui/vue'
-import { emit } from 'process';
 import Btn from './Btn.vue';
 import Store from '../store/Store'
 

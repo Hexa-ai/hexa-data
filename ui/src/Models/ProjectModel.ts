@@ -7,12 +7,6 @@ class ProjectModel extends BaseModel {
   public uuid: string =''
   public name: string =''
   public description: string =''
-  public adress: string =''
-  public long: number =0
-  public lat: number =0
-  public l1: string=''
-  public l2: string=''
-  public l3: string=''
   public readToken: string=''
   public writeToken: string=''
   public tokenIssuance: string=''
@@ -21,11 +15,21 @@ class ProjectModel extends BaseModel {
   public persistentWriteToken: string=''
   public persistentTokenIssuance: string=''
   public persistentTokenExpiry: string=''
-  public dashboardType: string ='LEGACY'
-  public dashboardGrafanaUrl: string =''
-  public dashboardGrafanaWritePassword: string =''
-  public dashboardGrafanaReadPassword: string =''
-  public variableType: string ='LEGACY'
+  public grafanaEnabled: boolean = false
+  public grafanaUrl: string =''
+  public grafanaVersion: string =''
+  public grafanaDockerHost: string =''
+  public grafanaDockerPort: string =''
+  public grafanaConfiguration: string =''
+  public grafanaReaderPassword: string =''
+  public grafanaWriterPassword: string =''
+  public nodeRedEnabled: boolean = false
+  public nodeRedUrl: string =''
+  public nodeRedVersion: string =''
+  public nodeRedDockerHost: string =''
+  public nodeRedDockerPort: string =''
+  public nodeRedConfiguration: string =''
+  public nodeRedWriterPassword: string =''
 
   // 0|null -> no Cmd, 1 -> Import, 2 -> Export, 3 -> Export in progress, 4 -> Archive in progress, 5 -> Export done
   // 10 -> Unarchive in progress, 11 -> Import in progress, 12 -> Import done

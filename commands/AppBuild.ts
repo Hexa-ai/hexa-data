@@ -70,6 +70,7 @@ export default class AppBuild extends BaseCommand {
 
     await fs.copyFile('./docker-compose.yml', buildDir + 'docker-compose.yml')
     await fs.copyFile('./.env.example', buildDir + '.env')
+    await fs.copyFile('./.env', buildDir + '.env')
     await fs.copyFile('./ecosystem.config.js', buildDir + 'ecosystem.config.js')
     await fs.copyFile('./dockerfile-hd', buildDir + 'dockerfile-hd')
     await fs.copyFile('./dockerfile-wfs', buildDir + 'dockerfile-wfs')
