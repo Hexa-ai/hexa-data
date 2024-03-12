@@ -14,6 +14,7 @@
   "close": "Fermer",
   "initTemplate": "Initialiser le modèle",
   "other": "Autre",
+  "month": "mois",
   "months": "mois",
   "year": "an",
   "years": "ans",
@@ -26,6 +27,18 @@
   "forgotPasswordPage": {
     "infos": "Entrez votre adresse e-mail, nous vous enverrons un e-mail avec votre nouveau mot de passe.",
     "resetPassword": "Réinitialiser le mot de passe"
+  },
+  "dialog": {
+    "confirm": {
+      "title": "Confirmation",
+      "message": "Etes-vous sûr de vouloir effectuer cette action ?",
+      "confirm": "Confirmer",
+      "cancel": "Annuler"
+    }
+  },
+  "toast": {
+    "success": "L'opération a été effectuée avec succès",
+    "error": "Une erreur est survenue : "
   },
   "loginPage": {
     "login": "Connexion",
@@ -117,6 +130,10 @@
     }
   },
   "projectInfos": {
+    "services": "Services liés au projet",
+    "importexport": "Importation et Exportation",
+    "parameters": "Paramètres globaux du projet",
+    "generatedTokens": "Jetons long terme",
     "project": "Projet: ",
     "owner": "Créateur",
     "devicesCount": "Nombre d'équipements",
@@ -131,6 +148,7 @@
     "adress": "Adresse",
     "long": "Longitude",
     "lat": "Latitude",
+    "languages": "Langues",
     "l1": "Langue numéro 1",
     "l2": "Langue numéro 2",
     "l3": "Langue numéro 3",
@@ -157,15 +175,6 @@
     "comfirmImport": "Importer",
     "importSettingsInfos": "Attention l'import écrasera les paramètres actuels de ce projet",
     "title": "Titre",
-    "dashboardTypeTitle": "Type de tableau de bord",
-    "dashboardTypeDescription": "Modifier le type du tableau de bord et gérer les paramètres.",
-    "dashboardType": "Type de tableau de bord",
-    "dashboardTypeLegacy": "Dashboard intégré - Legacy",
-    "dashboardTypeGrafana": "Dashboard externe avancé - Version 2",
-    "dashboardGrafanaUrl": "URL de l'instance externe",
-    "dashboardGrafanaReaderPassword": "Mot de passe du compte de lecture : ",
-    "dashboardGrafanaWriterPassword": "Mot de passe du compte d'écriture : ",
-    "letEmptyForPasswordGeneration": "Laisser vide pour générer un mot de passe aléatoire",
     "persistentTokenTitle": "Tokens persistants",
     "persistentTokenDescription": "Créer et gérer des tokens peristants pour accéder directement à la base de données Warp10.",
     "persistentTokenDuration": "Durée de validité des tokens",
@@ -188,6 +197,7 @@
     "users": "Utilisateurs",
     "variables": "Variables",
     "macros": "Macros",
+    "programming": "Développement",
     "texts": "Textes",
     "settings": "Paramètres",
     "informations": "Informations",
@@ -300,7 +310,6 @@
     "showHistory": "Afficher l'historique",
     "noVariableOnProject": "Il n'y a aucune variable dans ce projet. Commencez par envoyer des variables afin de pouvoir les consulter sur cette page.",
     "deleteMessage": "Souhaitez-vous vraiment supprimer cette variable ? Toutes les données seront supprimées",
-    "deleteTitle": "Suppression de la variable",
     "deleteConfirmButton": "Supprimer",
     "deleteConfirmation": "La suppression de la variable a été effectuée avec succès !"
   },

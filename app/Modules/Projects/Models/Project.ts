@@ -74,24 +74,6 @@ export default class Project extends BaseModel {
   public description: string
 
   @column()
-  public adress?: string
-
-  @column()
-  public long?: number
-
-  @column()
-  public lat?: number
-
-  @column()
-  public l1: string
-
-  @column()
-  public l2: string
-
-  @column()
-  public l3: string
-
-  @column()
   public readToken: string
 
   @column()
@@ -115,20 +97,64 @@ export default class Project extends BaseModel {
   @column.dateTime()
   public tokenExpiry: DateTime
 
-  @column()
-  public dashboardType: string
+  @column({
+    serialize: (value?: Number) => {
+      return Boolean(value)
+    },
+  })
+  public grafanaEnabled: boolean
 
   @column()
-  public variableType: string
+  public grafanaMode: string | null
 
   @column()
-  public dashboardGrafanaUrl: string
+  public grafanaUrl: string | null
 
   @column()
-  public dashboardGrafanaWritePassword: string
+  public grafanaVersion: string | null
 
   @column()
-  public dashboardGrafanaReadPassword: string
+  public grafanaConfiguration: string | null
+
+  @column()
+  public grafanaReaderPassword: string | null
+
+  @column()
+  public grafanaWriterPassword: string | null
+
+  @column()
+  public grafanaDockerHost: string | null
+
+  @column()
+  public grafanaDockerPort: string | null
+
+  @column({
+    serialize: (value?: Number) => {
+      return Boolean(value)
+    },
+  })
+  public nodeRedEnabled: boolean
+
+  @column()
+  public nodeRedMode: string | null
+
+  @column()
+  public nodeRedUrl: string | null
+
+  @column()
+  public nodeRedVersion: string | null
+
+  @column()
+  public nodeRedDockerHost: string | null
+
+  @column()
+  public nodeRedDockerPort: string | null
+
+  @column()
+  public nodeRedConfiguration: string | null
+
+  @column()
+  public nodeRedWriterPassword: string | null
 
   // 0|null -> no Cmd, 1 -> Import, 2 -> Export, 3 -> Export in progress, 4 -> Archive in progress, 5 -> Export done
   // 10 -> Unarchive in progress, 11 -> Import in progress, 12 -> Import done

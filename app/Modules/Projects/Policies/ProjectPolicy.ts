@@ -39,13 +39,13 @@ export default class ProjectPolicy extends BasePolicy {
   public async removeUsers() {
     return false
   }
+  public async manageGrafanaService() {
+    return false
+  }
+  public async manageNodeRedService() {
+    return false
+  }
   public async generatePersistentTokens() {
-    return false
-  }
-  public async updateDashboardType() {
-    return false
-  }
-  public async updateVariableType() {
     return false
   }
   public async getGrafanaCookies(user: User, projectId: number) {

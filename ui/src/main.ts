@@ -4,7 +4,6 @@ import { createRouter, createWebHistory, useRoute } from 'vue-router'
 import VueWriter from 'vue-writer'
 import './index.css'
 import App from './App.vue'
-import Prime from './prime'
 import { RouteService } from '../src/Classes/RouteService'
 
 const Login = () => import('./pages/Login.vue')
@@ -36,6 +35,7 @@ const Variables = () => import('./pages/Tags/Variables/Index.vue')
 const Variable = () => import('./pages/Tags/Variables/Show.vue')
 const VariableCreate = () => import('./pages/Tags/Variables/Create.vue')
 const Macros = () => import('./pages/Tags/Macros/index.vue')
+const Programming = () => import('./pages/Programming.vue')
 const Macro = () => import('./pages/Tags/Macros/Show.vue')
 const MacroCreate = () => import('./pages/Tags/Macros/Create.vue')
 const Texts = () => import('./pages/Tags/Texts/Index.vue')
@@ -77,6 +77,7 @@ const routes = [
   { path: '/projects/:id/variables', component: Variables },
   { path: '/projects/:id/variables/create', component: VariableCreate },
   { path: '/projects/:id/variables/:tagId', component: Variable },
+  { path: '/projects/:id/programming', component: Programming },
   { path: '/projects/:id/macros', component: Macros },
   { path: '/projects/:id/macros/create', component: MacroCreate },
   { path: '/projects/:id/macros/:tagId', component: Macro },
@@ -117,4 +118,3 @@ app.use(router)
 app.use(i18n)
 app.use(VueWriter)
 app.mount('#app')
-Prime(app)
