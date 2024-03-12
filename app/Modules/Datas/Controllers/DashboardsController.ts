@@ -24,18 +24,7 @@ export default class DashboardsController {
     const project = await Project.findOrFail(params.projectId)
     const warp10Service = new Warp10Service()
 
-    let description: string = ''
-    if (auth.user != undefined) {
-      if (auth.user.lang == project.l1) {
-        description = 'descriptionL1'
-      } else if (auth.user.lang == project.l2) {
-        description = 'descriptionL2'
-      } else if (auth.user.lang == project.l3) {
-        description = 'descriptionL3'
-      } else {
-        description = 'descriptionL1'
-      }
-    }
+    let description: string = 'descriptionL1'
     let result = await warp10Service.exec(
       request.raw()!,
       project.readToken,
@@ -71,18 +60,7 @@ export default class DashboardsController {
     }
     const warp10Service = new Warp10Service()
 
-    let description: string = ''
-    if (params.lang != undefined) {
-      if (params.lang == project.l1) {
-        description = 'descriptionL1'
-      } else if (params.lang == project.l2) {
-        description = 'descriptionL2'
-      } else if (params.lang == project.l3) {
-        description = 'descriptionL3'
-      } else {
-        description = 'descriptionL1'
-      }
-    }
+    let description: string = 'descriptionL1'
     let result = await warp10Service.exec(
       request.raw()!,
       project.readToken,

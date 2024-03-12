@@ -39,19 +39,7 @@ export default class MacrosController {
     const project = await Project.findOrFail(params.projectId)
     const macro = await Tag.query().where('projectId', project.id).andWhere('id', params.macroId).firstOrFail()
 
-    let description: string = ''
-    if (auth.user != undefined) {
-      if (auth.user.lang == project.l1) {
-        description = 'descriptionL1'
-      } else if (auth.user.lang == project.l2) {
-        description = 'descriptionL2'
-      } else if (auth.user.lang == project.l3) {
-        description = 'descriptionL3'
-      } else {
-        description = 'descriptionL1'
-      }
-    }
-
+    let description: string = 'descriptionL1'
     await runtimeManager.startMacro(project.id, project.readToken, project.writeToken, macro.name, macro.id, macro.script,{description:description})
 
     const uuid = await Redis.get('macro-' + macro.id.toString())
