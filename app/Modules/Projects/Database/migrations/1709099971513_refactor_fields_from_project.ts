@@ -29,7 +29,7 @@ export default class extends BaseSchema {
       table.string('l1', 3).nullable()
       table.string('l2', 3).nullable()
       table.string('l3', 3).nullable()
-      table.string('variable_type').defaultTo('LEGACY').after('dashboard_grafana_read_password')
+      table.string('variable_type').defaultTo('LEGACY')
 
       table.dropColumn('grafana_docker_port')
       table.dropColumn('grafana_docker_host')

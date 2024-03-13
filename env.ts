@@ -23,7 +23,8 @@ export default Env.rules({
   NODE_ENV: Env.schema.enum(['development', 'production', 'testing'] as const),
 
   WARP10_ENDPOINT: Env.schema.string(),
-  WARP10_SECRET: Env.schema.string(),
+  WARP10_MASTER_READ_TOKEN: Env.schema.string(),
+  WARP10_MASTER_WRITE_TOKEN: Env.schema.string(),
   WARP10_APP_NAME: Env.schema.string(),
   WARP10_TOKEN_DURATION: Env.schema.number(),
   WARP10_TEMPLATES_PATH: Env.schema.string(),

@@ -7,8 +7,8 @@ export default class extends BaseSchema {
     this.schema.alterTable('projects', (table) => {
       table.timestamp('persistent_token_expiry').nullable().after('token_uuid')
       table.timestamp('persistent_token_issuance').nullable().after('token_uuid')
-      table.string('persistent_write_token').nullable().after('token_uuid')
-      table.string('persistent_read_token').nullable().after('token_uuid')
+      table.text('persistent_write_token').nullable().after('token_uuid')
+      table.text('persistent_read_token').nullable().after('token_uuid')
     })
   }
 

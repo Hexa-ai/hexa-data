@@ -54,16 +54,8 @@ services:
     environment:
       - WARP10_HEAP=${WARP10_HEAP}
       - WARP10_HEAP_MAX=${WARP10_HEAP}
-      - accelerator=true
-      - accelerator.ephemeral=false
-      - accelerator.chunk.length=60000000
-      - accelerator.chunk.count=300
-      - accelerator.preload=true
-      - accelerator.preload.poolsize=8
-      - accelerator.preload.batchsize=1000
       - ingress.attributes.allowdelta=true
       - warpscript.extension.token=${WARP10_WARPSCRIPT_EXTENSION_TOKEN}
-      - token.secret=${WARP10_SECRET}
       - warpscript.maxops=${WARP10_WARPSCRIPT_MAXOPS}
       - warpscript.maxops.hard=${WARP10_WARPSCRIPT_MAXOPS_HARD}
       - warpfleet.macros.repos=${WARP10_WARPFLEET_MACROS_REPOS}

@@ -108,7 +108,10 @@ export default class Warp10Service {
       owners: [uuid],
       producers: [uuid],
       applications: [string.camelCase(Env.get('WARP10_APP_NAME'))],
-      attributes: {}
+      attributes: {
+        '.cap:limits':  '',
+        '.cap:tokendump': ''
+      }
     }
     const writeToken: WarpWriteToken = {
       type: 'WRITE',
@@ -118,13 +121,15 @@ export default class Warp10Service {
       issuance: issuance,
       expiry: expiry,
       labels: labels,
-      attributes: {}
+      attributes: {
+        '.cap:limits':  '',
+        '.cap:tokendump': ''
+      }
     }
     // Exec tokengen request to Warp10 for read token
-    const resultReadToken = await this.warp.exec('\'' + JSON.stringify(readToken) + '\' JSON-> \'' + Env.get('WARP10_SECRET') + '\' TOKENGEN')
+    const resultReadToken = await this.warp.exec('\'' + Env.get('WARP10_MASTER_READ_TOKEN') + '\' CAPADD ' + '\'' + JSON.stringify(readToken) + '\' JSON-> TOKENGEN')
     // Exec tokengen request to Warp10 for write token
-    const resultWriteToken = await this.warp.exec('\'' + JSON.stringify(writeToken) + '\' JSON-> \'' + Env.get('WARP10_SECRET') + '\' TOKENGEN')
-
+    const resultWriteToken = await this.warp.exec('\'' + Env.get('WARP10_MASTER_READ_TOKEN') + '\' CAPADD ' + '\'' + JSON.stringify(writeToken) + '\' JSON-> TOKENGEN')
     const generatedTokens: TokenInfo = {
       readToken: resultReadToken.result[0].token,
       writeToken: resultWriteToken.result[0].token,
@@ -224,11 +229,11 @@ export default class Warp10Service {
     output = "'" + value + "' '" + name + "' STORE" + os.EOL + script
     return output
   }
-  public static wsAuth(script: string): string {
-    let output: string = ""
-    output = "$readToken AUTHENTICATE" + os.EOL + script
-    return output
-  }
+  // public static wsAuth(script: string): string {
+  //   let output: string = ""
+  //   output = "$readToken AUTHENTICATE" + os.EOL + script
+  //   return output
+  // }
   public static wsAppendString(script: string, addedString: string): string {
     let output: string = "<'" + os.EOL + addedString + os.EOL + "'>" + os.EOL + script
     return output
@@ -246,7 +251,7 @@ export default class Warp10Service {
   public async scriptExec(script: string, readToken: string, writeToken: string, projectId:number): Promise<WsExecResult | WsError> {
     let fullScript: string =''
     fullScript = Warp10Service.wsAppendWarpScript(fullScript,script)
-    fullScript = Warp10Service.wsAuth(fullScript)
+    //fullScript = Warp10Service.wsAuth(fullScript)
     fullScript = Warp10Service.wsAppendVar(fullScript,'hdUrl',Env.get('HD_API_URL').split('/api/v1')[0])
     fullScript = Warp10Service.wsAppendVar(fullScript,'hdApiUrl',Env.get('HD_API_URL'))
     fullScript = Warp10Service.wsAppendToken(fullScript,readToken,'readToken')
@@ -276,7 +281,7 @@ export default class Warp10Service {
     for (const [key, value] of Object.entries(requestParams)) {
       fullScript = Warp10Service.wsAppendVar(fullScript,key,<string>value)
     }
-    fullScript = Warp10Service.wsAuth(fullScript)
+    //fullScript = Warp10Service.wsAuth(fullScript)
     fullScript = Warp10Service.wsAppendVar(fullScript,'hdUrl',Env.get('HD_API_URL').split('/api/v1')[0])
     fullScript = Warp10Service.wsAppendVar(fullScript,'hdApiUrl',Env.get('HD_API_URL'))
     fullScript = Warp10Service.wsAppendToken(fullScript,readToken,'readToken')
