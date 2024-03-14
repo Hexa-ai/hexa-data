@@ -16,6 +16,7 @@ class ProjectModel extends BaseModel {
   public persistentTokenIssuance: string=''
   public persistentTokenExpiry: string=''
   public grafanaEnabled: boolean = false
+  public grafanaMode: string = ''
   public grafanaUrl: string =''
   public grafanaVersion: string =''
   public grafanaDockerHost: string =''
@@ -24,6 +25,7 @@ class ProjectModel extends BaseModel {
   public grafanaReaderPassword: string =''
   public grafanaWriterPassword: string =''
   public nodeRedEnabled: boolean = false
+  public nodeRedMode: string =''
   public nodeRedUrl: string =''
   public nodeRedVersion: string =''
   public nodeRedDockerHost: string =''
