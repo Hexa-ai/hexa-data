@@ -12,6 +12,7 @@ build/**/*
 tmp/*
 tmp/*.sqlite3
 .env
+docker-compose.yml
 server/database/*.sqlite
 storage
 .cache
