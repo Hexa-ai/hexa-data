@@ -40,7 +40,7 @@ export default class ServiceNodeRedController {
       /*
        * Create or update the docker container
        */
-      const { port } = await projectService.deployNodeRed({
+      const { url } = await projectService.deployNodeRed({
         adminUser: Env.get('DOCKER_NODERED_ADMIN_USER'),
         adminPassword: Env.get('DOCKER_NODERED_ADMIN_PASSWORD'),
         writerUser: Env.get('VITE_DOCKER_NODERED_WRITE_USER'),
@@ -52,7 +52,7 @@ export default class ServiceNodeRedController {
       // Save new container created
       project.nodeRedEnabled = nodeRedEnabled
       project.nodeRedMode = nodeRedMode
-      project.nodeRedUrl = `http://${nodeRedDockerHost}:${port}`
+      project.nodeRedUrl = url
       project.nodeRedVersion = nodeRedVersion
       project.nodeRedConfiguration = nodeRedConfiguration
       project.nodeRedDockerHost = nodeRedDockerHost

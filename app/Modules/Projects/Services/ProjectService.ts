@@ -1,6 +1,18 @@
 import Project from '../Models/Project'
+import Env from '@ioc:Adonis/Core/Env'
 import { DockerManager } from './DockerManager'
 import bcrypt from 'bcrypt'
+
+function slugify(str) {
+  return String(str)
+    .normalize('NFKD') // split accented characters into their base characters and diacritical marks
+    .replace(/[\u0300-\u036f]/g, '') // remove all the accents, which happen to be all in the \u03xx UNICODE block.
+    .trim() // trim leading or trailing whitespace
+    .toLowerCase() // convert to lowercase
+    .replace(/[^a-z0-9 -]/g, '') // remove non-alphanumeric characters
+    .replace(/\s+/g, '-') // replace spaces with hyphens
+    .replace(/-+/g, '-') // remove consecutive hyphens
+}
 
 class ProjectService {
   private project: Project
@@ -36,6 +48,7 @@ class ProjectService {
 
     // Retrieve an available port and create the container
     const unusedPort = await this.docker.findUnusedPort()
+    const domain = Env.get('VITE_DOCKER_GRAFANA_DOMAIN') ? slugify(this.project.name) + '.' + Env.get('VITE_DOCKER_GRAFANA_DOMAIN') : Env.get('VITE_DOCKER_HOST_IP') + ':' + unusedPort
     const id = await this.docker.createContainer(containerName, {
       Image: image,
       ExposedPorts: {
@@ -63,8 +76,13 @@ class ProjectService {
         'GF_SECURITY_ALLOW_EMBEDDING=true',
       ],
       Labels: {
-        project: this.project.id.toString(),
-        type: 'grafana',
+        'project': this.project.id.toString(),
+        'type': 'grafana',
+        'traefik.enable': 'true',
+        'traefik.http.routers.grafana.rule': 'Host(`' + domain + '`)',
+        'traefik.http.routers.grafana.entrypoints': 'websecure',
+        'traefik.http.routers.grafana.tls': 'true',
+        'traefik.http.services.grafana.loadbalancer.server.port': unusedPort.toString(),
       },
     })
 
@@ -73,7 +91,11 @@ class ProjectService {
     await this.docker.uploadFile(id, 'grafana.ini', config, '/etc/grafana')
     await this.docker.restartContainer(id)
 
-    return { id, port: unusedPort }
+    return {
+      id,
+      url : Env.get('VITE_DOCKER_GRAFANA_DOMAIN') ? 'https://' + domain : 'http://' + domain,
+      port: unusedPort
+    }
   }
 
   async removeGrafana() {
@@ -113,6 +135,7 @@ class ProjectService {
 
     // Retrieve an available port and create the container
     const unusedPort = await this.docker.findUnusedPort()
+    const domain = Env.get('VITE_DOCKER_NODERED_DOMAIN') ? slugify(this.project.name) + '.' + Env.get('VITE_DOCKER_NODERED_DOMAIN') : Env.get('VITE_DOCKER_HOST_IP') + ':' + unusedPort
     const id = await this.docker.createContainer(containerName, {
       Image: image,
       ExposedPorts: {
@@ -137,6 +160,11 @@ class ProjectService {
       Labels: {
         project: this.project.id.toString(),
         type: 'nodered',
+        'traefik.enable': 'true',
+        'traefik.http.routers.grafana.rule': 'Host(`' + domain + '`)',
+        'traefik.http.routers.grafana.entrypoints': 'websecure',
+        'traefik.http.routers.grafana.tls': 'true',
+        'traefik.http.services.grafana.loadbalancer.server.port': unusedPort.toString(),
       },
     })
 
@@ -151,7 +179,11 @@ class ProjectService {
     await this.docker.uploadFile(id, 'settings.js', config, '/data')
     await this.docker.restartContainer(id)
 
-    return { id, port: unusedPort }
+    return {
+      id,
+      url : Env.get('VITE_DOCKER_NODERED_DOMAIN') ? 'https://' + domain : 'http://' + domain,
+      port: unusedPort
+    }
   }
 
   async removeNodeRed() {

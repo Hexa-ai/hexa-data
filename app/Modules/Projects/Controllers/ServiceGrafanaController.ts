@@ -31,7 +31,7 @@ export default class ServiceGrafanaController {
       /*
        * Create or update the docker container
        */
-      const { port } = await projectService.deployGrafana({
+      const { url } = await projectService.deployGrafana({
         adminUser: Env.get('DOCKER_GRAFANA_ADMIN_USER'),
         adminPassword: Env.get('DOCKER_GRAFANA_ADMIN_PASSWORD'),
         config: grafanaConfiguration,
@@ -41,7 +41,7 @@ export default class ServiceGrafanaController {
       // Save new container created
       project.grafanaEnabled = grafanaEnabled
       project.grafanaMode = grafanaMode
-      project.grafanaUrl = `http://${grafanaDockerHost}:${port}`
+      project.grafanaUrl = url
       project.grafanaVersion = grafanaVersion
       project.grafanaConfiguration = grafanaConfiguration
       project.grafanaDockerHost = grafanaDockerHost
