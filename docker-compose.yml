@@ -1,18 +1,19 @@
 version: '3.4'
 services:
-  hd-service:
-    image: ghcr.io/hexa-ai/hexa-data:latest
-    ports:
-      - 3333:3333
-    restart: unless-stopped
-    volumes:
-      - .env:/home/node/app/.env
-      - v_hexa-data:/home/node/app/storage
+  # hd-service:
+  #   build:
+  #     context: .
+  #     dockerfile: dockerfile-hd
+  #   ports:
+  #   - 3333:3333
+  #   restart: unless-stopped
+  #   volumes:
+  #   - v_hexa-data:/usr/src/app/storage
   queue-redis-service:
     image: redis:${QUEUE_REDIS_VERSION}
     restart: always
     ports:
-      - 6379:6379
+      - 63790:6379
     command: redis-server --save 20 1 --loglevel warning --requirepass ${QUEUE_REDIS_PASSWORD}
     volumes:
       - v_redis:/data
@@ -20,7 +21,7 @@ services:
     image: mysql:${MYSQL_VERSION}
     command: --default-authentication-plugin=mysql_native_password
     ports:
-      - 3306:3306
+     - 33061:3306
     restart: unless-stopped
     environment:
       - MYSQL_ROOT_PASSWORD=${MYSQL_PASSWORD}
@@ -41,12 +42,12 @@ services:
       - v_emqx-etc:/opt/emqx/etc
       - v_emqx-log:/opt/emqx/log
     ports:
-      - 8883:8883
-      - 1883:1883
-      - 3000:18083
+    - 8883:8883
+    - 1883:1883
+    - 3000:18083
 
     extra_hosts:
-      - 'host.docker.internal:host-gateway'
+    - "host.docker.internal:host-gateway"
     restart: unless-stopped
   warp10-service:
     image: warp10io/warp10:${WARP10_VERSION}
@@ -74,7 +75,7 @@ services:
     ports:
       - 8080:8080
     extra_hosts:
-      - 'host.docker.internal:host-gateway'
+    - "host.docker.internal:host-gateway"
     restart: unless-stopped
   warpfleetsynchronizer-service:
     build:
@@ -84,17 +85,6 @@ services:
       - 8082:8082
     volumes:
       - v_warpfleetsynchronizer:/data
-  grafana:
-    image: grafana/grafana-oss:${GRAFANA_VERSION}
-    ports:
-      - 30001:3000
-    restart: unless-stopped
-    environment:
-      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD}
-      - GF_SECURITY_ADMIN_USER=${GRAFANA_ADMIN_USER}
-      - GF_SECURITY_ALLOW_EMBEDDING=true
-    volumes:
-      - v_grafana:/var/lib/grafana
 
 volumes:
   v_mysql:
@@ -106,4 +96,3 @@ volumes:
   v_node-red:
   v_redis:
   v_warpfleetsynchronizer:
-  v_grafana:
