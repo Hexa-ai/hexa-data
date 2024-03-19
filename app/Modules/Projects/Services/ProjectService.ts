@@ -79,10 +79,10 @@ class ProjectService {
         'project': this.project.id.toString(),
         'type': 'grafana',
         'traefik.enable': 'true',
-        'traefik.http.routers.grafana.rule': 'Host(`' + domain + '`)',
-        'traefik.http.routers.grafana.entrypoints': 'websecure',
-        'traefik.http.routers.grafana.tls': 'true',
-        'traefik.http.services.grafana.loadbalancer.server.port': unusedPort.toString(),
+        [`traefik.http.routers.grafana-${this.project.id}.rule`]: 'Host(`' + domain + '`)',
+        [`traefik.http.routers.grafana-${this.project.id}.entrypoints`]: 'websecure',
+        [`traefik.http.routers.grafana-${this.project.id}.tls`]: 'true',
+        [`traefik.http.services.grafana-${this.project.id}.loadbalancer.server.port`]: unusedPort.toString(),
       },
     })
 
@@ -161,10 +161,10 @@ class ProjectService {
         project: this.project.id.toString(),
         type: 'nodered',
         'traefik.enable': 'true',
-        'traefik.http.routers.grafana.rule': 'Host(`' + domain + '`)',
-        'traefik.http.routers.grafana.entrypoints': 'websecure',
-        'traefik.http.routers.grafana.tls': 'true',
-        'traefik.http.services.grafana.loadbalancer.server.port': unusedPort.toString(),
+        [`traefik.http.routers.nodered-${this.project.id}.rule`]: 'Host(`' + domain + '`)',
+        [`traefik.http.routers.grafana-${this.project.id}.entrypoints`]: 'websecure',
+        [`traefik.http.routers.grafana-${this.project.id}.tls`]: 'true',
+        [`traefik.http.services.grafana-${this.project.id}.loadbalancer.server.port`]: unusedPort.toString(),
       },
     })
 
