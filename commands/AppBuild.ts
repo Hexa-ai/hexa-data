@@ -16,15 +16,15 @@ export default class AppBuild extends BaseCommand {
   public async run() {
     const targetDir = path.resolve('./public/assets')
     await fs.remove(targetDir)
-    if (fs.existsSync('./.env')) {
-      await fs.rename('./.env', './temp.env')
-    }
+    // if (fs.existsSync('./.env')) {
+    //   await fs.rename('./.env', './temp.env')
+    // }
     await fs.rename('./.env.example', './.env')
     await execaUtils.execute('npm', ['run', 'build:vite'])
     await fs.rename('./.env', './.env.example')
-    if (fs.existsSync('./temp.env')) {
-      await fs.rename('./temp.env', './.env')
-    }
+    // if (fs.existsSync('./temp.env')) {
+    //   await fs.rename('./temp.env', './.env')
+    // }
 
     await fs.copy(path.resolve('./ui/node_modules/@senx'), path.resolve('./ui/dist/assets/@senx'))
     await fs.copy(
@@ -68,9 +68,9 @@ export default class AppBuild extends BaseCommand {
       fs.mkdirSync(usersPhotosDir, { recursive: true })
     }
 
-    await fs.copyFile('./docker-compose.yml', buildDir + 'docker-compose.yml')
+    await fs.copyFile('./docker-compose.yml.example', buildDir + 'docker-compose.yml')
     await fs.copyFile('./.env.example', buildDir + '.env')
-    await fs.copyFile('./.env', buildDir + '.env')
+    // await fs.copyFile('./.env', buildDir + '.env')
     await fs.copyFile('./ecosystem.config.js', buildDir + 'ecosystem.config.js')
     await fs.copyFile('./dockerfile-hd', buildDir + 'dockerfile-hd')
     await fs.copyFile('./dockerfile-wfs', buildDir + 'dockerfile-wfs')
