@@ -162,9 +162,9 @@ class ProjectService {
         type: 'nodered',
         'traefik.enable': 'true',
         [`traefik.http.routers.nodered-${this.project.id}.rule`]: 'Host(`' + domain + '`)',
-        [`traefik.http.routers.grafana-${this.project.id}.entrypoints`]: 'websecure',
-        [`traefik.http.routers.grafana-${this.project.id}.tls`]: 'true',
-        [`traefik.http.services.grafana-${this.project.id}.loadbalancer.server.port`]: unusedPort.toString(),
+        [`traefik.http.routers.nodered-${this.project.id}.entrypoints`]: 'websecure',
+        [`traefik.http.routers.nodered-${this.project.id}.tls`]: 'true',
+        [`traefik.http.services.nodered-${this.project.id}.loadbalancer.server.port`]: unusedPort.toString(),
       },
     })
 
