@@ -17,10 +17,12 @@ function slugify(str) {
 class ProjectService {
   private project: Project
   public docker: DockerManager
+  public dockerHostIp: string
 
   constructor(project: Project, ip, port) {
     this.project = project
     this.docker = new DockerManager(ip, port)
+    this.dockerHostIp = ip
   }
 
   async deployGrafana({ adminPassword, adminUser, config, version }) {
@@ -48,7 +50,7 @@ class ProjectService {
 
     // Retrieve an available port and create the container
     const unusedPort = await this.docker.findUnusedPort()
-    const domain = Env.get('VITE_DOCKER_GRAFANA_DOMAIN') ? slugify(this.project.name) + '.' + Env.get('VITE_DOCKER_GRAFANA_DOMAIN') : Env.get('VITE_DOCKER_HOST_IP') + ':' + unusedPort
+    const domain = Env.get('VITE_DOCKER_GRAFANA_DOMAIN') ? slugify(this.project.name) + '.' + Env.get('VITE_DOCKER_GRAFANA_DOMAIN') : this.dockerHostIp + ':' + unusedPort
     const id = await this.docker.createContainer(containerName, {
       Image: image,
       ExposedPorts: {
@@ -58,6 +60,7 @@ class ProjectService {
         PortBindings: {
           '3000/tcp': [
             {
+              HostIp: this.dockerHostIp,
               HostPort: unusedPort.toString(),
             },
           ],
@@ -135,7 +138,7 @@ class ProjectService {
 
     // Retrieve an available port and create the container
     const unusedPort = await this.docker.findUnusedPort()
-    const domain = Env.get('VITE_DOCKER_NODERED_DOMAIN') ? slugify(this.project.name) + '.' + Env.get('VITE_DOCKER_NODERED_DOMAIN') : Env.get('VITE_DOCKER_HOST_IP') + ':' + unusedPort
+    const domain = Env.get('VITE_DOCKER_NODERED_DOMAIN') ? slugify(this.project.name) + '.' + Env.get('VITE_DOCKER_NODERED_DOMAIN') : this.dockerHostIp + ':' + unusedPort
     const id = await this.docker.createContainer(containerName, {
       Image: image,
       ExposedPorts: {
@@ -145,6 +148,7 @@ class ProjectService {
         PortBindings: {
           '1880/tcp': [
             {
+              HostIp: this.dockerHostIp,
               HostPort: unusedPort.toString(),
             },
           ],
