@@ -82,7 +82,7 @@ class ProjectService {
         [`traefik.http.routers.grafana-${this.project.id}.rule`]: 'Host(`' + domain + '`)',
         [`traefik.http.routers.grafana-${this.project.id}.entrypoints`]: 'webSecure',
         [`traefik.http.routers.grafana-${this.project.id}.tls`]: 'true',
-        [`traefik.http.services.grafana-${this.project.id}.loadbalancer.server.port`]: 3000,
+        [`traefik.http.services.grafana-${this.project.id}.loadbalancer.server.port`]: '3000',
       },
     })
 
@@ -164,7 +164,7 @@ class ProjectService {
         [`traefik.http.routers.nodered-${this.project.id}.rule`]: 'Host(`' + domain + '`)',
         [`traefik.http.routers.nodered-${this.project.id}.entrypoints`]: 'webSecure',
         [`traefik.http.routers.nodered-${this.project.id}.tls`]: 'true',
-        [`traefik.http.services.nodered-${this.project.id}.loadbalancer.server.port`]: 1880,
+        [`traefik.http.services.nodered-${this.project.id}.loadbalancer.server.port`]: '1880',
       },
     })
 
