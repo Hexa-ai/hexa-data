@@ -76,5 +76,6 @@ export default class AppBuild extends BaseCommand {
     await fs.copyFile('./dockerfile-wfs', buildDir + 'dockerfile-wfs')
     await fs.copy('./app/Services/Warp10Templates', buildDir + '/app/Services/Warp10Templates')
     await fs.copy('./bin', buildDir + '/bin')
+    await fs.copy('./resources/project_services', buildDir + '/resources/project_services')
   }
 }
