@@ -1,5 +1,6 @@
 import Env from '@ioc:Adonis/Core/Env'
 import axios, { AxiosRequestHeaders } from 'axios'
+import https from 'https'
 
 export default class GrafanaService {
   constructor(endpoint, adminUser, adminPassword) {
@@ -81,6 +82,9 @@ export default class GrafanaService {
       try {
         await axios.get(this.endpoint + '/api/admin/settings', {
           headers: this.headers,
+          httpsAgent: new https.Agent({
+            rejectUnauthorized: false,
+          })
         })
         return true // Grafana est disponible
       } catch (error) {
@@ -104,6 +108,9 @@ export default class GrafanaService {
           'User-Agent':
             'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36',
         },
+        httpsAgent: new https.Agent({
+          rejectUnauthorized: false,
+        })
       }
     )
 
@@ -131,6 +138,9 @@ export default class GrafanaService {
       },
       {
         headers: this.headers,
+        httpsAgent: new https.Agent({
+          rejectUnauthorized: false,
+        })
       }
     )
 
@@ -167,6 +177,9 @@ export default class GrafanaService {
           loginOrEmail: name,
         },
         headers: this.headers,
+        httpsAgent: new https.Agent({
+          rejectUnauthorized: false,
+        })
       })
 
       return response.data
@@ -186,6 +199,9 @@ export default class GrafanaService {
       },
       {
         headers: this.headers,
+        httpsAgent: new https.Agent({
+          rejectUnauthorized: false,
+        })
       }
     )
 
@@ -198,6 +214,9 @@ export default class GrafanaService {
       { role },
       {
         headers: this.headers,
+        httpsAgent: new https.Agent({
+          rejectUnauthorized: false,
+        })
       }
     )
 
@@ -212,6 +231,9 @@ export default class GrafanaService {
       },
       {
         headers: this.headers,
+        httpsAgent: new https.Agent({
+          rejectUnauthorized: false,
+        })
       }
     )
 
