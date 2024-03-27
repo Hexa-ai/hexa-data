@@ -168,6 +168,7 @@ export default class DevicesController {
     if (device !== null) {
       if (!(await Hash.verify(device!.password, payload.password))) {
         logger.info('MQTT Connection forbidden ->' + payload.clientId)
+        console.log('MQTT Forbidden: ' + payload.clientId +'/'+payload.username+'/'+payload.password)
         response.status(400)
       } else {
         logger.info('MQTT Connection authorize ->' + payload.clientId)
@@ -181,6 +182,7 @@ export default class DevicesController {
       }
       else {
         logger.info('MQTT Connection forbidden ->' + payload.clientId)
+        console.log('MQTT Forbidden: ' + payload.clientId +'/'+payload.username+'/'+payload.password)
         response.status(400)
       }
     }
