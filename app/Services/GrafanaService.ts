@@ -95,6 +95,8 @@ export default class GrafanaService {
       }
     }
 
+    await new Promise((resolve) => setTimeout(resolve, 5000))
+
     return checkAvailability()
   }
 
