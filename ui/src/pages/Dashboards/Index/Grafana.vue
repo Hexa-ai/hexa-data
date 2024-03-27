@@ -2,8 +2,7 @@
   <div>
     <BaseLayoutVue :pages-bread-crumb="refBreadCrumb" :show-tool-bar="false">
       <template v-slot:default>
-        <iframe v-if="showIframe" class="w-full" style="height: calc(100%)"
-          :src="props.project.grafanaUrl"></iframe>
+        <iframe v-if="showIframe" class="w-full" style="height: calc(100%)" :src="props.project.grafanaUrl"></iframe>
         <div v-else>
           <Loader></Loader>
         </div>
@@ -31,22 +30,14 @@ const { t } = useI18n()
 const props = defineProps(['project'])
 const { project }: any = toRefs(props)
 
+const domain = ref(new URL(project.value.grafanaUrl).host)
 const showIframe = ref(false)
-const grafanaCookieDomain = import.meta.env.VITE_DOCKER_GRAFANA_COOKIE_DOMAIN
 
 axios.get('/projects/' + project.value.id + '/services/grafana/cookies')
   .then((response) => {
-    if (grafanaCookieDomain && grafanaCookieDomain !== '') {
-      Cookies.set('grafana_session', response.data.grafana_session, {
-        domain: grafanaCookieDomain.startsWith('.') ? grafanaCookieDomain : '.' + grafanaCookieDomain,
-      })
-      Cookies.set('grafana_session_expiry', response.data.grafana_session_expiry, {
-        domain: grafanaCookieDomain.startsWith('.') ? grafanaCookieDomain : '.' + grafanaCookieDomain,
-      })
-    } else {
-      Cookies.set('grafana_session', response.data.grafana_session)
-      Cookies.set('grafana_session_expiry', response.data.grafana_session_expiry)
-    }
+    console.log('Writing grafana_session,grafana_session_expiry auth cookie into domain', domain.value)
+    Cookies.set('grafana_session', response.data.grafana_session, { domain: domain.value })
+    Cookies.set('grafana_session_expiry', response.data.grafana_session_expiry, { domain: domain.value })
     showIframe.value = true
   })
   .catch((error) => {
