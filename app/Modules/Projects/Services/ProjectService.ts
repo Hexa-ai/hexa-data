@@ -87,7 +87,7 @@ class ProjectService {
         [`traefik.http.routers.grafana-${this.project.id}.tls`]: 'true',
         [`traefik.http.services.grafana-${this.project.id}.loadbalancer.server.port`]: '3000',
         [`traefik.http.middlewares.grafana-${this.project.id}-stripprefix.stripprefix.prefixes`]: path,
-        [`traefik.http.routers.grafana-${this.project.id}.middlewares=`]: `grafana-${this.project.id}-stripprefix`,
+        [`traefik.http.routers.grafana-${this.project.id}.middlewares`]: `grafana-${this.project.id}-stripprefix`,
       },
     })
 
