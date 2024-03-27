@@ -31,6 +31,8 @@ class ProjectService {
     const volumeName = 'v_grafana_' + this.project.id
     await this.docker.ensureImageExists(image)
 
+    const path = `/containers/grafana/${slugify(this.project.name)}`
+
     // Remove the container if it already exists
     const existingContainer = await this.docker.findContainerByName(containerName)
     if (existingContainer) {
@@ -50,7 +52,6 @@ class ProjectService {
 
     // Retrieve an available port and create the container
     const unusedPort = await this.docker.findUnusedPort()
-    const domain = Env.get('VITE_DOCKER_GRAFANA_DOMAIN') ? slugify(this.project.name) + '.' + Env.get('VITE_DOCKER_GRAFANA_DOMAIN') : this.dockerHostIp + ':' + unusedPort
     const id = await this.docker.createContainer(containerName, {
       Image: image,
       ExposedPorts: {
@@ -76,27 +77,32 @@ class ProjectService {
       Env: [
         `GF_SECURITY_ADMIN_PASSWORD=${adminPassword}`,
         `GF_SECURITY_ADMIN_USER=${adminUser}`,
-        'GF_SECURITY_ALLOW_EMBEDDING=true',
       ],
       Labels: {
         'project': this.project.id.toString(),
         'type': 'grafana',
         'traefik.enable': 'true',
-        [`traefik.http.routers.grafana-${this.project.id}.rule`]: 'Host(`' + domain + '`)',
+        [`traefik.http.routers.grafana-${this.project.id}.rule`]: 'Host(`data.hexa-ai.fr`) && PathPrefix(`' + path + '`)',
         [`traefik.http.routers.grafana-${this.project.id}.entrypoints`]: 'webSecure',
         [`traefik.http.routers.grafana-${this.project.id}.tls`]: 'true',
         [`traefik.http.services.grafana-${this.project.id}.loadbalancer.server.port`]: '3000',
+        [`traefik.http.middlewares.grafana-${this.project.id}-stripprefix.stripprefix.prefixes`]: path,
+        [`traefik.http.routers.grafana-${this.project.id}.middlewares=`]: `grafana-${this.project.id}-stripprefix`,
       },
     })
 
     // Start it, upload the configuration and restart it
     await this.docker.startContainer(id)
+
+    // Replace config variables
+    config = config.replace('${ROOT_PATH}', path)
+
     await this.docker.uploadFile(id, 'grafana.ini', config, '/etc/grafana')
     await this.docker.restartContainer(id)
 
     return {
       id,
-      url : Env.get('VITE_DOCKER_GRAFANA_DOMAIN') ? 'https://' + domain : 'http://' + domain,
+      url : 'https://data.hexa-ai.fr/' + path,
       port: unusedPort
     }
   }

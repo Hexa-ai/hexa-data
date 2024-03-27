@@ -34,9 +34,9 @@ const showIframe = ref(false)
 
 axios.get('/projects/' + project.value.id + '/services/grafana/cookies')
   .then((response) => {
-    console.log('Writing grafana_session,grafana_session_expiry cookies into domain .data.hexa-ai.fr')
-    Cookies.set('grafana_session', response.data.grafana_session, { domain: '.data.hexa-ai.fr' })
-    Cookies.set('grafana_session_expiry', response.data.grafana_session_expiry, { domain: '.data.hexa-ai.fr' })
+    console.log('Writing grafana_session,grafana_session_expiry cookies into domain data.hexa-ai.fr')
+    Cookies.set('grafana_session', response.data.grafana_session, { domain: 'data.hexa-ai.fr' })
+    Cookies.set('grafana_session_expiry', response.data.grafana_session_expiry, { domain: 'data.hexa-ai.fr' })
     showIframe.value = true
   })
   .catch((error) => {
