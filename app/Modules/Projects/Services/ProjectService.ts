@@ -102,7 +102,7 @@ class ProjectService {
 
     return {
       id,
-      url : 'https://data.hexa-ai.fr/' + path,
+      url : 'https://data.hexa-ai.fr' + path,
       port: unusedPort
     }
   }
