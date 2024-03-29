@@ -47,7 +47,7 @@ let warpScript = ref('')
 if (props.valueType == 2 || props.valueType == 3 || props.valueType == 1) {
   chartType.value = 'area'
   warpScript.value = `
-  10000000 LIMIT
+  
   {
     'token' $readToken
     'class' '${props.className}'
