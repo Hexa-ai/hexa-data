@@ -176,7 +176,12 @@ class ProjectService {
         [`traefik.http.routers.nodered-${this.project.id}.tls`]: 'true',
         [`traefik.http.services.nodered-${this.project.id}.loadbalancer.server.port`]: '1880',
         [`traefik.http.middlewares.nodered-${this.project.id}-stripprefix.stripprefix.prefixes`]: path,
-        [`traefik.http.routers.nodered-${this.project.id}.middlewares`]: `nodered-${this.project.id}-stripprefix`,
+        [`traefik.http.routers.nodered-${this.project.id}.middlewares`]: `nodered-${this.project.id}-redirectregex,nodered-${this.project.id}-stripprefix`, 
+        
+        // Ajout du middleware de redirection pour ajouter le slash terminal
+        [`traefik.http.middlewares.nodered-${this.project.id}-redirectregex.redirectregex.regex`]: `^(https?://[^/]+${path})$`,
+        [`traefik.http.middlewares.nodered-${this.project.id}-redirectregex.redirectregex.replacement`]: `${'$1'}/`,
+        [`traefik.http.middlewares.nodered-${this.project.id}-redirectregex.redirectregex.permanent`]: 'true',
       },
     })
 
