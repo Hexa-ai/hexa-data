@@ -1,5 +1,4 @@
 import Project from '../Models/Project'
-import Env from '@ioc:Adonis/Core/Env'
 import { DockerManager } from './DockerManager'
 import bcrypt from 'bcrypt'
 
