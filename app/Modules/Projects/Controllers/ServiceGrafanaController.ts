@@ -90,7 +90,7 @@ export default class ServiceGrafanaController {
   }
 
   public async getAuthCookies({ params, bouncer, response, auth }: HttpContextContract) {
-    await bouncer.with('ProjectPolicy').authorize('getGrafanaCookies', params.id)
+    await bouncer.with('ProjectPolicy').authorize('getGrafanaAuth', params.id)
     const project = await Project.findOrFail(params.id)
 
     if (auth.user && project.grafanaEnabled && project.grafanaMode === 'MANAGED') {

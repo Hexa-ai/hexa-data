@@ -2,7 +2,7 @@
   <div>
     <BaseLayoutVue :pages-bread-crumb="refBreadCrumb" :show-tool-bar="false">
       <template v-slot:default>
-        <iframe v-if="project?.nodeRedUrl" class="w-full" style="height: calc(100%)" :src="project?.nodeRedUrl"></iframe>
+        <iframe v-if="iframeUrl" class="w-full" style="height: calc(100%)" :src="iframeUrl"></iframe>
       </template>
     </BaseLayoutVue>
   </div>
@@ -16,13 +16,27 @@
 </style>
 
 <script setup lang="ts">
-import { ref, toRefs, inject } from 'vue'
+import axios from '@/services/axios'
+import { ref } from 'vue'
 import BaseLayoutVue from '../layouts/BaseLayout.vue'
 import { useI18n } from 'vue-i18n'
+import { useRoute } from 'vue-router'
 const { t } = useI18n()
-const store:any = inject('store')!
+const route = useRoute()
 
-const project = store.currentProject
+const iframeUrl = ref(null)
+const project = ref({})
+
+init()
+async function init() {
+  project.value = (await axios.get('/projects/' + route.params.id)).data
+
+  const response = await axios.get('/projects/' + route.params.id + '/services/node-red/token')
+  console.log('Writing auth-tokens session storage tokens for node-red')
+  localStorage.setItem('auth-tokens', JSON.stringify(response.data));
+
+  iframeUrl.value = project.value.nodeRedUrl
+}
 
 const refBreadCrumb = ref([
   { name: 'Projects', href: '/projects' },

@@ -41,7 +41,6 @@ const MacroCreate = () => import('./pages/Tags/Macros/Create.vue')
 const Texts = () => import('./pages/Tags/Texts/Index.vue')
 const TextCreate = () => import('./pages/Tags/Texts/Create.vue')
 const Text = () => import('./pages/Tags/Texts/Show.vue')
-const NodeRed = () => import('./pages/nodered/Index.vue')
 
 import fr from './locales/fr.json'
 import en from './locales/en.json'
@@ -73,7 +72,6 @@ const routes = [
   { path: '/projects/:id/dashboards-report/:writeToken/:dashboardId', component: DashboardReport },
   { path: '/projects/:id/dashboards/edit/:dashboardId', component: DashboardEdit },
   { path: '/projects/:id/devices', component: Devices },
-  { path: '/projects/:id/nodered', component: NodeRed },
   { path: '/projects/:id/variables', component: Variables },
   { path: '/projects/:id/variables/create', component: VariableCreate },
   { path: '/projects/:id/variables/:tagId', component: Variable },

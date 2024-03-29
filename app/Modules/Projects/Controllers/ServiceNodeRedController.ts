@@ -3,6 +3,8 @@ import Env from '@ioc:Adonis/Core/Env'
 import Project from '../Models/Project'
 import fs from 'fs/promises'
 import { ProjectService } from '../Services/ProjectService'
+import NodeRedService from 'App/Services/NodeRedService'
+import Role from '../Contracts/enums/Roles'
 
 const generatePassword = (length) => {
   const charset = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
@@ -84,6 +86,23 @@ export default class ServiceNodeRedController {
     return {
       config: await fs.readFile('./resources/project_services/config/settings.js', 'utf-8'),
     }
+  }
+
+  public async getAuthToken({ params, bouncer, response, auth }: HttpContextContract) {
+    await bouncer.with('ProjectPolicy').authorize('getNodeRedAuth', params.id)
+    const project = await Project.findOrFail(params.id)
+
+    if (auth.user && project.nodeRedEnabled && project.nodeRedMode === 'MANAGED') {
+      const nodeRedService = new NodeRedService(project.nodeRedUrl)
+
+      if (auth.user.isAdmin) {
+        return await nodeRedService.getAdminToken()
+      } else if (await auth.user.hasProjectRights(project.id, Role.EDITOR)) {
+        return await nodeRedService.getWriterToken(project.nodeRedWriterPassword)
+      }
+    }
+
+    return response.status(400)
   }
 
   public async getStatus({ bouncer, params, response }: HttpContextContract) {

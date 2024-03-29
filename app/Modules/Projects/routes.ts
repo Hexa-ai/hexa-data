@@ -38,7 +38,7 @@ Route.group(() => {
     Route.get('projects/services/node-red/config', 'ServiceNodeRedController.getDefaultConfig')
 
     Route.post('projects/:id/services/node-red', 'ServiceNodeRedController.update')
-    Route.get('projects/:id/services/node-red/cookies', 'ServiceNodeRedController.getAuthCookies')
+    Route.get('projects/:id/services/node-red/token', 'ServiceNodeRedController.getAuthToken')
     Route.get('projects/:id/services/node-red/status', 'ServiceNodeRedController.getStatus')
     Route.post('projects/:id/services/node-red/stop', 'ServiceNodeRedController.stop')
     Route.post('projects/:id/services/node-red/start', 'ServiceNodeRedController.start')

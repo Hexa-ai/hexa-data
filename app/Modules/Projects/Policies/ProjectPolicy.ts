@@ -48,7 +48,10 @@ export default class ProjectPolicy extends BasePolicy {
   public async generatePersistentTokens() {
     return false
   }
-  public async getGrafanaCookies(user: User, projectId: number) {
+  public async getGrafanaAuth(user: User, projectId: number) {
+    return await user.hasProjectRights(projectId)
+  }
+  public async getNodeRedAuth(user: User, projectId: number) {
     return await user.hasProjectRights(projectId)
   }
 }
