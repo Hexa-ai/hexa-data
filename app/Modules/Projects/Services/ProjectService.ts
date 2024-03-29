@@ -125,6 +125,8 @@ class ProjectService {
     const volumeName = 'v_nodered_' + this.project.id
     await this.docker.ensureImageExists(image)
 
+    const path = `/containers/node-red/${slugify(this.project.name)}`
+
     // Remove the container if it already exists
     const existingContainer = await this.docker.findContainerByName(containerName)
     if (existingContainer) {
@@ -144,7 +146,6 @@ class ProjectService {
 
     // Retrieve an available port and create the container
     const unusedPort = await this.docker.findUnusedPort()
-    const domain = Env.get('VITE_DOCKER_NODERED_DOMAIN') ? slugify(this.project.name) + '.' + Env.get('VITE_DOCKER_NODERED_DOMAIN') : this.dockerHostIp + ':' + unusedPort
     const id = await this.docker.createContainer(containerName, {
       Image: image,
       ExposedPorts: {
@@ -171,10 +172,12 @@ class ProjectService {
         project: this.project.id.toString(),
         type: 'nodered',
         'traefik.enable': 'true',
-        [`traefik.http.routers.nodered-${this.project.id}.rule`]: 'Host(`' + domain + '`)',
+        [`traefik.http.routers.nodered-${this.project.id}.rule`]: 'Host(`data.hexa-ai.fr`) && PathPrefix(`' + path + '`)',
         [`traefik.http.routers.nodered-${this.project.id}.entrypoints`]: 'webSecure',
         [`traefik.http.routers.nodered-${this.project.id}.tls`]: 'true',
-        [`traefik.http.services.nodered-${this.project.id}.loadbalancer.server.port`]: '1880',
+        [`traefik.http.services.nodered-${this.project.id}.loadbalancer.server.port`]: '3000',
+        [`traefik.http.middlewares.nodered-${this.project.id}-stripprefix.stripprefix.prefixes`]: path,
+        [`traefik.http.routers.nodered-${this.project.id}.middlewares`]: `nodered-${this.project.id}-stripprefix`,
       },
     })
 
@@ -186,12 +189,13 @@ class ProjectService {
     config = config.replace('${ADMIN_PASSWORD_HASH}', await bcrypt.hash(adminPassword, 10))
     config = config.replace('${WRITER_USER}', writerUser)
     config = config.replace('${WRITER_PASSWORD_HASH}', await bcrypt.hash(writerPassword, 10))
+    config = config.replace('${ROOT_PATH}', path)
     await this.docker.uploadFile(id, 'settings.js', config, '/data')
     await this.docker.restartContainer(id)
 
     return {
       id,
-      url : Env.get('VITE_DOCKER_NODERED_DOMAIN') ? 'https://' + domain : 'http://' + domain,
+      url : 'https://data.hexa-ai.fr' + path,
       port: unusedPort
     }
   }
