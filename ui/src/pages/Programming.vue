@@ -24,16 +24,28 @@ import { useRoute } from 'vue-router'
 const { t } = useI18n()
 const route = useRoute()
 
+function slugify(str : string) {
+  return String(str)
+    .normalize('NFKD') 
+    .replace(/[\u0300-\u036f]/g, '')
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9 -]/g, '')
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-')
+}
+
 const iframeUrl = ref(null)
-const project = ref({})
+const project:any = ref({})
 
 init()
 async function init() {
   project.value = (await axios.get('/projects/' + route.params.id)).data
+  const keyname = 'auth-tokens-containers-node-red-' + slugify(project.value?.name)
 
   const response = await axios.get('/projects/' + route.params.id + '/services/node-red/token')
-  console.log('Writing auth-tokens session storage tokens for node-red')
-  localStorage.setItem('auth-tokens', JSON.stringify(response.data));
+  console.log(`Writing ${keyname} session storage tokens for node-red`)
+  localStorage.setItem(keyname, JSON.stringify(response.data));
 
   iframeUrl.value = project.value.nodeRedUrl
 }
