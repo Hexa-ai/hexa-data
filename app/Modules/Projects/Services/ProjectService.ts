@@ -174,7 +174,7 @@ class ProjectService {
         [`traefik.http.routers.nodered-${this.project.id}.rule`]: 'Host(`data.hexa-ai.fr`) && PathPrefix(`' + path + '`)',
         [`traefik.http.routers.nodered-${this.project.id}.entrypoints`]: 'webSecure',
         [`traefik.http.routers.nodered-${this.project.id}.tls`]: 'true',
-        [`traefik.http.services.nodered-${this.project.id}.loadbalancer.server.port`]: '3000',
+        [`traefik.http.services.nodered-${this.project.id}.loadbalancer.server.port`]: '1880',
         [`traefik.http.middlewares.nodered-${this.project.id}-stripprefix.stripprefix.prefixes`]: path,
         [`traefik.http.routers.nodered-${this.project.id}.middlewares`]: `nodered-${this.project.id}-stripprefix`,
       },
