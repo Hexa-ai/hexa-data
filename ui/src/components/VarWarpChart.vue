@@ -62,8 +62,8 @@ if (props.valueType == 2 || props.valueType == 3 || props.valueType == 1) {
   <% $data 0 GET ATTRIBUTES $language GET 'description' STORE $data 0 GET ATTRIBUTES 'unit' GET 'unit' STORE $data 0 GET { NULL NULL 'i' $description 'u' $unit } SETATTRIBUTES { NULL NULL } RELABEL 'data' STORE %> <% $data 0 GET 'data' STORE %>
   <% %> TRY
   $data 10000 LTTB 'data' STORE
-  $data VALUES SIZE 1 - 'lastValueIndex' STORE
-  $data VALUES $lastValueIndex GET 'lastValue' STORE
+  // $data VALUES SIZE 1 - 'lastValueIndex' STORE
+  // $data VALUES $lastValueIndex GET 'lastValue' STORE
   { 'data' $data
     'params' [ { 'datasetColor' '${store.publicAppSettings.appPrimaryColor}' 'xAxis' 0 } ]
     'globalParams' {
