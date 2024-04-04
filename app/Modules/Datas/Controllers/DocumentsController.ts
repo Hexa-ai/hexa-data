@@ -52,7 +52,7 @@ export default class DocumentsController {
    * @param {Bouncer} ActionsAuthorizerContract<User>
    */
   public async wsReportIndex({ params, request, response }: HttpContextContract) {
-    const project = await Project.query().where('writeToken', params.writeToken).firstOrFail()
+    const project = await Project.query().where('persistentWriteToken', params.writeToken).firstOrFail()
     const requestParams = request.qs()
     let documents: ModelPaginatorContract<Document>
     if (typeof requestParams.searchKey != 'undefined' && requestParams.searchKey != '') {
@@ -82,7 +82,7 @@ export default class DocumentsController {
    * @param {response} ResponseContract
    */
   public async wsReportStore({ params, request, response }: HttpContextContract) {
-    const project = await Project.query().where('writeToken', params.writeToken).firstOrFail()
+    const project = await Project.query().where('persistentWriteToken', params.writeToken).firstOrFail()
     const existingDoc = await Document.query().where('projectId', project.id).andWhere('name', params.name).first()
 
     const asplitedName = params.name.split('.')
@@ -129,7 +129,7 @@ export default class DocumentsController {
    * @param {response} ResponseContract
    */
   public async wsReportDestroy({ params, response }: HttpContextContract) {
-    const project = await Project.query().where('writeToken', params.writeToken).firstOrFail()
+    const project = await Project.query().where('persistentWriteToken', params.writeToken).firstOrFail()
 
     await Document.query().where('project_id', project.id).andWhere('id', params.id).delete()
 
