@@ -4,7 +4,7 @@ import Document from '../Models/Document'
 import Project from '../../Projects/Models/Project'
 import { Attachment } from '@ioc:Adonis/Addons/AttachmentLite'
 import mime from 'mime-types'
-import { Queue } from '@ioc:Setten/Queue'
+import Drive from '@ioc:Adonis/Core/Drive'
 import { cuid } from '@poppinss/utils/build/helpers'
 
 export default class DocumentsController {
@@ -88,37 +88,30 @@ export default class DocumentsController {
     const asplitedName = params.name.split('.')
     const extension = asplitedName[asplitedName.length - 1].toLowerCase()
 
+    console.log(request.raw())
+
     if (existingDoc != null ) {
-      await Queue.dispatch('App/Jobs/GenerateDoc', {
-        filePath: existingDoc.file?.name,
-        fileData: request.raw(),
-        extName: existingDoc.file?.extname,
-        fileType: params.type,
-        docId: existingDoc.id,
-      })
-    } else {
-      const fileAttachment = new Attachment({
-        extname: extension,
-        mimeType: <string>mime.lookup(extension),
-        size: (<string>request.raw()).length,
-        name: 'projectsDocuments/' + cuid() + '.' + extension,
-      })
-      fileAttachment.isPersisted = true
-      var document = await Document.create({
-        name: params.name,
-        type: 1,
-        projectId: project.id,
-        inProgress: true,
-        file: fileAttachment,
-      })
-      await Queue.dispatch('App/Jobs/GenerateDoc', {
-        filePath: fileAttachment.name,
-        fileData: request.raw(),
-        extName: extension,
-        fileType: params.type,
-        docId: document.id,
-      })
+      await existingDoc.delete()
     }
+    const fileAttachment = new Attachment({
+      extname: extension,
+      mimeType: <string>mime.lookup(extension),
+      size: (<string>request.raw()).length,
+      name: 'projectsDocuments/' + cuid() + '.' + extension,
+    })
+
+    fileAttachment.isPersisted = true
+
+    Drive.put(fileAttachment.name,<string>request.raw())
+    
+    await Document.create({
+      name: params.name,
+      type: 1,
+      projectId: project.id,
+      inProgress: true,
+      file: fileAttachment,
+    })
+
     response.status(200)
   }
   /**

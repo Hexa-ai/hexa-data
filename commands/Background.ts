@@ -30,7 +30,7 @@ export default class Background extends BaseCommand {
     runtimeManager.destroy()
 
     await this.startMqttSub()
-    await this.startUserScript()
+    //await this.startUserScript()
   }
 
   protected async startMqttSub() {
@@ -40,9 +40,9 @@ export default class Background extends BaseCommand {
     this.logger.info('---- MQTT Subscriber Starting -----')
   }
 
-  protected async startUserScript() {
-    const UserScriptService = (await import('App/Modules/Datas/Services/UserScriptService')).default
-    new UserScriptService()
-    this.logger.info('---- UserScript Runner Starting -----')
-  }
+  // protected async startUserScript() {
+  //   const UserScriptService = (await import('App/Modules/Datas/Services/UserScriptService')).default
+  //   new UserScriptService()
+  //   this.logger.info('---- UserScript Runner Starting -----')
+  // }
 }
