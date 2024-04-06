@@ -7,6 +7,7 @@
       </div>
       <Datepicker
           :local="local"
+          :teleport="false"
           :range="range"
           format="dd/MM/yyyy HH:mm:ss"
           :cancelText="cancelText"

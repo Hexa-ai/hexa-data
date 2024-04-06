@@ -54,31 +54,6 @@
               <div class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
                 <div class="sm:col-span-2">
                   <InputField
-                    :title="$t('devices.dashboard')"
-                    v-model="refDevice!.dashboardId"
-                    :isRequired="false"
-                    :isDisabled="false"
-                    :choices="refDashboardName"
-                    :values="refDashboardId"
-                    :index-is-value="false"
-                    :type="FieldType.SELECT"
-                  ></InputField>
-                </div>
-              </div>
-              <div class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
-                <div class="sm:col-span-2">
-                  <InputField
-                    :title="$t('devices.adress')"
-                    v-model="refDevice!.adress"
-                    :isRequired="false"
-                    :isDisabled="false"
-                    :type="FieldType.TEXT"
-                  ></InputField>
-                </div>
-              </div>
-              <div class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
-                <div class="sm:col-span-2">
-                  <InputField
                     :title="$t('devices.lat')"
                     v-model="refDevice!.lat"
                     :isRequired="false"

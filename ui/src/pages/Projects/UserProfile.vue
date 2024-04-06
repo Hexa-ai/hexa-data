@@ -86,7 +86,7 @@
                   :title="$t('users.tags')"
                   v-model="refTags"
                   :isRequired="false"
-                  :isDisabled="true"
+                  :isDisabled="!refEdit"
                   :type="FieldType.TEXT"
                 ></InputField>
               </div>
