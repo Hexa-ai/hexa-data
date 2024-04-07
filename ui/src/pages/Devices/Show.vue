@@ -33,11 +33,7 @@
           v-model="isOpen"
         ></ComfirmPopup>
         <div class="m-3">
-          <h3 class="text-2xl leading-6 font-medium text-gray-900 mb-5">{{ refDevice.name }}</h3>
-        </div>
-        <div class="m-3">
-          <h3 class="text-lg leading-6 font-medium text-gray-900">
-            {{ $t('devices.MQTTStats') }}
+          <h3 class="text-2xl leading-6 font-medium text-gray-900 mb-5">{{ refDevice.name }}
             <div class="inline-block ml-5">
               <p
                 v-if="refDevice.connected == true"
@@ -46,23 +42,14 @@
                 {{ $t('devices.connected') }}
               </p>
               <p
-                v-if="refDevice.connected == false"
+                v-if="refDevice.connected != true"
                 class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-200 text-white-800"
               >
                 {{ $t('devices.disconnected') }}
-              </p>
+              </p> <p v-if="refDevice.connected == true" class="inline-flex text-xs leading-5 font-semibold"> {{ refDevice.ip }} </p>
             </div>
           </h3>
-          <p class="mt-1 text-sm text-gray-500">{{ $t('devices.MQTTStatsDescription') }}</p>
         </div>
-
-        <DeviceStatsWarpChart
-          v-if="refDevice.namespace != ''"
-          :url="warp10Url"
-          :class-name="refDevice.namespace + '.upMsgRate'"
-          :value-type="3"
-        ></DeviceStatsWarpChart>
-
         <form
           class="space-y-8 divide-y divide-gray-200 m-3"
           action="#"
@@ -86,17 +73,6 @@
                     v-model="refDevice!.name"
                     :isRequired="false"
                     :isDisabled="!edit"
-                    :type="FieldType.TEXT"
-                  ></InputField>
-                </div>
-              </div>
-              <div class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
-                <div class="sm:col-span-2">
-                  <InputField
-                    :title="$t('devices.namespace')"
-                    v-model="refDevice!.namespace"
-                    :isRequired="false"
-                    :isDisabled="true"
                     :type="FieldType.TEXT"
                   ></InputField>
                 </div>

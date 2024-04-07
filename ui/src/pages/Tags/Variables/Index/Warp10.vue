@@ -12,7 +12,8 @@
       </template>
 
       <template v-slot:default>
-        <dialog ref="refShowVariableHistory" class="modal">
+        <dialog  ref="refShowVariableHistory" class="modal">
+         
           <div class="modal-box w-11/12 max-w-5xl">
             <h3 class="font-bold text-lg">Historique {{ showVariableHistoryTarget?.c }}</h3>
             <div class="mt-4">
@@ -179,10 +180,17 @@ const props = defineProps({
  */
 const refShowVariableHistory: any = ref(null)
 const showVariableHistoryTarget = ref(null as Variable | null)
+
 const showVariableHistory = (variable: Variable) => {
-  refShowVariableHistory.value.showModal()
   showVariableHistoryTarget.value = variable
+  refShowVariableHistory.value.showModal()
+  // Listen close envent
+  refShowVariableHistory.value.addEventListener('close', () => {
+    showVariableHistoryTarget.value = null;
+});
 }
+
+
 
 /*
  * SHOW VARIABLE INFOS
