@@ -47,6 +47,9 @@
     "youch": "^3.2.0",
     "youch-terminal": "^2.1.4"
   },
+  "engines": {
+    "node": "<=16"
+  },
   "dependencies": {
     "@adonisjs/attachment-lite": "^1.0.7",
     "@adonisjs/auth": "^8.2.1",
