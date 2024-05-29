@@ -35,6 +35,7 @@ Route.group(() => {
     //Route.post('warp10/:projectId', 'MacrosController.wsExec').namespace('App/Modules/Datas/Controllers')
     Route.post('projects/:projectId/documents', 'DocumentsController.store').namespace('App/Modules/Datas/Controllers')
     Route.get('projects/:projectId/documents', 'DocumentsController.index').namespace('App/Modules/Datas/Controllers')
+    Route.get('projects/:projectId/statistics', 'DocumentsController.statistics').namespace('App/Modules/Datas/Controllers')
     Route.delete('projects/:projectId/documents/:id', 'DocumentsController.destroy').namespace('App/Modules/Datas/Controllers')
   }).prefix('/v1').middleware(['auth'])
 }).prefix('/api')
