@@ -6,6 +6,7 @@ import { Attachment } from '@ioc:Adonis/Addons/AttachmentLite'
 import mime from 'mime-types'
 import Drive from '@ioc:Adonis/Core/Drive'
 import { cuid } from '@poppinss/utils/build/helpers'
+import { DateTime } from 'luxon'
 
 export default class DocumentsController {
   /**
@@ -41,6 +42,29 @@ export default class DocumentsController {
 
     response.send(documents)
   }
+
+  /**
+   * Get statistics about Documents.
+   * GET projects/:projectId/documents/statistics
+   */
+  public async statistics({ params, response, bouncer }: HttpContextContract) {
+    await bouncer.with('DocumentPolicy').authorize('index', params.projectId)
+    
+    const totalDocuments = await Document.query()
+        .where('project_id', params.projectId)
+        .count('* as total')
+
+    const since = DateTime.now().minus({ days: 7 }).toSQL()
+    const recentDocuments = await Document.query()
+        .where('project_id', params.projectId)
+        .andWhere('created_at', '>=', since)
+        .count('* as recent')
+
+    response.send({
+        totalDocuments: totalDocuments[0].$extras.total,
+        recentDocuments: recentDocuments[0].$extras.recent,
+    })
+}
 
   /**
    * Show a paginated list of Documents (WarpScript).
