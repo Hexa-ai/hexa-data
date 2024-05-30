@@ -323,7 +323,7 @@ async function init() {
   documentStatistics.value.totalDocuments = documentStatisticsResponse.data.totalDocuments
 
   const variablesResponse = await axios.get(`/projects/${route.params.id}/warp10/variables?search=`)
-  variableCount.value = variablesResponse.data.meta.fetched
+  variableCount.value = variablesResponse.data.result[0].length
 }
 
 function getDescAttrName(model: DashboardModel): string {
