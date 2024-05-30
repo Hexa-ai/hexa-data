@@ -27,7 +27,8 @@ import { useRouter, useRoute } from 'vue-router'
 import "leaflet/dist/leaflet.css"
 import L from "leaflet";
 import DeviceModel from '../Models/DeviceModel';
-//import store from '../store';
+import greenDot from '/src/assets/device-map/green-dot.gif';
+import orangeDot from '/src/assets/device-map/orange-dot.gif';
 
 var router = useRouter()
 
@@ -46,7 +47,7 @@ onUpdated(() => {
   }).addTo(map);
   for (const device of props.deviceCollection) {
     var myIcon = L.icon({
-      iconUrl: `/src/assets/device-map/${device.connected ? 'green' : 'orange'}-dot.gif`,
+      iconUrl: device.connected ? greenDot : orangeDot,
       iconSize: [64, 64],
     })
     markerList.push(
