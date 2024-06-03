@@ -43,13 +43,15 @@ export default class MetricsController {
 
       // Now push all the items to the ingress
       for (const [key, value] of Object.entries(items)) {
-        await this.ingress.push({
-          token: this.projectTokens[mqttMessage.projectUuid],
-          classname: itemNamePrefix ? itemNamePrefix + key : key,
-          value,
-          labels: { ...tags, topic: mqttMessage.topic },
-          timestamp: ts,
-        })
+        if (typeof(value)=="boolean" || typeof(value)=="string" || typeof(value)=="number" || value==null) {
+          await this.ingress.push({
+            token: this.projectTokens[mqttMessage.projectUuid],
+            classname: itemNamePrefix ? itemNamePrefix + key : key,
+            value,
+            labels: { ...tags, topic: mqttMessage.topic },
+            timestamp: ts,
+          })
+        }
       }
     }
   }
