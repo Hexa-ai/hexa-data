@@ -43,7 +43,7 @@ export default class MetricsController {
 
       // Now push all the items to the ingress
       for (const [key, value] of Object.entries(items)) {
-        if (typeof(value)=="boolean" || typeof(value)=="string" || typeof(value)=="number" || value==null) {
+        if (typeof(value)=="boolean" || typeof(value)=="string" || typeof(value)=="number" ) {
           await this.ingress.push({
             token: this.projectTokens[mqttMessage.projectUuid],
             classname: itemNamePrefix ? itemNamePrefix + key : key,
