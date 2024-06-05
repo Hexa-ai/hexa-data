@@ -11,13 +11,13 @@
               <div class="stat-figure text-primary">
                 <ChipIcon class="menu-body-font flex-shrink-0 h-12 w-6"></ChipIcon>
               </div>
-              <div class="stat-title">Equipements</div>
+              <div class="stat-title">{{ $t('projectInfos.devices') }}</div>
               <div class="stat-value text-primary mt-2">{{ refDeviceCollection.data.length }}</div>
               <div class="stat-desc mt-2">
                 <span class="font-bold">{{ refDeviceCollection.data.filter(device => device.connected).length }}</span>
-                en ligne,
+                {{ $t('projectInfos.online') }},
                 <span class="font-bold">{{ refDeviceCollection.data.filter(device => !device.connected).length }}</span>
-                hors ligne
+                {{ $t('projectInfos.offline') }}
               </div>
             </div>
 
@@ -25,19 +25,19 @@
               <div class="stat-figure text-primary">
                 <VariableIcon class="menu-body-font flex-shrink-0 h-12 w-6"></VariableIcon>
               </div>
-              <div class="stat-title">Variables</div>
+              <div class="stat-title">{{ $t('projectInfos.variables') }}</div>
               <div class="stat-value text-primary mt-2">{{ variableCount }}</div>
-              <div class="stat-desc mt-2">Dans la base de données</div>
+              <div class="stat-desc mt-2">{{ $t('projectInfos.in-database') }}</div>
             </div>
 
             <div class="stat p-6">
               <div class="stat-figure text-primary">
                 <FolderIcon class="menu-body-font flex-shrink-0 h-12 w-6"></FolderIcon>
               </div>
-              <div class="stat-title">Documents</div>
+              <div class="stat-title">{{ $t('projectInfos.documents') }}</div>
               <div class="stat-value text-primary mt-2">{{ documentStatistics.totalDocuments }}</div>
-              <div class="stat-desc mt-2">Il y a <span class="font-bold">{{ documentStatistics.recentDocuments }}</span>
-                création(s) cette semaine</div>
+              <div class="stat-desc mt-2">{{ $t('projectInfos.there-is') }} <span class="font-bold">{{
+                documentStatistics.recentDocuments }}</span> {{ $t('projectInfos.creations-this-week') }}</div>
             </div>
 
             <div class="stat p-6">
@@ -48,36 +48,37 @@
                     d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
                 </svg>
               </div>
-              <div class="stat-title">Services</div>
+              <div class="stat-title">{{ $t('projectInfos.services') }}</div>
               <div class="stat-value text-primary mt-2">{{ (refProjectInfo.grafanaEnabled ? 1 : 0) +
                 (refProjectInfo.nodeRedEnabled ? 1 : 0) }}</div>
               <div class="stat-desc mt-2" v-if="refProjectInfo.grafanaEnabled || refProjectInfo.nodeRedEnabled">{{
                 refProjectInfo.grafanaEnabled ? 'Graphana' : '' }} {{ refProjectInfo.nodeRedEnabled ? 'NodeRED' : '' }}
               </div>
-              <div class="stat-desc mt-2" v-else>Aucun service actif</div>
+              <div class="stat-desc mt-2" v-else>{{ $t('projectInfos.no-service') }}</div>
             </div>
           </div>
 
           <div class="mt-2 -ml-2 -mr-2 flex flex-col md:flex-row">
             <div class="card m-2 shadow flex-1">
               <div class="card-body p-6">
-                <h2 class="card-title mb-6">Détails</h2>
+                <h2 class="card-title mb-6">{{ $t('projectInfos.details') }}</h2>
                 <div class="mb-2" v-if="store.authUser.projectRole == RoleType.EDITOR || store.authUser.isAdmin">
-                  <span class="label-text">Identifiant du projet :</span>
+                  <span class="label-text">{{ $t('projectInfos.project-id') }}</span>
                   <div class="badge ml-2 font-semibold text-sm badge-ghost cursor-pointer"
                     @click="copyToClipboard(refProjectInfo.uuid)">{{ refProjectInfo.uuid }}</div>
                 </div>
 
                 <div class="flex gap-x-10">
                   <div class="basis-1/2">
-                    <label class="label-text">Votre compte :</label>
+                    <label class="label-text">{{ $t('projectInfos.your-account') }}</label>
                     <p class="text-slate-500 text-sm">
-                      Vous êtes connecté en tant que
-                      <strong class="font-semibold">{{ store.authUser.name }}</strong>, et vous êtes
-                      <strong class="font-semibold" v-if="store.authUser.isAdmin">administrateur de la
-                        plateforme</strong>
-                      <strong class="font-semibold" v-if="store.authUser.projectRole == RoleType.EDITOR">éditeur du
-                        projet</strong>.
+                      {{ $t('projectInfos.you-are-connected-as') }}
+                      <strong class="font-semibold">{{ store.authUser.name }}</strong>, {{
+                        $t('projectInfos.and-your-are') }}
+                      <strong class="font-semibold" v-if="store.authUser.isAdmin">{{
+                        $t('projectInfos.administrator-role') }}</strong>
+                      <strong class="font-semibold" v-if="store.authUser.projectRole == RoleType.EDITOR">{{
+                        $t('projectInfos.editor-role') }}</strong>.
                     </p>
                   </div>
                   <div class="basis-1/2">
@@ -88,31 +89,30 @@
 
                 <div class="card-actions mt-4 justify-center"
                   v-if="store.authUser.projectRole == RoleType.EDITOR || store.authUser.isAdmin">
-                  <router-link :to="`/projects/${refProjectInfo.id}/settings`"
-                    class="btn btn-primary">Paramètres</router-link>
-                  <button @click="tokenDialog.showModal()" class="btn btn-outline btn-primary">Jetons
-                    d'authentification</button>
+                  <router-link :to="`/projects/${refProjectInfo.id}/settings`" class="btn btn-primary">{{
+                    $t('projectInfos.settings') }}</router-link>
+                  <button @click="tokenDialog.showModal()" class="btn btn-outline btn-primary">{{
+                    $t('projectInfos.tokens') }}</button>
                 </div>
               </div>
             </div>
 
             <div class="card m-2 shadow flex-1">
               <div class="card-body">
-                <h2 class="card-title mb-4">Services</h2>
+                <h2 class="card-title mb-4">{{ $t('projectInfos.services') }}</h2>
 
-                <p v-if="!refProjectInfo.grafanaEnabled && !refProjectInfo.nodeRedEnabled">
-                  Il n'y a pas de services actifs pour ce projet.</p>
+                <p v-if="!refProjectInfo.grafanaEnabled && !refProjectInfo.nodeRedEnabled">{{
+                  $t('projectInfos.no-services') }}</p>
 
                 <ul class="services-list">
-                  <li v-if="refProjectInfo.grafanaEnabled">Service <a href="#"
-                      class="text-primary font-semibold">Grafana</a> : Visualisation et analyse des
-                    données via des tableaux de bords temps réel.
+                  <li v-if="refProjectInfo.grafanaEnabled">{{ $t('projectInfos.service') }} <a href="#"
+                      class="text-primary font-semibold">Grafana</a> : {{ $t('projectInfos.grafana-description') }}
                     <div class="ml-8" v-if="refProjectInfo.grafanaMode === 'MANAGED'">
-                      • Identifiants :
+                      • {{ $t('projectInfos.authentication') }}
                       <div class="badge font-semibold badge-ghost">{{ store.authUser.projectRole == RoleType.EDITOR ||
                         store.authUser.isAdmin ? grafanaWriteUser : grafanaReadUser }}</div>
                       <div class="badge font-semibold ml-1 badge-ghost cursor-pointer"
-                        title="Cliquez pour dévoiler et copier dans le presse papier">
+                        :title="$t('projectInfos.click-to-show-and-copy')">
                         <span v-if="isGrafanaPasswordVisible"> {{ store.authUser.projectRole == RoleType.EDITOR ||
                           store.authUser.isAdmin ?
                           refProjectInfo.grafanaWriterPassword : refProjectInfo.grafanaReaderPassword }}</span>
@@ -121,13 +121,12 @@
                     </div>
                   </li>
                   <li v-if="refProjectInfo.nodeRedEnabled" class="mt-2">Service <a href="#"
-                      class="text-primary font-semibold">NodeRED</a> : Programmation
-                    visuelle basée sur des flux adaptés à l'IoT.
+                      class="text-primary font-semibold">NodeRED</a> : {{ $t('projectInfos.nodered-description') }}
                     <div class="ml-8" v-if="store.authUser.projectRole == RoleType.EDITOR || store.authUser.isAdmin">
-                      • Identifiants :
+                      • {{ $t('projectInfos.authentication') }}
                       <div class="badge font-semibold badge-ghost">{{ nodeRedWriteUser }}</div>
                       <div class="badge font-semibold ml-1 badge-ghost cursor-pointer"
-                        title="Cliquez pour dévoiler et copier dans le presse papier">
+                        :title="$t('projectInfos.click-to-show-and-copy')">
                         <span v-if="isNodeRedPasswordVisible">{{ refProjectInfo.nodeRedWriterPassword }}</span>
                         <span v-else @click="showNodeRedPassword">**********</span>
                       </div>
@@ -136,10 +135,11 @@
                 </ul>
                 <div class="card-actions mt-4 justify-center">
                   <a v-if="refProjectInfo.grafanaEnabled" target="_blank" :href="refProjectInfo.grafanaUrl"
-                    class="btn btn-primary">Accéder à Grafana</a>
+                    class="btn btn-primary">{{ $t('projectInfos.go-to-grafana') }}</a>
 
                   <a v-if="refProjectInfo.grafanaEnabled && (store.authUser.projectRole == RoleType.EDITOR || store.authUser.isAdmin)"
-                    target="_blank" :href="refProjectInfo.nodeRedUrl" class="btn btn-primary">Accéder à NodeRED</a>
+                    target="_blank" :href="refProjectInfo.nodeRedUrl" class="btn btn-primary">{{
+                      $t('projectInfos.go-to-nodered') }}</a>
                 </div>
               </div>
             </div>
@@ -156,7 +156,7 @@
               <kbd class="kbd kbd-xs mr-1">esc</kbd>
               <button class="btn btn-sm btn-circle btn-ghost ">✕</button>
             </form>
-            <h3 class="font-bold text-lg">Jetons long terme</h3>
+            <h3 class="font-bold text-lg">{{ $t('projectInfos.long-term-tokens') }}</h3>
             <div class="py-4">
               <label>
                 <span class="label label-text">{{ $t('projectInfos.uuid') }}</span>
@@ -168,7 +168,7 @@
               <label>
                 <span class="label label-text">{{ $t('projectInfos.readToken') }}</span>
                 <textarea rows="3" v-model="refProjectInfo.persistentReadToken"
-                  class="textarea textarea-bordered w-full" title="Cliquez pour copier dans le presse papier"
+                  class="textarea textarea-bordered w-full" :title="$t('projectInfos.click-to-copy')"
                   @click="copyToClipboard(refProjectInfo.persistentReadToken)"
                   @focus="($event.target && ($event.target as HTMLInputElement).select())"
                   style="cursor: pointer;"></textarea>
@@ -176,18 +176,18 @@
               <label>
                 <span class="label label-text">{{ $t('projectInfos.writeToken') }}</span>
                 <textarea rows="3" v-model="refProjectInfo.persistentWriteToken"
-                  class="textarea textarea-bordered w-full" title="Cliquez pour copier dans le presse papier"
+                  class="textarea textarea-bordered w-full" :title="$t('projectInfos.click-to-copy')"
                   @click="copyToClipboard(refProjectInfo.persistentWriteToken)"
                   @focus="($event.target && ($event.target as HTMLInputElement).select())"
                   style="cursor: pointer;"></textarea>
               </label>
-              <p class="mt-4">Vous pouvez créer et regénérer des tokens dans la <router-link
-                  :to="`/projects/${refProjectInfo.id}/settings`" class="text-primary-500">page paramètres</router-link>
-                du projet.</p>
+              <p class="mt-4">{{ $t('projectInfos.you-can-manage-tokens') }} <router-link
+                  :to="`/projects/${refProjectInfo.id}/settings`" class="text-primary-500">{{ $t('projectInfos.parameters-page') }}</router-link>
+                  {{ $t('projectInfos.of-the-project') }}</p>
             </div>
             <div class="modal-action">
               <form method="dialog">
-                <button class="btn">Fermer</button>
+                <button class="btn">{{ $t('close') }}</button>
               </form>
             </div>
           </div>
@@ -209,6 +209,7 @@
 </style>
 
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n'
 import { inject, ref } from 'vue'
 import BaseLayoutVue from '../../layouts/BaseLayout.vue'
 import { useRoute } from 'vue-router'
@@ -223,6 +224,8 @@ import RoleType from '@/Contracts/RoleType'
 import axios from '@/services/axios'
 import { ChipIcon, VariableIcon, FolderIcon } from '@heroicons/vue/outline'
 import bus from '@/services/bus'
+
+const { t } = useI18n()
 
 const grafanaWriteUser = ref(import.meta.env.VITE_DOCKER_GRAFANA_WRITE_USER)
 const grafanaReadUser = ref(import.meta.env.VITE_DOCKER_GRAFANA_READ_USER)
@@ -253,7 +256,7 @@ const copyToClipboard = (text: string) => {
   document.body.removeChild(el)
 
   bus.emit('toast', {
-    message: "La valeur a été copiée dans le presse papier",
+    message: t('projectInfos.value-copied-into-clipboard'),
   })
 }
 
