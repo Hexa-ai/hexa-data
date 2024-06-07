@@ -182,8 +182,8 @@ const refShowVariableHistory: any = ref(null)
 const showVariableHistoryTarget = ref(null as Variable | null)
 
 const showVariableHistory = (variable: Variable) => {
+  delete(variable.l.unit)
   showVariableHistoryTarget.value = variable
-  showVariableHistoryTarget.value.l = formatGtsLabels(variable.l)
   refShowVariableHistory.value.showModal()
   // Listen close envent
   refShowVariableHistory.value.addEventListener('close', () => {
