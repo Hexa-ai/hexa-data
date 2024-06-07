@@ -80,6 +80,7 @@ if (props.valueType == 2 || props.valueType == 3 || props.valueType == 1) {
       'token' $readToken
       'class' '${props.className}'
       'labels' '${JSON.stringify(props.labels || {})}' JSON->
+      'count' 1000
       'end' $end TOTIMESTAMP
       'start' $start TOTIMESTAMP
     } FETCH SORT 'gts' STORE [ $gts [] <% 'values' STORE $values 0 GET 'ts' STORE $values 7 GET 'value' STORE [ $ts $value 0 GET ] [ $ts NaN NaN NaN $value 0 GET ] %> MACROREDUCER ] REDUCE 'gtsResult' STORE
