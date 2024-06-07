@@ -60,7 +60,7 @@ let refUrl = ref('')
 let refData = ref([])
 
 const initialDateStart = new Date()
-initialDateStart.setDate(initialDateStart.getDate()-1)
+initialDateStart.setDate(initialDateStart.getHours()-1)
 
 var initialDateEnd = new Date()
 
