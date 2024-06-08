@@ -25,47 +25,34 @@ export default class MetricsControllerV1 {
       return
     }
 
-    // Build the default payload (with timestamp)
-    const payload = {
-      timestamp: Date.now(),
-      ...mqttMessage.payload,
+    // Force the payload to be an array of payloads
+    const payloads = Array.isArray(mqttMessage.payload)
+      ? mqttMessage.payload
+      : [mqttMessage.payload]
+
+    // Extract the item name prefix (if any, can be multiple nested levels into topic)
+    let itemNamePrefix = mqttMessage.params.length > 1 ? '' : null
+    for (let i = 1; i < mqttMessage.params.length; i++) {
+      itemNamePrefix += mqttMessage.params[i] + '.'
     }
 
-    // Lower the timestamp precision to second
-    payload.timestamp = Math.floor(payload.timestamp / 1000) * 1000
+    // Handle each payload individually
+    for (const payload of payloads) {
+      // Extract special attributs and push the other into items
+      const { ts = Date.now(), tags = {}, ...items } = payload
 
-    // Pushing all entries of the payload to the ingress
-    for (const [key, value] of Object.entries(payload)) {
-      // Ignore reserved words like timestamp
-      if (['timestamp'].includes(key)) {
-        continue
+      // Now push all the items to the ingress
+      for (const [key, value] of Object.entries(items)) {
+        if (typeof(value)=="boolean" || typeof(value)=="string" || typeof(value)=="number" ) {
+          await this.ingress.push({
+            token: this.projectTokens[mqttMessage.projectUuid],
+            classname: itemNamePrefix ? itemNamePrefix + key : key,
+            value,
+            labels: { ...tags, topic: mqttMessage.topic },
+            timestamp: ts,
+          })
+        }
       }
-
-      // Ignore all non primitive boolean, string or number values
-      if (!['boolean', 'string', 'number'].includes(typeof value)) {
-        continue
-      }
-
-      // Prepare labels
-      let labels: any = {
-        alarm: false,
-        unit: '',
-      }
-
-      // If the key is at the uns format (with 4 or 5 dots), we fill the labels
-      if ((key.match(/\./g) || []).length >= 4) {
-        const [domain, location, device, func, carac, unit = ''] = key.split('.')
-        labels = { ...labels, domain, location, device, func, carac, unit }
-      }
-
-      // Push the value to the ingress
-      await this.ingress.push({
-        token: this.projectTokens[mqttMessage.projectUuid],
-        classname: key,
-        value,
-        labels,
-        timestamp: payload.timestamp,
-      })
     }
   }
 
