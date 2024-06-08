@@ -16,7 +16,7 @@
     "queue": "node ace queue:listen",
     "scheduler": "node ace scheduler:run",
     "scripts": "node ace scripts:start",
-    "ofuscate": "npx javascript-obfuscator build --output build"
+    "stop": "killall node"
   },
   "devDependencies": {
     "@adonisjs/assembler": "^5.8.0",
