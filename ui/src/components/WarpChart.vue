@@ -1,18 +1,18 @@
 <template>
-  <div style="height: 30rem;" :class="'disabled:opacity-75 pb-20 ' + (unstyled ? '' : 'pt-5 pl-5 pr-5 bg-white shadow rounded-lg mb-5 mt-5')">
+  <div style="height: 30rem;" :class="'disabled:opacity-75 ' + (unstyled ? '' : 'pt-5 pl-5 pr-5 bg-white shadow rounded-lg mb-5 mt-5')">
     <InputFieldDate
       title="Interval"
       :range="true"
       v-model="datePickerRange"
       :isRequired="false"
       @update:modelValue="update"
-      class="mb-3"
+      class="h-1/6"
     ></InputFieldDate>
-    <div class="flex flex-row h-full">
-      <discovery-tile v-if="warpScript!='' && refUrl!=''" :id="tileId" :url="refUrl" :options="{'httpHeaders': { 'Authorization': 'Bearer ' + store.authUser.token.token }, 'showRangeSelector':true, 'autoRefresh':autoRefresh, 'timeZone':'AUTO'}" :type="type">
+    <!-- <div class="flex flex-row h-5/6"> -->
+      <discovery-tile class="flex flex-row h-5/6" v-if="warpScript!='' && refUrl!=''" :id="tileId" :url="refUrl" :options="{'httpHeaders': { 'Authorization': 'Bearer ' + store.authUser.token.token }, 'showRangeSelector':true, 'autoRefresh':autoRefresh, 'timeZone':'AUTO'}" :type="type">
         {{warpScript}}
       </discovery-tile>
-    </div>
+    <!-- </div> -->
   </div>
 </template>
 

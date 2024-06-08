@@ -6,10 +6,10 @@
       v-model="datePickerRange"
       :isRequired="false"
       @update:modelValue="update"
-      class="mb-3"
+      class="h-1/6"
     ></InputFideldDate>
 
-    <ul id="list" role="list" class="-mb-8 h-full overflow-y-scroll">
+    <ul id="list" role="list" class="h-5/6 overflow-y-scroll">
       <li v-for="(row, index) of refData" :key="index">
 <div class="relative pb-8">
           <span v-if="index !== refData.length - 1" class="absolute top-4 left-4 -ml-px h-full w-0.5 bg-gray-200" aria-hidden="true" />
@@ -60,7 +60,7 @@ let refUrl = ref('')
 let refData = ref([])
 
 const initialDateStart = new Date()
-initialDateStart.setDate(initialDateStart.getHours()-1)
+initialDateStart.setHours(initialDateStart.getHours()-1)
 
 var initialDateEnd = new Date()
 
@@ -83,7 +83,6 @@ function update(e:string | string[]){
   const res = axios.post(refUrl.value,props.script, conf)
 
   res.then(function (response) {
-    console.log(response)
     refData.value = response.data
   })
 }
