@@ -35,7 +35,7 @@ export default class MetricsControllerV1 {
     payload.timestamp = Math.floor(payload.timestamp / 1000) * 1000
 
     // Pushing all entries of the payload to the ingress
-    for (const [key, value] of Object.entries(payload)) {
+    for (let [key, value] of Object.entries(payload)) {
       // Ignore reserved words like timestamp
       if (['timestamp'].includes(key)) {
         continue
@@ -56,6 +56,11 @@ export default class MetricsControllerV1 {
       if ((key.match(/\./g) || []).length >= 4) {
         const [domain, location, device, func, carac, unit = ''] = key.split('.')
         labels = { ...labels, domain, location, device, func, carac, unit }
+      }
+
+      // If the key ends with .unit, we need to remove it from the key
+      if (key.endsWith('.unit')) {
+        key = key.slice(0, -5)
       }
 
       // Push the value to the ingress
